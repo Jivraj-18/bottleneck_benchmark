@@ -1,0 +1,10 @@
+{
+  "case_id": "GH-2026-02-02-ACTIONS",
+  "title": "GitHub Actions outage from provider policy change blocking VM metadata",
+  "vendor": "GitHub",
+  "published_date": "2026-02-03",
+  "incident_date": "2026-02-02",
+  "source_title": "GitHub Status - Incident with Actions",
+  "source_url": "https://www.githubstatus.com/incidents/xwn6hjps36ty",
+  "why_selected": "Compact but high-quality incident report with clear impact, true bottleneck, and remediation focus on provider coordination and safe rollout of changes."
+}

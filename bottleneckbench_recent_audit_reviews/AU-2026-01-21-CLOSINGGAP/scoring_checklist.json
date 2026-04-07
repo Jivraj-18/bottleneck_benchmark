@@ -1,0 +1,32 @@
+{
+  "case_id": "AU-2026-01-21-CLOSINGGAP",
+  "binary_checks": [
+    "Did the answer identify implementation/reporting architecture as the main bottleneck, not merely 'funding' or 'political will'?",
+    "Did the answer name at least one real slow variable such as reporting architecture, coordination capability, or funding transparency?",
+    "Did the top intervention target partnership implementation or reporting quality directly?",
+    "Did the answer avoid generic distractors such as new slogans, new targets, or unspecified more funding?",
+    "Did the answer include at least one concrete early-warning signal?"
+  ],
+  "graded_checks": {
+    "binding_constraint_accuracy_0_to_2": {
+      "0": "Missed or generic",
+      "1": "Partially right / near-equivalent",
+      "2": "Correct and case-specific"
+    },
+    "slow_variable_recall_0_to_2": {
+      "0": "No real slow variables",
+      "1": "One real slow variable or mixed with symptoms",
+      "2": "Multiple real slow variables, clearly separated from symptoms"
+    },
+    "intervention_quality_0_to_2": {
+      "0": "Mostly non-binding or cosmetic",
+      "1": "Mixed",
+      "2": "Targets the real bottleneck directly"
+    },
+    "distractor_resistance_0_to_2": {
+      "0": "Chases distractors",
+      "1": "Some distractor contamination",
+      "2": "Stays focused on the real constraint"
+    }
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "case_id": "GH-2026-02-09-CACHE",
+  "title": "GitHub multi-service degradation from user-settings cache rewrite cascade",
+  "vendor": "GitHub",
+  "published_date": "2026-02-09",
+  "incident_date": "2026-02-09",
+  "source_title": "GitHub Status - Incident with Issues, Actions and Git Operations",
+  "source_url": "https://www.githubstatus.com/incidents/lcw3tg2f6zsd",
+  "why_selected": "Excellent systems case: a real bottleneck hidden behind many symptoms, cascading failure across multiple services, and clear interventions around write amplification, throttling, rollback, and recovery behavior."
+}

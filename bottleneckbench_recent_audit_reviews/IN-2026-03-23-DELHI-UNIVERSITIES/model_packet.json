@@ -1,0 +1,24 @@
+{
+  "background": "A performance audit examined how the Government of the National Capital Territory of Delhi and selected public universities planned and delivered higher and technical education. The review covered policy, academic quality, accreditation, affiliation, staffing, infrastructure, financial management, and internal controls.",
+  "system_context": [
+    "The audit examined a sample including an affiliating university and two technical universities.",
+    "Government departments were expected to formulate higher-education and technical-education policy and provide grants-in-aid.",
+    "Universities were expected to plan toward their stated vision, maintain accreditation, manage staffing and infrastructure, and run internal quality systems."
+  ],
+  "timeline": [
+    "Audit period covered April 2018 to March 2023.",
+    "Policy guidelines were not revised for several years and some regulatory committees were constituted late.",
+    "Several sampled universities operated for years without required accreditation coverage.",
+    "The report was published on 23 March 2026."
+  ],
+  "observations": [
+    "The government departments had mission statements but had not formulated comprehensive policies aligned to those missions.",
+    "There were delays in revising policy guidelines and constituting admission/fee-regulatory arrangements.",
+    "Sampled universities lacked long-term and annual plans tied to their stated goals.",
+    "Accreditation and affiliation processes were weak, with infrastructure and staffing deficiencies in affiliated institutions.",
+    "All three sampled universities had major shortages in teaching and non-teaching staff and key leadership roles were often held on additional-charge or consultant arrangements.",
+    "Infrastructure was inadequate or underutilized; seating deficits and large vacancy rates in student intake were observed.",
+    "Internal quality assurance cells did not meet regularly and academic/administrative audits were inadequate."
+  ],
+  "task": "Identify the binding constraint and slow variables. What governed quality and performance here regardless of improvements elsewhere? Recommend the top 3 interventions and 2 things you would explicitly deprioritize."
+}

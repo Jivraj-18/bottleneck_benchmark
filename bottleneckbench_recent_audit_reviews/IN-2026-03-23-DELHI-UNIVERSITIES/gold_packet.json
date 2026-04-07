@@ -1,0 +1,47 @@
+{
+  "binding_constraint_top1": "A missing system-level governance and planning architecture for higher and technical education — spanning policy, institutional planning, staffing, accreditation, and internal quality control — rather than any single shortage in classrooms or funding.",
+  "binding_constraint_top3": [
+    "No comprehensive policy framework aligned to the government’s higher-education mission.",
+    "Weak institutional planning and execution inside universities, including missing annual plans and weak quality-assurance routines.",
+    "Persistent staffing and accreditation deficits that degrade quality and prevent the system from functioning as designed."
+  ],
+  "slow_variables": [
+    "Education-policy formulation and interdepartmental governance",
+    "Faculty and administrative recruitment pipelines",
+    "Accreditation and affiliation assurance cycles",
+    "Capital planning and infrastructure utilization discipline",
+    "Internal quality-assurance and academic-audit systems"
+  ],
+  "contributing_factors": [
+    "Departments had not formulated comprehensive policies aligned to their stated visions.",
+    "Key regulatory committees and policy-guideline revisions were delayed.",
+    "Universities lacked operational plans, had severe staff shortages, and operated with gaps in accreditation.",
+    "Internal quality assurance cells did not function at the required cadence."
+  ],
+  "good_interventions_ranked": [
+    "Publish a comprehensive Delhi higher-education and technical-education policy with accountable owners, timelines, and a review mechanism.",
+    "Require each university to maintain long-term and annual plans linked to staffing, accreditation, infrastructure, and student-outcome milestones.",
+    "Run time-bound recruitment and accreditation remediation, with recurring academic/administrative audits feeding into governing-body oversight."
+  ],
+  "bad_interventions": [
+    "Adding isolated infrastructure projects without fixing governance, planning, and staffing",
+    "Trying to fill seats through marketing before resolving accreditation, course relevance, and quality gaps",
+    "One-off committee creation without clear authority, cadence, and follow-through"
+  ],
+  "early_warning_signals": [
+    "Mission statements without associated policy documents or annual operating plans",
+    "Leadership posts repeatedly filled on temporary or additional-charge arrangements",
+    "Accreditation timelines slipping without escalation",
+    "Chronic seat vacancies coexisting with infrastructure or staffing shortfalls",
+    "Quality-assurance committees missing meetings or not closing audit findings"
+  ],
+  "distractors_to_penalize": [
+    "Purely cosmetic campus upgrades",
+    "Generic digitalization recommendations without process accountability",
+    "Blaming only student demand while ignoring quality/governance weaknesses"
+  ],
+  "evidence": [
+    "The audit found no comprehensive policies aligned to the departments’ visions and widespread issues across accreditation, staffing, infrastructure, finance, and controls.",
+    "Its recommendations centered on policy, planning, accreditation timelines, recruitment, infrastructure coordination, and recurring audits."
+  ]
+}

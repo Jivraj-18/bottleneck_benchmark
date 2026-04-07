@@ -1,0 +1,10 @@
+{
+  "case_id": "LARAVEL-2026-02-20-CLOUDFLARE",
+  "title": "Laravel Cloud connectivity outage from upstream BYOIP dependency",
+  "vendor": "Laravel Cloud",
+  "published_date": "2026-02-20",
+  "incident_date": "2026-02-20",
+  "source_title": "Laravel Cloud Incident Report: February 20, 2026",
+  "source_url": "https://laravel.com/blog/laravel-cloud-incident-report-february-20-2026",
+  "why_selected": "Excellent downstream-customer perspective on the same network incident, showing how vendor dependencies and self-mitigation gaps become the real bottleneck for customers."
+}

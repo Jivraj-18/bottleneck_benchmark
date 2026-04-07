@@ -1,0 +1,385 @@
+{
+  "cases": [
+    {
+      "case_id": "CF-2026-02-20-BYOIP",
+      "title": "Cloudflare BYOIP prefix withdrawal outage",
+      "vendor": "Cloudflare",
+      "published_date": "2026-02-21",
+      "incident_date": "2026-02-20",
+      "source_title": "Cloudflare outage on February 20, 2026",
+      "source_url": "https://blog.cloudflare.com/cloudflare-outage-february-20-2026/",
+      "why_selected": "Detailed provider postmortem with timeline, technical cause, blast-radius mechanics, and explicit remediation steps.",
+      "model_packet": {
+        "background": "A major edge/network provider experienced an outage that affected a subset of customers using a service that lets them bring their own IP ranges. Some customer services became unreachable from the Internet, causing timeouts and connection failures. The provider's recursive DNS website also saw 403 errors.",
+        "system_context": [
+          "The affected service manages customer IP prefixes and their advertisement to the Internet.",
+          "Customer changes are persisted in an authoritative database, and the same database is used for operational actions.",
+          "Customers can sometimes self-mitigate by re-advertising their prefixes via a dashboard.",
+          "A release related to the addressing API completed shortly before impact began."
+        ],
+        "timeline": [
+          "2026-02-05 21:53 UTC: code related to the later incident was merged.",
+          "2026-02-20 17:46 UTC: release completed.",
+          "2026-02-20 17:56 UTC: impact began as prefix advertisement updates started propagating; prefixes began to be withdrawn.",
+          "2026-02-20 18:13 UTC: provider engaged for failures on a high-visibility internal service.",
+          "2026-02-20 18:18 UTC: internal incident declared.",
+          "2026-02-20 18:21 UTC: engineering team responsible for the addressing API paged.",
+          "2026-02-20 18:46 UTC: team identified the issue and disabled the problematic execution path.",
+          "2026-02-20 19:11 UTC onward: teams worked on restoring serviceability for withdrawn and removed prefixes.",
+          "2026-02-20 19:19 UTC: some customers began re-advertising prefixes via dashboard, partially reducing impact.",
+          "2026-02-20 23:03 UTC: global configuration rollout completed; incident ended."
+        ],
+        "observations": [
+          "Roughly 1,100 customer prefixes were withdrawn before the team was able to revert the change.",
+          "Most of the total incident duration was spent restoring prefix configurations to their prior state.",
+          "Rollback and recovery were harder because desired customer configuration and operational state were tightly coupled.",
+          "The provider later emphasized the need for controlled rollouts, rollback mechanisms, and broad-change circuit breakers."
+        ],
+        "task": "Identify the binding constraint and slow variables. What governed the severity and duration of this incident regardless of improvements elsewhere? Recommend the top 3 interventions and 2 things you would explicitly deprioritize."
+      },
+      "gold_packet": {
+        "binding_constraint_top1": "Unsafe control-plane change propagation from the addressing/control system into production network state, with no health-mediated staged rollout or fast rollback path.",
+        "binding_constraint_top3": [
+          "Tight coupling between authoritative customer configuration and operational production state, making rollback and recovery slow.",
+          "Lack of circuit breakers or arbitration for large-scale withdrawal actions in the IP management pipeline."
+        ],
+        "slow_variables": [
+          "Control-plane architecture and separation of desired vs operational state",
+          "Rollback design and health-mediated deployment capability",
+          "Schema correctness and type standardization in the addressing API",
+          "Broad-change detection / circuit-breaker mechanisms"
+        ],
+        "contributing_factors": [
+          "A broken sub-process in the release began executing after deployment.",
+          "The pending_delete flag was interpreted as a string, which made validation weaker and behavior harder to reason about.",
+          "Large-scale withdrawal actions were able to proceed without automated blast-radius checks.",
+          "Engineers had to recover both withdrawn and removed prefixes, which prolonged restoration."
+        ],
+        "good_interventions_ranked": [
+          "Separate desired customer configuration from operational production state, so bad control-plane changes can be reverted quickly without database surgery.",
+          "Require health-mediated, staged rollouts for any network-affecting configuration change, with automatic stop/rollback on adverse signals.",
+          "Add broad-change circuit breakers that halt deployments when prefixes are being withdrawn/deleted too quickly or too broadly."
+        ],
+        "bad_interventions": [
+          "Adding more incident-response staffing without changing rollout and rollback mechanics",
+          "Improving only customer communications while leaving the control-plane blast radius unchanged",
+          "Optimizing data-plane performance; the key issue was unsafe control-plane mutation, not serving capacity"
+        ],
+        "early_warning_signals": [
+          "Unusually rapid or broad prefix withdrawals/deletions",
+          "Synthetic probes showing customer services becoming unreachable shortly after a control-plane release",
+          "Mismatch growth between desired prefix inventory and operationally advertised prefixes"
+        ],
+        "distractors_to_penalize": [
+          "General network capacity expansion",
+          "More dashboard UX polish",
+          "Purely manual runbook improvements without architectural rollback support"
+        ],
+        "evidence": [
+          "Customer prefixes were unintentionally withdrawn after a change to network IP address management.",
+          "The provider later committed to API schema standardization, better separation of operational and configured state, and circuit breakers for large withdrawal actions."
+        ]
+      }
+    },
+    {
+      "case_id": "LARAVEL-2026-02-20-CLOUDFLARE",
+      "title": "Laravel Cloud connectivity outage from upstream BYOIP dependency",
+      "vendor": "Laravel Cloud",
+      "published_date": "2026-02-20",
+      "incident_date": "2026-02-20",
+      "source_title": "Laravel Cloud Incident Report: February 20, 2026",
+      "source_url": "https://laravel.com/blog/laravel-cloud-incident-report-february-20-2026",
+      "why_selected": "Excellent downstream-customer perspective on the same network incident, showing how vendor dependencies and self-mitigation gaps become the real bottleneck for customers.",
+      "model_packet": {
+        "background": "A cloud application platform experienced a connectivity outage lasting about 3 hours and 15 minutes. Customer apps, the control panel, and API became unreachable. Running apps, databases, and caches remained healthy, and no customer data was lost.",
+        "system_context": [
+          "The platform relies on an upstream network provider for BYOIP-style IP prefix management.",
+          "The outage was network-level: applications and infrastructure kept running but could not be reached.",
+          "The team has redundancy in much of its infrastructure, but not yet in the IP announcement layer."
+        ],
+        "timeline": [
+          "18:42 UTC: platform monitoring detected connectivity failures; incident declared.",
+          "18:45 UTC: upstream provider began investigating network issues.",
+          "18:48 UTC: status page and social notification updated.",
+          "19:09 UTC: upstream provider identified impact to a subset of BYOIP prefixes and said the underlying issue was mitigated; restoration work began.",
+          "Around 19:40 UTC: platform attempted to re-advertise prefixes through the provider dashboard, but the prefixes were locked in a withdrawn state.",
+          "20:50 UTC: upstream provider acknowledged some customers could not re-advertise through the dashboard and began working on a fix.",
+          "21:57 UTC: full connectivity restored."
+        ],
+        "observations": [
+          "The team's monitoring caught the issue before the upstream status page reflected it.",
+          "A suggested self-mitigation path existed in theory but was unavailable in practice because prefixes were locked.",
+          "Recovery depended on the upstream provider unlocking or restoring the prefixes.",
+          "The platform explicitly said a single upstream dependency could still cause prolonged outage."
+        ],
+        "task": "Identify the binding constraint and slow variables. What truly governed outage duration here? Recommend the top 3 interventions and 2 things to deprioritize."
+      },
+      "gold_packet": {
+        "binding_constraint_top1": "Single-provider dependency in the IP announcement layer, combined with lack of an independent failover path when the provider's control plane or recovery workflow was unavailable.",
+        "binding_constraint_top3": [
+          "No redundancy/decoupling at the network announcement layer",
+          "Recovery dependence on an upstream provider because self-mitigation was blocked by locked withdrawn prefixes"
+        ],
+        "slow_variables": [
+          "Network architecture redundancy and multi-provider/failover design",
+          "Vendor dependency management and recovery assumptions",
+          "Control over announcement-layer operations vs delegated control to an upstream provider"
+        ],
+        "contributing_factors": [
+          "The platform's applications and data plane remained healthy, but the routing path disappeared.",
+          "The dashboard-based re-advertisement path was not actually usable because prefixes were locked in a withdrawn state.",
+          "Recovery was delayed until the upstream provider fixed the locked-prefix problem and restored the routes."
+        ],
+        "good_interventions_ranked": [
+          "Introduce redundancy or failover at the IP announcement layer so one upstream provider cannot fully isolate the platform.",
+          "Design a tested recovery path that remains available even when the provider's normal control surface is impaired.",
+          "Audit critical dependencies specifically for 'self-mitigation works in theory but not under this failure mode' gaps."
+        ],
+        "bad_interventions": [
+          "Scaling the underlying application infrastructure",
+          "Database/cache performance work",
+          "More status-page automation without changing the dependency architecture"
+        ],
+        "early_warning_signals": [
+          "Connectivity probes failing while origin/application health remains normal",
+          "Provider-advised self-mitigation steps failing due to control-plane state locks",
+          "Critical dependency layers with no redundant path despite redundancy elsewhere"
+        ],
+        "distractors_to_penalize": [
+          "App performance tuning",
+          "Deployment pipeline optimization",
+          "General observability improvements not tied to dependency failover"
+        ],
+        "evidence": [
+          "The report explicitly says the redundancy gap was in the IP announcement layer.",
+          "Apps and data remained healthy; the outage was governed by routing control and dependency recovery."
+        ]
+      }
+    },
+    {
+      "case_id": "CLERK-2026-03-10-CLOUDSQL",
+      "title": "Clerk outage from failed Cloud SQL live migration",
+      "vendor": "Clerk",
+      "published_date": "2026-03-13",
+      "incident_date": "2026-03-10",
+      "source_title": "Postmortem: Clerk System Outage (March 10, 2026)",
+      "source_url": "https://clerk.com/blog/2026-03-10-service-outage-postmortem",
+      "why_selected": "Very strong benchmark material: detailed timeline, visible misleading symptoms, explicit root cause, and unusually candid remediation discussion around vendor dependency and architecture choices.",
+      "model_packet": {
+        "background": "An authentication platform saw increased latency, elevated 5xx errors, and widespread request throttling. Session management was partially restored during the incident via an outage mode, but many requests still returned errors. The incident resolved on its own after roughly 26 minutes.",
+        "system_context": [
+          "The platform depends on a managed PostgreSQL offering with high availability.",
+          "The database CPU remained within normal limits during the incident.",
+          "Monitoring showed increased lock contention and elevated read-side IO wait without a corresponding increase in writes.",
+          "Attempts to offload reads to replicas did not help."
+        ],
+        "timeline": [
+          "15:57 UTC: alerting detected increased latency and elevated 5xx errors; lock contention had started about a minute earlier.",
+          "During investigation: no clear smoking gun; team attempted to move reads to replicas, without success.",
+          "Compute resources became saturated as queries and transactions slowed, leading to 429 responses.",
+          "Session outage resiliency triggered automatically but most session token requests still returned 429 while compute remained saturated.",
+          "16:10 UTC: team enabled Origin Outage Mode, restoring session operations.",
+          "During investigation: team noted unusual elevated IO wait on reads without matching write increase and suspected an infrastructure issue.",
+          "16:23 UTC: issue resolved on its own; platform stabilized."
+        ],
+        "observations": [
+          "The database itself looked 'up' and CPU was normal, making the issue harder to diagnose from usual signals.",
+          "The failure mode had been seen before in a related form months earlier.",
+          "The service relies on maintenance behaviors of a managed database provider and does not get advance notice of certain operations.",
+          "The company later said it may need to migrate providers or operate the database itself if this behavior cannot be disabled."
+        ],
+        "task": "Identify the binding constraint and slow variables. What governed outage severity and repeatability here? Recommend the top 3 interventions and 2 things to deprioritize."
+      },
+      "gold_packet": {
+        "binding_constraint_top1": "Dependence on opaque live migration behavior in the managed database provider, whose failure mode caused severe disk latency and lock contention despite the database remaining nominally 'up'.",
+        "binding_constraint_top3": [
+          "Lack of control over a catastrophic provider maintenance path",
+          "Architecture/operational dependence on live migration as a maintenance primitive"
+        ],
+        "slow_variables": [
+          "Provider/platform choice and degree of operational control",
+          "Database maintenance/failover strategy",
+          "Ability to opt out of risky managed-provider behaviors",
+          "Error translation and reliability hardening around provider-induced degradation"
+        ],
+        "contributing_factors": [
+          "A failed live migration caused increased disk latency, which increased lock contention and saturated compute.",
+          "The usual signs were misleading: CPU was normal and reads-vs-writes looked odd, delaying confident diagnosis.",
+          "Replica-read offloading did not help because the underlying bottleneck was infrastructure-level disk latency during migration."
+        ],
+        "good_interventions_ranked": [
+          "Avoid or disable live migrations; use planned replica promotion / explicit maintenance workflows instead.",
+          "Re-pin or otherwise constrain provider maintenance until the unsafe migration mode is eliminated.",
+          "Evaluate migrating to a different database provider or self-operating Postgres if the risky maintenance behavior cannot be turned off."
+        ],
+        "bad_interventions": [
+          "Adding more database CPU",
+          "Read-replica scaling alone",
+          "Tuning only query/application performance while leaving live-migration risk intact"
+        ],
+        "early_warning_signals": [
+          "Read-side IO wait spikes without matching write increase",
+          "Lock contention spikes with normal CPU",
+          "Previous incident history showing that provider live-migration failures have catastrophic behavior"
+        ],
+        "distractors_to_penalize": [
+          "General app-layer optimization",
+          "Replica count increases as the primary fix",
+          "Treating this as a generic traffic surge"
+        ],
+        "evidence": [
+          "The postmortem attributes the outage to a failed Google Cloud SQL live migration.",
+          "The company concluded that if live migrations cannot be disabled, it may need another provider or in-house operation."
+        ]
+      }
+    },
+    {
+      "case_id": "GH-2026-02-02-ACTIONS",
+      "title": "GitHub Actions outage from provider policy change blocking VM metadata",
+      "vendor": "GitHub",
+      "published_date": "2026-02-03",
+      "incident_date": "2026-02-02",
+      "source_title": "GitHub Status - Incident with Actions",
+      "source_url": "https://www.githubstatus.com/incidents/xwn6hjps36ty",
+      "why_selected": "Compact but high-quality incident report with clear impact, true bottleneck, and remediation focus on provider coordination and safe rollout of changes.",
+      "model_packet": {
+        "background": "A large code-hosting platform had a major incident in which hosted CI runners became unavailable across all regions and all runner types. Jobs queued and timed out waiting for hosted runners. Several dependent features were also affected, while self-hosted runners on other providers were not.",
+        "system_context": [
+          "The affected service depends on compute-provider primitives for VM lifecycle operations.",
+          "Impacted features included Actions and several features that rely on the same compute infrastructure.",
+          "Self-hosted runners outside the affected provider were not impacted."
+        ],
+        "timeline": [
+          "18:35 UTC: hosted runners became unavailable.",
+          "19:03 UTC: public incident opened for Actions.",
+          "21:13 UTC: team said root cause was identified and they were working with the upstream provider.",
+          "22:53 UTC: upstream provider applied mitigation; telemetry improved.",
+          "23:50 UTC: most customers should see recovery from failing hosted-runner jobs.",
+          "Full recovery occurred later for standard and larger runners after backlog drained."
+        ],
+        "observations": [
+          "Impact spanned all regions and runner types, which is atypical for this area.",
+          "The outage blocked VM create, delete, reimage, and related operations.",
+          "The root issue originated in the underlying compute provider rather than GitHub application logic.",
+          "Recovery required upstream rollback before queues could drain."
+        ],
+        "task": "Identify the binding constraint and slow variables. What governed global impact here, and what are the top 3 interventions and 2 deprioritized actions?"
+      },
+      "gold_packet": {
+        "binding_constraint_top1": "A provider-side backend storage access policy change blocked critical VM metadata access, breaking VM lifecycle operations that Actions hosted runners depend on globally.",
+        "binding_constraint_top3": [
+          "Hidden single point of failure in provider metadata/control dependency for hosted-runner lifecycle operations",
+          "Insufficient isolation/failover away from a provider-wide metadata/control-plane failure"
+        ],
+        "slow_variables": [
+          "Provider dependency architecture and cross-region blast-radius assumptions",
+          "Safe rollout and early detection for provider policy changes",
+          "Incident-response and escalation paths with the underlying compute provider"
+        ],
+        "contributing_factors": [
+          "The failure was global, not regional, because the policy change affected backend storage accounts broadly.",
+          "Dependent features sharing the same compute substrate were affected too.",
+          "Even after rollback, backlog drain extended perceived recovery."
+        ],
+        "good_interventions_ranked": [
+          "Improve isolation and failover assumptions around provider metadata/control dependencies for runner lifecycle operations.",
+          "Work with the provider on safer rollout and earlier detection of backend policy changes before customer impact.",
+          "Reduce dependency coupling so secondary features do not all fail when hosted-runner VM lifecycle operations are blocked."
+        ],
+        "bad_interventions": [
+          "Adding more runner capacity without addressing metadata/control-plane dependency",
+          "Application-layer tuning for Actions queue handling as the main fix",
+          "Focusing only on customer messaging"
+        ],
+        "early_warning_signals": [
+          "Cross-region spikes in VM create/delete/reimage failures",
+          "Hosted-runner wait times rising globally while self-hosted runners remain healthy",
+          "Provider telemetry/policy changes touching backend storage or metadata access"
+        ],
+        "distractors_to_penalize": [
+          "Generic CI performance optimization",
+          "Code-level changes in Actions workflows",
+          "Scaling Pages/Copilot independently"
+        ],
+        "evidence": [
+          "The report says a backend storage access policy change blocked critical VM metadata access.",
+          "Hosted runners across all regions were affected; self-hosted runners on other providers were not."
+        ]
+      }
+    },
+    {
+      "case_id": "GH-2026-02-09-CACHE",
+      "title": "GitHub multi-service degradation from user-settings cache rewrite cascade",
+      "vendor": "GitHub",
+      "published_date": "2026-02-09",
+      "incident_date": "2026-02-09",
+      "source_title": "GitHub Status - Incident with Issues, Actions and Git Operations",
+      "source_url": "https://www.githubstatus.com/incidents/lcw3tg2f6zsd",
+      "why_selected": "Excellent systems case: a real bottleneck hidden behind many symptoms, cascading failure across multiple services, and clear interventions around write amplification, throttling, rollback, and recovery behavior.",
+      "model_packet": {
+        "background": "A large developer platform experienced two related periods of degraded availability on the same day. Users saw errors loading pages, failures for Git over HTTPS, failures in workflow runs, and errors in AI-assisted features. SSH-based Git operations were not affected.",
+        "system_context": [
+          "A user settings caching mechanism is involved in requests from several services.",
+          "The platform uses shared infrastructure components for coordinating background work and for proxying Git operations over HTTPS.",
+          "A recent configuration change affected the caching mechanism."
+        ],
+        "timeline": [
+          "First degraded period: 16:12 UTC to 17:39 UTC.",
+          "Second degraded period: 18:53 UTC to 20:09 UTC.",
+          "After initial mitigations, some services recovered before others.",
+          "The team eventually disabled the source(s) of problematic cache rewrites and restarted the affected Git proxy service."
+        ],
+        "observations": [
+          "The same underlying issue created two incidents through two different write paths.",
+          "One affected path involved asynchronous rewrites; another involved synchronous writes not addressed by the initial mitigation.",
+          "The Git HTTPS proxy exhausted available connections under the load/cascade.",
+          "The company later emphasized write amplification, self-throttling, rollback responsiveness, and proxy auto-recovery."
+        ],
+        "task": "Identify the binding constraint and slow variables. What truly governed platform-wide impact here? Recommend the top 3 interventions and 2 deprioritized actions."
+      },
+      "gold_packet": {
+        "binding_constraint_top1": "A user-settings cache configuration change that triggered high-volume cache rewrites, overwhelming shared coordination/proxy infrastructure and exhausting Git HTTPS proxy connections.",
+        "binding_constraint_top3": [
+          "Write amplification in a shared caching mechanism tied to many services",
+          "Lack of self-throttling / rollback responsiveness in bulk cache updates",
+          "Proxy layer inability to self-recover from connection exhaustion"
+        ],
+        "slow_variables": [
+          "Caching architecture and write-amplification behavior",
+          "Isolation of shared infrastructure components from bulk background work",
+          "Rollback and throttling safeguards for cache/config changes",
+          "Recovery behavior of the Git HTTPS proxy layer"
+        ],
+        "contributing_factors": [
+          "The first incident came from asynchronous rewrites overwhelming a shared infrastructure component.",
+          "The second incident came from an additional synchronous write source that bypassed the initial mitigation.",
+          "Shared components caused the blast radius to include github.com, API, Actions, Copilot, webhooks, Pages, Codespaces, and more."
+        ],
+        "good_interventions_ranked": [
+          "Redesign the caching mechanism to reduce write amplification and add self-throttling during bulk updates.",
+          "Strengthen rollout/validation/rollback safeguards for caching-system configuration changes.",
+          "Fix the Git HTTPS proxy failure mode so connection exhaustion does not require manual restarts to recover."
+        ],
+        "bad_interventions": [
+          "Front-end performance work",
+          "Scaling only one affected service such as Actions without fixing the shared cache/proxy cascade",
+          "Treating each impacted product separately instead of as a shared-systems issue"
+        ],
+        "early_warning_signals": [
+          "Sharp increase in cache rewrite volume during/after config changes",
+          "Shared coordination infrastructure saturation",
+          "Git HTTPS proxy connection pool exhaustion while SSH Git remains healthy"
+        ],
+        "distractors_to_penalize": [
+          "Purely product-specific mitigations",
+          "Extra capacity alone without write-amplification control",
+          "General customer support improvements"
+        ],
+        "evidence": [
+          "The status report says both incidents shared the same underlying cause: a configuration change to the user settings caching mechanism.",
+          "Immediate steps focused on reducing write amplification, adding self-throttling, hardening rollbacks, and fixing proxy recovery."
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "case_id": "IN-2026-03-23-DELHI-UNIVERSITIES",
+  "binary_checks": [
+    "Did the answer identify system-level governance/planning as the main bottleneck rather than just infrastructure or staff shortages?",
+    "Did the answer name at least one real slow variable such as recruitment pipelines, accreditation cycles, or policy architecture?",
+    "Did the top intervention strengthen system planning or governance directly?",
+    "Did the answer avoid distractors such as campus beautification or pure demand-generation fixes?",
+    "Did the answer include at least one concrete early-warning signal?"
+  ],
+  "graded_checks": {
+    "binding_constraint_accuracy_0_to_2": {
+      "0": "Missed or generic",
+      "1": "Partially right / near-equivalent",
+      "2": "Correct and case-specific"
+    },
+    "slow_variable_recall_0_to_2": {
+      "0": "No real slow variables",
+      "1": "One real slow variable or mixed with symptoms",
+      "2": "Multiple real slow variables, clearly separated from symptoms"
+    },
+    "intervention_quality_0_to_2": {
+      "0": "Mostly non-binding or cosmetic",
+      "1": "Mixed",
+      "2": "Targets the real bottleneck directly"
+    },
+    "distractor_resistance_0_to_2": {
+      "0": "Chases distractors",
+      "1": "Some distractor contamination",
+      "2": "Stays focused on the real constraint"
+    }
+  }
+}

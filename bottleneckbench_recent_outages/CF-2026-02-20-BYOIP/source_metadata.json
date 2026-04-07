@@ -1,0 +1,10 @@
+{
+  "case_id": "CF-2026-02-20-BYOIP",
+  "title": "Cloudflare BYOIP prefix withdrawal outage",
+  "vendor": "Cloudflare",
+  "published_date": "2026-02-21",
+  "incident_date": "2026-02-20",
+  "source_title": "Cloudflare outage on February 20, 2026",
+  "source_url": "https://blog.cloudflare.com/cloudflare-outage-february-20-2026/",
+  "why_selected": "Detailed provider postmortem with timeline, technical cause, blast-radius mechanics, and explicit remediation steps."
+}

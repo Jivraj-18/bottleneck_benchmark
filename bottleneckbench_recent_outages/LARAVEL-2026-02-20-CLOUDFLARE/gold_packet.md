@@ -1,0 +1,51 @@
+# Laravel Cloud connectivity outage from upstream BYOIP dependency — Gold packet
+
+## Binding Constraint Top1
+
+Single-provider dependency in the IP announcement layer, combined with lack of an independent failover path when the provider's control plane or recovery workflow was unavailable.
+
+## Binding Constraint Top3
+
+- No redundancy/decoupling at the network announcement layer
+- Recovery dependence on an upstream provider because self-mitigation was blocked by locked withdrawn prefixes
+
+## Slow Variables
+
+- Network architecture redundancy and multi-provider/failover design
+- Vendor dependency management and recovery assumptions
+- Control over announcement-layer operations vs delegated control to an upstream provider
+
+## Contributing Factors
+
+- The platform's applications and data plane remained healthy, but the routing path disappeared.
+- The dashboard-based re-advertisement path was not actually usable because prefixes were locked in a withdrawn state.
+- Recovery was delayed until the upstream provider fixed the locked-prefix problem and restored the routes.
+
+## Good Interventions Ranked
+
+- Introduce redundancy or failover at the IP announcement layer so one upstream provider cannot fully isolate the platform.
+- Design a tested recovery path that remains available even when the provider's normal control surface is impaired.
+- Audit critical dependencies specifically for 'self-mitigation works in theory but not under this failure mode' gaps.
+
+## Bad Interventions
+
+- Scaling the underlying application infrastructure
+- Database/cache performance work
+- More status-page automation without changing the dependency architecture
+
+## Early Warning Signals
+
+- Connectivity probes failing while origin/application health remains normal
+- Provider-advised self-mitigation steps failing due to control-plane state locks
+- Critical dependency layers with no redundant path despite redundancy elsewhere
+
+## Distractors To Penalize
+
+- App performance tuning
+- Deployment pipeline optimization
+- General observability improvements not tied to dependency failover
+
+## Evidence
+
+- The report explicitly says the redundancy gap was in the IP announcement layer.
+- Apps and data remained healthy; the outage was governed by routing control and dependency recovery.

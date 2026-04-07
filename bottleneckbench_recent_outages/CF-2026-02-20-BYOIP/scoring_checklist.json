@@ -1,0 +1,32 @@
+{
+  "case_id": "CF-2026-02-20-BYOIP",
+  "binary_checks": [
+    "Did the answer identify the true binding constraint or an acceptable near-equivalent?",
+    "Did the answer name at least one real slow variable rather than only symptoms or fast variables?",
+    "Did the top intervention act on the binding constraint?",
+    "Did the answer avoid at least one known distractor/non-bottleneck action?",
+    "Did the answer include at least one plausible early-warning signal?"
+  ],
+  "graded_checks": {
+    "binding_constraint_accuracy_0_to_2": {
+      "0": "Missed or generic",
+      "1": "Partially right / near-equivalent",
+      "2": "Correct and case-specific"
+    },
+    "slow_variable_recall_0_to_2": {
+      "0": "No real slow variables",
+      "1": "One real slow variable or mixed with symptoms",
+      "2": "Multiple real slow variables, clearly separated from symptoms"
+    },
+    "intervention_quality_0_to_2": {
+      "0": "Mostly non-binding or cosmetic",
+      "1": "Mixed",
+      "2": "Targets the real bottleneck directly"
+    },
+    "distractor_resistance_0_to_2": {
+      "0": "Chases distractors",
+      "1": "Some distractor contamination",
+      "2": "Stays focused on the real constraint"
+    }
+  }
+}

@@ -1,0 +1,26 @@
+# ZA-2026-03-26-AGSA-PFMA model packet
+
+## Background
+South Africa’s Auditor-General reviewed audit outcomes for national and provincial departments, public entities, and legislatures. One year into the new administration, the report highlights minimal overall progress in audit outcomes and service-delivery foundations, especially among high-impact auditees.
+
+## System Context
+- 417 auditees were covered.
+- 151 auditees achieved clean audits, while the remainder managed most of the expenditure budget.
+- High-impact auditees account for the majority of expenditure and affect sectors such as education, health, infrastructure, water, transport, and security.
+- The audit office stressed that poor audit outcomes are closely linked to service-delivery risk.
+
+## Timeline
+- 2024-25 audit cycle: outcomes assessed across national and provincial government.
+- The report notes prior-year recommendations had seen little implementation progress.
+- 26 March 2026: media release and general report published.
+
+## Observations
+- Only a minority of auditees achieved clean audits, and those represented a small share of total expenditure.
+- Many auditees still could not produce credible financial and performance reports or ensure legislative compliance.
+- Audit regressions were significant and affected major expenditure areas.
+- Procurement and contract-management failures remained major drivers of irregular expenditure.
+- Non-compliance persisted with weak consequences, creating a culture of tolerance and impunity.
+- The report explicitly says the weaknesses are not mainly due to unclear mandates, lack of structures, or insufficient funding.
+
+## Task
+Identify the binding constraint and slow variables. What governed the weak audit and service-delivery outcomes here regardless of improvements elsewhere? Recommend the top 3 interventions and 2 things you would explicitly deprioritize.

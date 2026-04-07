@@ -1,0 +1,21 @@
+{
+  "background": "A large developer platform experienced two related periods of degraded availability on the same day. Users saw errors loading pages, failures for Git over HTTPS, failures in workflow runs, and errors in AI-assisted features. SSH-based Git operations were not affected.",
+  "system_context": [
+    "A user settings caching mechanism is involved in requests from several services.",
+    "The platform uses shared infrastructure components for coordinating background work and for proxying Git operations over HTTPS.",
+    "A recent configuration change affected the caching mechanism."
+  ],
+  "timeline": [
+    "First degraded period: 16:12 UTC to 17:39 UTC.",
+    "Second degraded period: 18:53 UTC to 20:09 UTC.",
+    "After initial mitigations, some services recovered before others.",
+    "The team eventually disabled the source(s) of problematic cache rewrites and restarted the affected Git proxy service."
+  ],
+  "observations": [
+    "The same underlying issue created two incidents through two different write paths.",
+    "One affected path involved asynchronous rewrites; another involved synchronous writes not addressed by the initial mitigation.",
+    "The Git HTTPS proxy exhausted available connections under the load/cascade.",
+    "The company later emphasized write amplification, self-throttling, rollback responsiveness, and proxy auto-recovery."
+  ],
+  "task": "Identify the binding constraint and slow variables. What truly governed platform-wide impact here? Recommend the top 3 interventions and 2 deprioritized actions."
+}

@@ -1,0 +1,555 @@
+[
+  {
+    "case_id": "AU-2026-01-21-CLOSINGGAP",
+    "title": "Closing the Gap in Schooling and Early Childhood Development — Partnership and Reporting",
+    "publisher": "Australian National Audit Office (ANAO)",
+    "source_type": "Performance audit report",
+    "publication_date": "2026-01-21",
+    "geography": "Australia",
+    "url": "https://www.anao.gov.au/work/performance-audit/closing-the-gap-schooling-and-early-childhood-development-partnership-and-reporting",
+    "model_packet": {
+      "background": "Australia’s 2020 National Agreement on Closing the Gap includes targets for preschool enrolment, developmental progress, and year 12 completion. Four federal entities have key roles for these education-related targets. Multiple stakeholders rely on annual reporting and dashboard data to understand progress and whether partnership obligations are being met.",
+      "system_context": [
+        "The agreement emphasizes both outcomes and the way governments work with First Nations people, including policy partnerships and place-based partnerships.",
+        "The Early Childhood Care and Development Policy Partnership is one of the most developed partnership arrangements in this area.",
+        "The Australian Government is jointly accountable with states and territories for implementation.",
+        "Progress is mixed: one target was considered on track, one worsening, and one improving but not on track."
+      ],
+      "timeline": [
+        "2020: National Agreement on Closing the Gap signed.",
+        "2021: Data specifications for targets were endorsed before the first dashboard release.",
+        "2021–2024: Government implementation plans and annual reports stated that six new place-based partnerships would be established by 2024.",
+        "June 2025: Place-based partnerships were still not fully established through formal agreements; several supporting indicators were still undeveloped."
+      ],
+      "observations": [
+        "Partnership activity was improving in some areas, but required place-based partnerships were delayed.",
+        "The lead federal entity did not have a documented strategy or practical plan for helping establish place-based partnerships.",
+        "Reporting on partnership progress was deficient and worsening across annual reports.",
+        "Progress reporting for the three education-related targets was described as accurate in parts, but incomplete or not fully meaningful in key ways.",
+        "Many supporting indicators intended to explain progress had not yet been developed.",
+        "No federal entity was publicly reporting the proportion of grant funding for these targets going to Aboriginal and Torres Strait Islander organisations."
+      ],
+      "task": "Identify the binding constraint and slow variables. What governed the quality of implementation and transparency here regardless of improvements elsewhere? Recommend the top 3 interventions and 2 things you would explicitly deprioritize."
+    },
+    "gold_packet": {
+      "binding_constraint_top1": "An incomplete accountability-and-implementation architecture for the agreement’s partnership obligations — especially place-based partnership execution, target reporting, and funding-transparency mechanisms — rather than a lack of stated goals.",
+      "binding_constraint_top3": [
+        "Weak cross-entity ownership and operating plans for establishing place-based partnerships on time.",
+        "Incomplete measurement/reporting design, including missing supporting indicators and unmeaningful or incomplete annual reporting.",
+        "Poor visibility into whether funding is actually reaching Aboriginal community-controlled and other Aboriginal and Torres Strait Islander organisations."
+      ],
+      "slow_variables": [
+        "Intergovernmental coordination capability and practical implementation planning",
+        "Data specification and reporting architecture for targets and supporting indicators",
+        "Funding transparency systems and grant-reporting discipline",
+        "Whole-of-government partnership capability and guidance for working with First Nations partners"
+      ],
+      "contributing_factors": [
+        "Required place-based partnerships were still not fully established by June 2025.",
+        "The lead entity lacked a documented strategy or practical plan to help establish these partnerships.",
+        "Annual reporting on partnership progress did not meet agreement requirements and worsened over time.",
+        "Many supporting indicators intended to add explanatory value were still undeveloped."
+      ],
+      "good_interventions_ranked": [
+        "Create a practical cross-entity implementation plan with deadlines, accountable owners, and escalation paths for establishing place-based partnerships.",
+        "Make annual reporting comply with agreement requirements, including progress, gaps, partnership status, and achievements for each place-based and policy partnership.",
+        "Track and publicly report the share of relevant funding going to Aboriginal community-controlled and other Aboriginal and Torres Strait Islander organisations, alongside supporting indicators that explain target movement."
+      ],
+      "bad_interventions": [
+        "Announcing new targets or strategies without fixing reporting and implementation mechanics",
+        "Increasing funding without building transparency into where it goes and what it changes",
+        "Focusing only on dashboard polish while leaving missing indicators and partnership-accountability gaps unresolved"
+      ],
+      "early_warning_signals": [
+        "Place-based partnerships still lacking formal agreements past stated deadlines",
+        "Annual reports omitting required partnership information or target context",
+        "Supporting indicators remaining undeveloped year after year",
+        "No public visibility into funding flows to Aboriginal community-controlled organisations"
+      ],
+      "distractors_to_penalize": [
+        "Generic calls for more collaboration without implementation mechanics",
+        "More public communications without better reporting substance",
+        "Headline target changes without governance/reporting reform"
+      ],
+      "evidence": [
+        "The audit found partnership arrangements and funding design largely improving, but transparency over progress was declining.",
+        "Place-based partnerships had not been established as required and reporting requirements on partnership success were not being met.",
+        "Progress reporting for Targets 3, 4 and 5 could be more reliable and complete, with many supporting indicators still not developed."
+      ]
+    },
+    "scoring_checklist": {
+      "case_id": "AU-2026-01-21-CLOSINGGAP",
+      "binary_checks": [
+        "Did the answer identify implementation/reporting architecture as the main bottleneck, not merely 'funding' or 'political will'?",
+        "Did the answer name at least one real slow variable such as reporting architecture, coordination capability, or funding transparency?",
+        "Did the top intervention target partnership implementation or reporting quality directly?",
+        "Did the answer avoid generic distractors such as new slogans, new targets, or unspecified more funding?",
+        "Did the answer include at least one concrete early-warning signal?"
+      ],
+      "graded_checks": {
+        "binding_constraint_accuracy_0_to_2": {
+          "0": "Missed or generic",
+          "1": "Partially right / near-equivalent",
+          "2": "Correct and case-specific"
+        },
+        "slow_variable_recall_0_to_2": {
+          "0": "No real slow variables",
+          "1": "One real slow variable or mixed with symptoms",
+          "2": "Multiple real slow variables, clearly separated from symptoms"
+        },
+        "intervention_quality_0_to_2": {
+          "0": "Mostly non-binding or cosmetic",
+          "1": "Mixed",
+          "2": "Targets the real bottleneck directly"
+        },
+        "distractor_resistance_0_to_2": {
+          "0": "Chases distractors",
+          "1": "Some distractor contamination",
+          "2": "Stays focused on the real constraint"
+        }
+      }
+    }
+  },
+  {
+    "case_id": "NZ-2026-03-12-CHATHAM",
+    "title": "Chatham Islands Council: Inquiry into sensitive expenditure and procurement",
+    "publisher": "Office of the Auditor-General New Zealand",
+    "source_type": "Inquiry report",
+    "publication_date": "2026-03-12",
+    "geography": "New Zealand",
+    "url": "https://oag.parliament.nz/2026/chatham-islands",
+    "model_packet": {
+      "background": "New Zealand’s smallest and most remote local authority came under inquiry after concerns about sensitive expenditure and procurement. The council serves about 600 people, relies heavily on central-government funding, has a small staff, and faces high logistical and governance complexity.",
+      "system_context": [
+        "The council operates in a geographically isolated setting with significant financial and capacity constraints.",
+        "The organisation is small, with a compact executive structure and staff performing multiple roles.",
+        "The council relies on external support from other public organisations for some services.",
+        "The inquiry examined a house upgrade linked to the chief executive, consultancy procurement, travel, credit-card use, and reimbursement claims."
+      ],
+      "timeline": [
+        "2024 annual audit: concerns raised about sensitive expenditure and procurement.",
+        "2022–2024: house-upgrade budget increased substantially and scope changed.",
+        "During the inquiry: documents and records provided by the chief executive were examined alongside procurement and spending records.",
+        "March 2026: inquiry report published."
+      ],
+      "observations": [
+        "The council had relevant policies and processes, but staff — including the chief executive — did not routinely follow them.",
+        "Systems to monitor and control spending were not working well.",
+        "The chief executive managed a house-upgrade project from which he stood to benefit, and project scope increased beyond what was necessary.",
+        "Consultancy contracts and spending were not appropriately documented or transparently reported to the council.",
+        "Credit-card and reimbursement controls were fragmented, leaving weak oversight.",
+        "The inquiry found multiple examples of inaccurate or misleading information supplied to the Auditor-General’s office."
+      ],
+      "task": "Identify the binding constraint and slow variables. What governed the quality of spending control and decision-making here regardless of improvements elsewhere? Recommend the top 3 interventions and 2 things you would explicitly deprioritize."
+    },
+    "gold_packet": {
+      "binding_constraint_top1": "A breakdown in governance integrity and spend-control enforcement — especially concentration of operational discretion in leadership without independent checks — rather than the absence of formal policies.",
+      "binding_constraint_top3": [
+        "Misalignment between written policy and day-to-day practice.",
+        "Weak internal control design and fragmented oversight of procurement, credit-card, reimbursement, and project decisions.",
+        "Leadership integrity and role-separation failures, amplified by a very small and capacity-constrained organisation."
+      ],
+      "slow_variables": [
+        "Ethical leadership and organisational integrity norms",
+        "Independent oversight capacity and role separation",
+        "Procurement and spending-control system design",
+        "Capability support for a small remote council, including shared services or external review"
+      ],
+      "contributing_factors": [
+        "The chief executive managed a project from which he benefited and expanded the project scope.",
+        "Consultancy contracts were poorly documented and conflicts were not clearly managed.",
+        "Separate review systems for credit-card spending and reimbursements weakened oversight.",
+        "Misleading records and altered documents undermined trust in governance and assurance processes."
+      ],
+      "good_interventions_ranked": [
+        "Remove conflicted officials from direct control of projects or procurements from which they may benefit, and require independent approval/review.",
+        "Redesign spending oversight so procurement, card use, reimbursements, and project approvals are reviewed through one enforceable control framework with documentary standards.",
+        "Provide targeted external/shared-service support for governance, procurement, and assurance functions given the council’s small size and isolation."
+      ],
+      "bad_interventions": [
+        "Simply rewriting policies without changing enforcement and independent oversight",
+        "Targeting only travel or petty expenses while ignoring leadership and control breakdowns",
+        "Providing more money without strengthening governance and assurance capability"
+      ],
+      "early_warning_signals": [
+        "Projects with repeated budget changes where the approver or manager has a personal benefit",
+        "Contracts, variations, or procurement memos created late or lacking contemporaneous records",
+        "Poor match rates between card/reimbursement records and supporting evidence",
+        "Frequent reliance on after-the-fact documentation to justify decisions"
+      ],
+      "distractors_to_penalize": [
+        "Cosmetic policy refreshes",
+        "One-off staff training without structural control changes",
+        "Narrow cost-cutting recommendations that miss integrity failures"
+      ],
+      "evidence": [
+        "The report found the council did not have adequate systems to manage sensitive expenditure and procurement effectively even though relevant policies existed.",
+        "Its main concerns were policy-practice misalignment, lack of effective controls, and organisational integrity and ethical leadership."
+      ]
+    },
+    "scoring_checklist": {
+      "case_id": "NZ-2026-03-12-CHATHAM",
+      "binary_checks": [
+        "Did the answer identify integrity/control breakdown rather than only transaction-specific overspending?",
+        "Did the answer name at least one real slow variable such as oversight capacity, role separation, or ethical leadership?",
+        "Did the top intervention strengthen independence or enforceable controls?",
+        "Did the answer avoid narrow distractors such as focusing only on travel costs or policy wording?",
+        "Did the answer include at least one useful early-warning signal?"
+      ],
+      "graded_checks": {
+        "binding_constraint_accuracy_0_to_2": {
+          "0": "Missed or generic",
+          "1": "Partially right / near-equivalent",
+          "2": "Correct and case-specific"
+        },
+        "slow_variable_recall_0_to_2": {
+          "0": "No real slow variables",
+          "1": "One real slow variable or mixed with symptoms",
+          "2": "Multiple real slow variables, clearly separated from symptoms"
+        },
+        "intervention_quality_0_to_2": {
+          "0": "Mostly non-binding or cosmetic",
+          "1": "Mixed",
+          "2": "Targets the real bottleneck directly"
+        },
+        "distractor_resistance_0_to_2": {
+          "0": "Chases distractors",
+          "1": "Some distractor contamination",
+          "2": "Stays focused on the real constraint"
+        }
+      }
+    }
+  },
+  {
+    "case_id": "IN-2026-03-23-DELHI-UNIVERSITIES",
+    "title": "Performance Audit on Functioning of Universities of GNCTD (Report 4 of 2025)",
+    "publisher": "Comptroller and Auditor General of India",
+    "source_type": "Performance audit report",
+    "publication_date": "2026-03-23",
+    "geography": "India",
+    "url": "https://cag.gov.in/ag/new-delhi/en/audit-report",
+    "model_packet": {
+      "background": "A performance audit examined how the Government of the National Capital Territory of Delhi and selected public universities planned and delivered higher and technical education. The review covered policy, academic quality, accreditation, affiliation, staffing, infrastructure, financial management, and internal controls.",
+      "system_context": [
+        "The audit examined a sample including an affiliating university and two technical universities.",
+        "Government departments were expected to formulate higher-education and technical-education policy and provide grants-in-aid.",
+        "Universities were expected to plan toward their stated vision, maintain accreditation, manage staffing and infrastructure, and run internal quality systems."
+      ],
+      "timeline": [
+        "Audit period covered April 2018 to March 2023.",
+        "Policy guidelines were not revised for several years and some regulatory committees were constituted late.",
+        "Several sampled universities operated for years without required accreditation coverage.",
+        "The report was published on 23 March 2026."
+      ],
+      "observations": [
+        "The government departments had mission statements but had not formulated comprehensive policies aligned to those missions.",
+        "There were delays in revising policy guidelines and constituting admission/fee-regulatory arrangements.",
+        "Sampled universities lacked long-term and annual plans tied to their stated goals.",
+        "Accreditation and affiliation processes were weak, with infrastructure and staffing deficiencies in affiliated institutions.",
+        "All three sampled universities had major shortages in teaching and non-teaching staff and key leadership roles were often held on additional-charge or consultant arrangements.",
+        "Infrastructure was inadequate or underutilized; seating deficits and large vacancy rates in student intake were observed.",
+        "Internal quality assurance cells did not meet regularly and academic/administrative audits were inadequate."
+      ],
+      "task": "Identify the binding constraint and slow variables. What governed quality and performance here regardless of improvements elsewhere? Recommend the top 3 interventions and 2 things you would explicitly deprioritize."
+    },
+    "gold_packet": {
+      "binding_constraint_top1": "A missing system-level governance and planning architecture for higher and technical education — spanning policy, institutional planning, staffing, accreditation, and internal quality control — rather than any single shortage in classrooms or funding.",
+      "binding_constraint_top3": [
+        "No comprehensive policy framework aligned to the government’s higher-education mission.",
+        "Weak institutional planning and execution inside universities, including missing annual plans and weak quality-assurance routines.",
+        "Persistent staffing and accreditation deficits that degrade quality and prevent the system from functioning as designed."
+      ],
+      "slow_variables": [
+        "Education-policy formulation and interdepartmental governance",
+        "Faculty and administrative recruitment pipelines",
+        "Accreditation and affiliation assurance cycles",
+        "Capital planning and infrastructure utilization discipline",
+        "Internal quality-assurance and academic-audit systems"
+      ],
+      "contributing_factors": [
+        "Departments had not formulated comprehensive policies aligned to their stated visions.",
+        "Key regulatory committees and policy-guideline revisions were delayed.",
+        "Universities lacked operational plans, had severe staff shortages, and operated with gaps in accreditation.",
+        "Internal quality assurance cells did not function at the required cadence."
+      ],
+      "good_interventions_ranked": [
+        "Publish a comprehensive Delhi higher-education and technical-education policy with accountable owners, timelines, and a review mechanism.",
+        "Require each university to maintain long-term and annual plans linked to staffing, accreditation, infrastructure, and student-outcome milestones.",
+        "Run time-bound recruitment and accreditation remediation, with recurring academic/administrative audits feeding into governing-body oversight."
+      ],
+      "bad_interventions": [
+        "Adding isolated infrastructure projects without fixing governance, planning, and staffing",
+        "Trying to fill seats through marketing before resolving accreditation, course relevance, and quality gaps",
+        "One-off committee creation without clear authority, cadence, and follow-through"
+      ],
+      "early_warning_signals": [
+        "Mission statements without associated policy documents or annual operating plans",
+        "Leadership posts repeatedly filled on temporary or additional-charge arrangements",
+        "Accreditation timelines slipping without escalation",
+        "Chronic seat vacancies coexisting with infrastructure or staffing shortfalls",
+        "Quality-assurance committees missing meetings or not closing audit findings"
+      ],
+      "distractors_to_penalize": [
+        "Purely cosmetic campus upgrades",
+        "Generic digitalization recommendations without process accountability",
+        "Blaming only student demand while ignoring quality/governance weaknesses"
+      ],
+      "evidence": [
+        "The audit found no comprehensive policies aligned to the departments’ visions and widespread issues across accreditation, staffing, infrastructure, finance, and controls.",
+        "Its recommendations centered on policy, planning, accreditation timelines, recruitment, infrastructure coordination, and recurring audits."
+      ]
+    },
+    "scoring_checklist": {
+      "case_id": "IN-2026-03-23-DELHI-UNIVERSITIES",
+      "binary_checks": [
+        "Did the answer identify system-level governance/planning as the main bottleneck rather than just infrastructure or staff shortages?",
+        "Did the answer name at least one real slow variable such as recruitment pipelines, accreditation cycles, or policy architecture?",
+        "Did the top intervention strengthen system planning or governance directly?",
+        "Did the answer avoid distractors such as campus beautification or pure demand-generation fixes?",
+        "Did the answer include at least one concrete early-warning signal?"
+      ],
+      "graded_checks": {
+        "binding_constraint_accuracy_0_to_2": {
+          "0": "Missed or generic",
+          "1": "Partially right / near-equivalent",
+          "2": "Correct and case-specific"
+        },
+        "slow_variable_recall_0_to_2": {
+          "0": "No real slow variables",
+          "1": "One real slow variable or mixed with symptoms",
+          "2": "Multiple real slow variables, clearly separated from symptoms"
+        },
+        "intervention_quality_0_to_2": {
+          "0": "Mostly non-binding or cosmetic",
+          "1": "Mixed",
+          "2": "Targets the real bottleneck directly"
+        },
+        "distractor_resistance_0_to_2": {
+          "0": "Chases distractors",
+          "1": "Some distractor contamination",
+          "2": "Stays focused on the real constraint"
+        }
+      }
+    }
+  },
+  {
+    "case_id": "ZA-2026-03-26-AGSA-PFMA",
+    "title": "2024-25 National and Provincial Government Audit Outcomes",
+    "publisher": "Auditor-General South Africa",
+    "source_type": "General audit report / media release",
+    "publication_date": "2026-03-26",
+    "geography": "South Africa",
+    "url": "https://www.agsa.co.za/Reporting/PFMAReports/PFMA2024-25.aspx",
+    "model_packet": {
+      "background": "South Africa’s Auditor-General reviewed audit outcomes for national and provincial departments, public entities, and legislatures. One year into the new administration, the report highlights minimal overall progress in audit outcomes and service-delivery foundations, especially among high-impact auditees.",
+      "system_context": [
+        "417 auditees were covered.",
+        "151 auditees achieved clean audits, while the remainder managed most of the expenditure budget.",
+        "High-impact auditees account for the majority of expenditure and affect sectors such as education, health, infrastructure, water, transport, and security.",
+        "The audit office stressed that poor audit outcomes are closely linked to service-delivery risk."
+      ],
+      "timeline": [
+        "2024-25 audit cycle: outcomes assessed across national and provincial government.",
+        "The report notes prior-year recommendations had seen little implementation progress.",
+        "26 March 2026: media release and general report published."
+      ],
+      "observations": [
+        "Only a minority of auditees achieved clean audits, and those represented a small share of total expenditure.",
+        "Many auditees still could not produce credible financial and performance reports or ensure legislative compliance.",
+        "Audit regressions were significant and affected major expenditure areas.",
+        "Procurement and contract-management failures remained major drivers of irregular expenditure.",
+        "Non-compliance persisted with weak consequences, creating a culture of tolerance and impunity.",
+        "The report explicitly says the weaknesses are not mainly due to unclear mandates, lack of structures, or insufficient funding."
+      ],
+      "task": "Identify the binding constraint and slow variables. What governed the weak audit and service-delivery outcomes here regardless of improvements elsewhere? Recommend the top 3 interventions and 2 things you would explicitly deprioritize."
+    },
+    "gold_packet": {
+      "binding_constraint_top1": "A systemic governance-and-capability failure at high-impact auditees — especially weak consequences, poor procurement/contract control, and inadequate oversight — rather than a lack of mandates or funding.",
+      "binding_constraint_top3": [
+        "Inadequate institutional capability to produce credible reporting and comply with law.",
+        "Governance failures and weak consequences that normalize non-compliance.",
+        "Weak oversight and intergovernmental coordination, especially where service delivery depends on multiple institutions."
+      ],
+      "slow_variables": [
+        "Leadership quality and consequence-management culture",
+        "Procurement and contract-management discipline",
+        "Financial and performance-reporting capability",
+        "Oversight and intergovernmental coordination capacity",
+        "Professionalisation of systems and controls in high-impact entities"
+      ],
+      "contributing_factors": [
+        "High-impact auditees remained persistently weak despite repeated prior warnings.",
+        "Procurement and contract-management failures drove large irregular-expenditure totals.",
+        "Many institutions relied on the audit process itself to detect and correct material misstatements.",
+        "The report states that roleplayers in the accountability ecosystem were not fulfilling their legislative roles consistently or effectively."
+      ],
+      "good_interventions_ranked": [
+        "Target high-impact auditees with accountable remediation plans focused on governance, controls, procurement, and credible reporting.",
+        "Strengthen consequence management and independent oversight so repeated non-compliance has visible operational consequences.",
+        "Improve institutional capability and systems in the areas that drive service delivery risk: procurement, contract management, reporting, and cross-government delivery planning."
+      ],
+      "bad_interventions": [
+        "Treating unqualified-with-findings as good enough",
+        "Adding generic training or funding without accountability and follow-through",
+        "Focusing on communication or presentation of audit results instead of high-impact control failures"
+      ],
+      "early_warning_signals": [
+        "Large auditees repeatedly remaining unqualified-with-findings or regressing",
+        "Irregular expenditure under prolonged review with no closure",
+        "Material misstatements corrected only after audit intervention",
+        "Repeat procurement deviations such as evergreen contracts and month-to-month extensions"
+      ],
+      "distractors_to_penalize": [
+        "Vague calls for 'more resources' without control reform",
+        "Celebrating small aggregate improvements while high-impact entities remain weak",
+        "Short-term optics measures that leave procurement and oversight unchanged"
+      ],
+      "evidence": [
+        "The Auditor-General identified three main shortcomings: governance failures/lack of consequences and integrity, inadequate institutional capability, and weaknesses in oversight and intergovernmental coordination.",
+        "The report also states these weaknesses are not mainly due to unclear mandates or insufficient funding."
+      ]
+    },
+    "scoring_checklist": {
+      "case_id": "ZA-2026-03-26-AGSA-PFMA",
+      "binary_checks": [
+        "Did the answer identify governance/capability/oversight as the main bottleneck rather than only budget pressure?",
+        "Did the answer name at least one real slow variable such as consequence culture, procurement systems, or reporting capability?",
+        "Did the top intervention act on high-impact governance/control failures directly?",
+        "Did the answer avoid distractors like generic more-funding or communications-first fixes?",
+        "Did the answer include at least one concrete early-warning signal?"
+      ],
+      "graded_checks": {
+        "binding_constraint_accuracy_0_to_2": {
+          "0": "Missed or generic",
+          "1": "Partially right / near-equivalent",
+          "2": "Correct and case-specific"
+        },
+        "slow_variable_recall_0_to_2": {
+          "0": "No real slow variables",
+          "1": "One real slow variable or mixed with symptoms",
+          "2": "Multiple real slow variables, clearly separated from symptoms"
+        },
+        "intervention_quality_0_to_2": {
+          "0": "Mostly non-binding or cosmetic",
+          "1": "Mixed",
+          "2": "Targets the real bottleneck directly"
+        },
+        "distractor_resistance_0_to_2": {
+          "0": "Chases distractors",
+          "1": "Some distractor contamination",
+          "2": "Stays focused on the real constraint"
+        }
+      }
+    }
+  },
+  {
+    "case_id": "EU-2026-03-XX-SERVICES",
+    "title": "Special Report 13/2026: Single market for services",
+    "publisher": "European Court of Auditors",
+    "source_type": "Special report",
+    "publication_date": "2026-03-??",
+    "geography": "European Union",
+    "url": "https://www.eca.europa.eu/ECAPublications/SR-2026-13/SR-2026-13_EN.pdf",
+    "model_packet": {
+      "background": "An EU audit examined whether the European Commission was effective in removing barriers to cross-border services under the Services Directive and related single-market tools. Services are economically significant, yet businesses still face considerable barriers when trying to provide services in another member state.",
+      "system_context": [
+        "The audit covered the period 2015–2025, with emphasis on actions since 2020.",
+        "The Commission had several strategies and action plans aimed at improving the single market.",
+        "The institutional toolbox included infringement procedures, points of single contact, SOLVIT, and the Single Market Enforcement Task Force.",
+        "The audit also considered whether the Commission had adequate indicators and cost-benefit analysis for market integration."
+      ],
+      "timeline": [
+        "2015, 2020, and 2025: strategic documents for the single market were adopted.",
+        "2021: the Commission had mapping and assessment work on service barriers.",
+        "By 2025: a new single-market strategy was in place, but prior barriers remained significant.",
+        "March 2026: special report 13/2026 published."
+      ],
+      "observations": [
+        "The Commission took measures to address barriers, but the approaches lacked clear objectives, economic-impact focus, and strategic ambition.",
+        "The Commission relied heavily on infringement procedures, but did not always act in a timely way on significant cases.",
+        "Tools intended to facilitate cross-border services were often ineffective in practice.",
+        "Businesses did not always have complete electronic access to the information and procedures needed.",
+        "Relevant sector-specific data and fit-for-purpose indicators were lacking.",
+        "The costs, benefits, and growth/employment effects of deeper services-market integration had not yet been sufficiently assessed."
+      ],
+      "task": "Identify the binding constraint and slow variables. What governed the EU’s limited progress here regardless of improvements elsewhere? Recommend the top 3 interventions and 2 things you would explicitly deprioritize."
+    },
+    "gold_packet": {
+      "binding_constraint_top1": "A weak prioritization-and-enforcement architecture for removing high-impact barriers to cross-border services — with insufficient economic targeting, underpowered tools, and limited monitoring — rather than a mere shortage of strategy documents.",
+      "binding_constraint_top3": [
+        "No robust method for classifying and targeting the barriers with the biggest economic impact.",
+        "Overreliance on slow or weak instruments for enforcement and facilitation.",
+        "Insufficient data, indicators, and evaluation to steer action toward the most consequential barriers."
+      ],
+      "slow_variables": [
+        "Commission enforcement posture and legal clarification capacity",
+        "Member-state incentives and coordination on barrier removal",
+        "Sector-specific data and indicator architecture",
+        "Legislative and procedural reform pathways for high-impact barriers"
+      ],
+      "contributing_factors": [
+        "Until 2025, the Commission lacked a strategic process for targeting the most important barriers.",
+        "Infringement procedures were not always timely enough on major issues.",
+        "Points of single contact, SOLVIT, and the Single Market Enforcement Task Force had limited practical impact.",
+        "The Commission had not sufficiently evaluated the growth and employment effects of removing services barriers."
+      ],
+      "good_interventions_ranked": [
+        "Prioritize and target the highest-impact barriers using a robust, evidence-based classification of costs and benefits.",
+        "Strengthen enforcement and escalation: use stronger legislative or procedural action when softer tools are unlikely to work.",
+        "Build fit-for-purpose indicators and sector-specific data so monitoring, prioritization, and accountability improve together."
+      ],
+      "bad_interventions": [
+        "Publishing more high-level strategy documents without stronger prioritization or enforcement",
+        "General business-information campaigns that leave administrative and legal barriers intact",
+        "Broad data collection that is not tied to enforcement or prioritization decisions"
+      ],
+      "early_warning_signals": [
+        "Repeated high-impact barriers staying unresolved across strategy cycles",
+        "Large gaps between complaint/case volumes and timely enforcement action",
+        "Points of single contact lacking complete electronic procedures in key sectors",
+        "Monitoring dashboards that track activity but not the most consequential barriers"
+      ],
+      "distractors_to_penalize": [
+        "Rhetorical commitments to the single market without implementation leverage",
+        "Low-impact facilitation projects detached from actual barrier removal",
+        "Generic digitalization claims without legal/procedural follow-through"
+      ],
+      "evidence": [
+        "The Court found Commission action remained insufficient and lacked clear objectives, focus on economic impact, and strategic ambition.",
+        "It also found the Commission lacked adequate data and had not sufficiently analysed the costs and benefits of further services integration."
+      ]
+    },
+    "scoring_checklist": {
+      "case_id": "EU-2026-03-XX-SERVICES",
+      "binary_checks": [
+        "Did the answer identify prioritization/enforcement weakness as the main bottleneck rather than just 'bureaucracy' in general?",
+        "Did the answer name at least one real slow variable such as enforcement capacity, member-state coordination, or indicator architecture?",
+        "Did the top intervention improve high-impact targeting or enforcement directly?",
+        "Did the answer avoid distractors such as more strategy rhetoric or generic information campaigns?",
+        "Did the answer include at least one useful early-warning signal?"
+      ],
+      "graded_checks": {
+        "binding_constraint_accuracy_0_to_2": {
+          "0": "Missed or generic",
+          "1": "Partially right / near-equivalent",
+          "2": "Correct and case-specific"
+        },
+        "slow_variable_recall_0_to_2": {
+          "0": "No real slow variables",
+          "1": "One real slow variable or mixed with symptoms",
+          "2": "Multiple real slow variables, clearly separated from symptoms"
+        },
+        "intervention_quality_0_to_2": {
+          "0": "Mostly non-binding or cosmetic",
+          "1": "Mixed",
+          "2": "Targets the real bottleneck directly"
+        },
+        "distractor_resistance_0_to_2": {
+          "0": "Chases distractors",
+          "1": "Some distractor contamination",
+          "2": "Stays focused on the real constraint"
+        }
+      }
+    }
+  }
+]

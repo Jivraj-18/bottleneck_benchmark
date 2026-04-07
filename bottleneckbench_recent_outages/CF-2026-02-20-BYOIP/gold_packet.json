@@ -1,0 +1,43 @@
+{
+  "binding_constraint_top1": "Unsafe control-plane change propagation from the addressing/control system into production network state, with no health-mediated staged rollout or fast rollback path.",
+  "binding_constraint_top3": [
+    "Tight coupling between authoritative customer configuration and operational production state, making rollback and recovery slow.",
+    "Lack of circuit breakers or arbitration for large-scale withdrawal actions in the IP management pipeline."
+  ],
+  "slow_variables": [
+    "Control-plane architecture and separation of desired vs operational state",
+    "Rollback design and health-mediated deployment capability",
+    "Schema correctness and type standardization in the addressing API",
+    "Broad-change detection / circuit-breaker mechanisms"
+  ],
+  "contributing_factors": [
+    "A broken sub-process in the release began executing after deployment.",
+    "The pending_delete flag was interpreted as a string, which made validation weaker and behavior harder to reason about.",
+    "Large-scale withdrawal actions were able to proceed without automated blast-radius checks.",
+    "Engineers had to recover both withdrawn and removed prefixes, which prolonged restoration."
+  ],
+  "good_interventions_ranked": [
+    "Separate desired customer configuration from operational production state, so bad control-plane changes can be reverted quickly without database surgery.",
+    "Require health-mediated, staged rollouts for any network-affecting configuration change, with automatic stop/rollback on adverse signals.",
+    "Add broad-change circuit breakers that halt deployments when prefixes are being withdrawn/deleted too quickly or too broadly."
+  ],
+  "bad_interventions": [
+    "Adding more incident-response staffing without changing rollout and rollback mechanics",
+    "Improving only customer communications while leaving the control-plane blast radius unchanged",
+    "Optimizing data-plane performance; the key issue was unsafe control-plane mutation, not serving capacity"
+  ],
+  "early_warning_signals": [
+    "Unusually rapid or broad prefix withdrawals/deletions",
+    "Synthetic probes showing customer services becoming unreachable shortly after a control-plane release",
+    "Mismatch growth between desired prefix inventory and operationally advertised prefixes"
+  ],
+  "distractors_to_penalize": [
+    "General network capacity expansion",
+    "More dashboard UX polish",
+    "Purely manual runbook improvements without architectural rollback support"
+  ],
+  "evidence": [
+    "Customer prefixes were unintentionally withdrawn after a change to network IP address management.",
+    "The provider later committed to API schema standardization, better separation of operational and configured state, and circuit breakers for large withdrawal actions."
+  ]
+}

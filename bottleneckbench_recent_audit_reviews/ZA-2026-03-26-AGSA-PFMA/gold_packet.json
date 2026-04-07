@@ -1,0 +1,46 @@
+{
+  "binding_constraint_top1": "A systemic governance-and-capability failure at high-impact auditees — especially weak consequences, poor procurement/contract control, and inadequate oversight — rather than a lack of mandates or funding.",
+  "binding_constraint_top3": [
+    "Inadequate institutional capability to produce credible reporting and comply with law.",
+    "Governance failures and weak consequences that normalize non-compliance.",
+    "Weak oversight and intergovernmental coordination, especially where service delivery depends on multiple institutions."
+  ],
+  "slow_variables": [
+    "Leadership quality and consequence-management culture",
+    "Procurement and contract-management discipline",
+    "Financial and performance-reporting capability",
+    "Oversight and intergovernmental coordination capacity",
+    "Professionalisation of systems and controls in high-impact entities"
+  ],
+  "contributing_factors": [
+    "High-impact auditees remained persistently weak despite repeated prior warnings.",
+    "Procurement and contract-management failures drove large irregular-expenditure totals.",
+    "Many institutions relied on the audit process itself to detect and correct material misstatements.",
+    "The report states that roleplayers in the accountability ecosystem were not fulfilling their legislative roles consistently or effectively."
+  ],
+  "good_interventions_ranked": [
+    "Target high-impact auditees with accountable remediation plans focused on governance, controls, procurement, and credible reporting.",
+    "Strengthen consequence management and independent oversight so repeated non-compliance has visible operational consequences.",
+    "Improve institutional capability and systems in the areas that drive service delivery risk: procurement, contract management, reporting, and cross-government delivery planning."
+  ],
+  "bad_interventions": [
+    "Treating unqualified-with-findings as good enough",
+    "Adding generic training or funding without accountability and follow-through",
+    "Focusing on communication or presentation of audit results instead of high-impact control failures"
+  ],
+  "early_warning_signals": [
+    "Large auditees repeatedly remaining unqualified-with-findings or regressing",
+    "Irregular expenditure under prolonged review with no closure",
+    "Material misstatements corrected only after audit intervention",
+    "Repeat procurement deviations such as evergreen contracts and month-to-month extensions"
+  ],
+  "distractors_to_penalize": [
+    "Vague calls for 'more resources' without control reform",
+    "Celebrating small aggregate improvements while high-impact entities remain weak",
+    "Short-term optics measures that leave procurement and oversight unchanged"
+  ],
+  "evidence": [
+    "The Auditor-General identified three main shortcomings: governance failures/lack of consequences and integrity, inadequate institutional capability, and weaknesses in oversight and intergovernmental coordination.",
+    "The report also states these weaknesses are not mainly due to unclear mandates or insufficient funding."
+  ]
+}

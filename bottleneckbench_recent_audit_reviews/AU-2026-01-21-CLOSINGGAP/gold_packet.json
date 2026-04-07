@@ -1,0 +1,46 @@
+{
+  "binding_constraint_top1": "An incomplete accountability-and-implementation architecture for the agreement’s partnership obligations — especially place-based partnership execution, target reporting, and funding-transparency mechanisms — rather than a lack of stated goals.",
+  "binding_constraint_top3": [
+    "Weak cross-entity ownership and operating plans for establishing place-based partnerships on time.",
+    "Incomplete measurement/reporting design, including missing supporting indicators and unmeaningful or incomplete annual reporting.",
+    "Poor visibility into whether funding is actually reaching Aboriginal community-controlled and other Aboriginal and Torres Strait Islander organisations."
+  ],
+  "slow_variables": [
+    "Intergovernmental coordination capability and practical implementation planning",
+    "Data specification and reporting architecture for targets and supporting indicators",
+    "Funding transparency systems and grant-reporting discipline",
+    "Whole-of-government partnership capability and guidance for working with First Nations partners"
+  ],
+  "contributing_factors": [
+    "Required place-based partnerships were still not fully established by June 2025.",
+    "The lead entity lacked a documented strategy or practical plan to help establish these partnerships.",
+    "Annual reporting on partnership progress did not meet agreement requirements and worsened over time.",
+    "Many supporting indicators intended to add explanatory value were still undeveloped."
+  ],
+  "good_interventions_ranked": [
+    "Create a practical cross-entity implementation plan with deadlines, accountable owners, and escalation paths for establishing place-based partnerships.",
+    "Make annual reporting comply with agreement requirements, including progress, gaps, partnership status, and achievements for each place-based and policy partnership.",
+    "Track and publicly report the share of relevant funding going to Aboriginal community-controlled and other Aboriginal and Torres Strait Islander organisations, alongside supporting indicators that explain target movement."
+  ],
+  "bad_interventions": [
+    "Announcing new targets or strategies without fixing reporting and implementation mechanics",
+    "Increasing funding without building transparency into where it goes and what it changes",
+    "Focusing only on dashboard polish while leaving missing indicators and partnership-accountability gaps unresolved"
+  ],
+  "early_warning_signals": [
+    "Place-based partnerships still lacking formal agreements past stated deadlines",
+    "Annual reports omitting required partnership information or target context",
+    "Supporting indicators remaining undeveloped year after year",
+    "No public visibility into funding flows to Aboriginal community-controlled organisations"
+  ],
+  "distractors_to_penalize": [
+    "Generic calls for more collaboration without implementation mechanics",
+    "More public communications without better reporting substance",
+    "Headline target changes without governance/reporting reform"
+  ],
+  "evidence": [
+    "The audit found partnership arrangements and funding design largely improving, but transparency over progress was declining.",
+    "Place-based partnerships had not been established as required and reporting requirements on partnership success were not being met.",
+    "Progress reporting for Targets 3, 4 and 5 could be more reliable and complete, with many supporting indicators still not developed."
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "case_id": "CLERK-2026-03-10-CLOUDSQL",
+  "title": "Clerk outage from failed Cloud SQL live migration",
+  "vendor": "Clerk",
+  "published_date": "2026-03-13",
+  "incident_date": "2026-03-10",
+  "source_title": "Postmortem: Clerk System Outage (March 10, 2026)",
+  "source_url": "https://clerk.com/blog/2026-03-10-service-outage-postmortem",
+  "why_selected": "Very strong benchmark material: detailed timeline, visible misleading symptoms, explicit root cause, and unusually candid remediation discussion around vendor dependency and architecture choices."
+}
