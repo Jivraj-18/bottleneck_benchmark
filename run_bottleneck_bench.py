@@ -359,6 +359,25 @@ def build_summary_row(record: dict[str, Any]) -> dict[str, Any]:
     return row
 
 
+def summary_key(row: dict[str, Any]) -> tuple[str, str, str, str, str]:
+    return (
+        str(row.get("case_id", "")),
+        str(row.get("model_name", "")),
+        str(row.get("model_id", "")),
+        str(row.get("condition", "")),
+        str(row.get("run_id", "")),
+    )
+
+
+def load_existing_summary_rows(summary_csv: Path) -> list[dict[str, Any]]:
+    if not summary_csv.exists():
+        return []
+
+    with summary_csv.open("r", encoding="utf-8", newline="") as f:
+        reader = csv.DictReader(f)
+        return list(reader)
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description="Run BottleneckBench across GPT/Gemini/Claude")
     parser.add_argument("--root", default=".", help="Repo root path")
@@ -427,7 +446,9 @@ def main() -> int:
     errors_jsonl = out_root / "errors.jsonl"
     summary_csv = root / "summary.csv"
 
-    rows: list[dict[str, Any]] = []
+    existing_rows = load_existing_summary_rows(summary_csv)
+    completed_keys = {summary_key(r) for r in existing_rows}
+    rows: list[dict[str, Any]] = list(existing_rows)
 
     total_jobs = len(all_cases) * len(models) * len(conditions) * max(1, args.repeats)
     done = 0
@@ -438,6 +459,21 @@ def main() -> int:
                 for condition in conditions:
                     for run_idx in range(1, args.repeats + 1):
                         done += 1
+                        planned_row = {
+                            "case_id": case.case_id,
+                            "model_name": model.name,
+                            "model_id": model.model,
+                            "condition": condition,
+                            "run_id": str(run_idx),
+                        }
+                        key = summary_key(planned_row)
+                        if key in completed_keys:
+                            print(
+                                f"[{done}/{total_jobs}] SKIP case={case.case_id} model={model.name} condition={condition} run={run_idx} (already in summary.csv)",
+                                flush=True,
+                            )
+                            continue
+
                         print(
                             f"[{done}/{total_jobs}] case={case.case_id} model={model.name} condition={condition} run={run_idx}",
                             flush=True,
@@ -484,7 +520,9 @@ def main() -> int:
                                 except Exception as judge_exc:  # noqa: BLE001
                                     record["judge_error"] = str(judge_exc)
 
-                            rows.append(build_summary_row(record))
+                            out_row = build_summary_row(record)
+                            rows.append(out_row)
+                            completed_keys.add(summary_key(out_row))
 
                             results_f.write(json.dumps(record, ensure_ascii=True) + "\n")
                             results_f.flush()

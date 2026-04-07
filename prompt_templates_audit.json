@@ -1,0 +1,4 @@
+{
+  "baseline": "Analyze this case. Identify:\nthe main bottleneck, the slow variables, the top 3 interventions, 2 things to deprioritize, and the earliest warning signals that leadership should track.",
+  "treatment": "Analyze this case. Identify:\nthe main bottleneck, the slow variables, the top 3 interventions, 2 things to deprioritize, and the earliest warning signals that leadership should track.\n\nIdentify  the binding constraints and slow variables - What governs here regardless of improvements elsewhere?"
+}

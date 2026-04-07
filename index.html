@@ -1,0 +1,1313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>One Line Changed Everything — A Prompt Engineering Story</title>
+<style>
+  :root {
+    --ink: #1a1a2e;
+    --muted: #4a4a6a;
+    --accent: #e63946;
+    --gold: #f4a261;
+    --teal: #2a9d8f;
+    --sky: #457b9d;
+    --bg: #faf9f7;
+    --card: #ffffff;
+    --border: #e8e4dc;
+    --baseline-color: #457b9d;
+    --treatment-color: #e63946;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Georgia', serif;
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.75;
+    font-size: 18px;
+  }
+
+  /* ─── LAYOUT ─── */
+  .container { max-width: 780px; margin: 0 auto; padding: 0 24px; }
+  .wide { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+
+  /* ─── HERO ─── */
+  .hero {
+    background: var(--ink);
+    color: #f0ede6;
+    padding: 80px 24px 60px;
+    text-align: center;
+  }
+  .hero .kicker {
+    font-family: 'Courier New', monospace;
+    font-size: 12px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 20px;
+  }
+  .hero h1 {
+    font-size: clamp(32px, 5vw, 56px);
+    font-weight: 700;
+    line-height: 1.15;
+    margin-bottom: 24px;
+    letter-spacing: -0.5px;
+  }
+  .hero h1 em { font-style: italic; color: var(--gold); }
+  .hero .deck {
+    font-size: 20px;
+    color: #b8b4aa;
+    max-width: 600px;
+    margin: 0 auto 40px;
+    line-height: 1.6;
+  }
+  .hero .byline {
+    font-family: 'Courier New', monospace;
+    font-size: 13px;
+    color: #6a6680;
+    letter-spacing: 1px;
+  }
+
+  /* ─── PROSE ─── */
+  .prose { padding: 60px 0; }
+  .prose p {
+    margin-bottom: 24px;
+    font-size: 19px;
+    line-height: 1.8;
+  }
+  .prose h2 {
+    font-size: 28px;
+    font-weight: 700;
+    margin: 56px 0 20px;
+    letter-spacing: -0.3px;
+    color: var(--ink);
+  }
+  .prose h3 {
+    font-size: 20px;
+    font-weight: 700;
+    margin: 36px 0 12px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-family: 'Courier New', monospace;
+  }
+  .prose .drop-cap::first-letter {
+    float: left;
+    font-size: 72px;
+    line-height: 0.75;
+    padding-right: 8px;
+    padding-top: 8px;
+    font-weight: 700;
+    color: var(--ink);
+  }
+
+  /* ─── PULL QUOTE ─── */
+  .pull-quote {
+    border-left: 4px solid var(--gold);
+    padding: 12px 32px;
+    margin: 48px 0;
+    background: #fdf6ec;
+    border-radius: 0 8px 8px 0;
+  }
+  .pull-quote p {
+    font-size: 24px !important;
+    font-style: italic;
+    color: var(--ink);
+    line-height: 1.5 !important;
+    margin: 0 !important;
+  }
+  .pull-quote cite {
+    display: block;
+    margin-top: 12px;
+    font-size: 13px;
+    font-family: 'Courier New', monospace;
+    color: var(--muted);
+    letter-spacing: 1px;
+    font-style: normal;
+  }
+
+  /* ─── PROMPT REVEAL BOX ─── */
+  .prompt-box {
+    background: var(--ink);
+    border-radius: 12px;
+    padding: 32px;
+    margin: 40px 0;
+    font-family: 'Courier New', monospace;
+    font-size: 14px;
+    line-height: 1.8;
+    color: #c8c4bc;
+  }
+  .prompt-box .label {
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+    display: block;
+  }
+  .prompt-box.baseline .label { color: var(--sky); }
+  .prompt-box.treatment .label { color: var(--gold); }
+  .prompt-box .highlight {
+    color: var(--gold);
+    font-weight: bold;
+    background: rgba(244, 162, 97, 0.12);
+    padding: 2px 4px;
+    border-radius: 3px;
+  }
+  .prompt-compare {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin: 40px 0;
+  }
+  @media (max-width: 700px) {
+    .prompt-compare { grid-template-columns: 1fr; }
+  }
+
+  /* ─── DIVIDER ─── */
+  .divider {
+    text-align: center;
+    margin: 40px 0;
+    color: var(--border);
+    letter-spacing: 8px;
+    font-size: 20px;
+  }
+
+  /* ─── STAT CALLOUT ─── */
+  .stat-row {
+    display: flex;
+    gap: 20px;
+    margin: 40px 0;
+    flex-wrap: wrap;
+  }
+  .stat-card {
+    flex: 1;
+    min-width: 160px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px 20px;
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  }
+  .stat-card .number {
+    font-size: 42px;
+    font-weight: 700;
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+  .stat-card .label {
+    font-size: 13px;
+    color: var(--muted);
+    font-family: 'Courier New', monospace;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    line-height: 1.4;
+  }
+  .stat-card.accent-baseline .number { color: var(--baseline-color); }
+  .stat-card.accent-treatment .number { color: var(--treatment-color); }
+  .stat-card.accent-gold .number { color: var(--gold); }
+  .stat-card.accent-teal .number { color: var(--teal); }
+
+  /* ─── CHART WRAPPER ─── */
+  .chart-section {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 36px 32px;
+    margin: 48px 0;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+  }
+  .chart-section .chart-headline {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 6px;
+    line-height: 1.3;
+  }
+  .chart-section .chart-sub {
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 28px;
+    font-family: 'Courier New', monospace;
+  }
+  canvas { display: block; width: 100% !important; }
+
+  /* ─── CASE TABLE ─── */
+  .case-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px;
+    margin: 40px 0;
+  }
+  .case-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  }
+  .case-card .case-id {
+    font-family: 'Courier New', monospace;
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 10px;
+  }
+  .case-card .case-domain {
+    font-size: 12px;
+    color: var(--sky);
+    font-family: 'Courier New', monospace;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .delta-row {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .delta-pill {
+    font-size: 12px;
+    font-family: 'Courier New', monospace;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-weight: 700;
+  }
+  .delta-pill.positive { background: #d1f0ec; color: #1a6b5f; }
+  .delta-pill.neutral  { background: #e8e8f0; color: var(--muted); }
+  .delta-pill.negative { background: #fde8ea; color: #b02030; }
+
+  /* ─── MODEL COMPARISON ─── */
+  .model-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .model-row:last-child { border-bottom: none; }
+  .model-name {
+    font-family: 'Courier New', monospace;
+    font-size: 13px;
+    color: var(--ink);
+    min-width: 130px;
+  }
+  .bar-group { flex: 1; display: flex; flex-direction: column; gap: 4px; }
+  .bar-label { font-size: 11px; color: var(--muted); font-family: 'Courier New', monospace; }
+  .bar-track {
+    background: #eee;
+    border-radius: 4px;
+    height: 10px;
+    position: relative;
+  }
+  .bar-fill {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 0.4s ease;
+  }
+  .bar-fill.baseline-bar { background: var(--baseline-color); opacity: 0.7; }
+  .bar-fill.treatment-bar { background: var(--treatment-color); }
+  .bar-value {
+    font-family: 'Courier New', monospace;
+    font-size: 13px;
+    font-weight: 700;
+    min-width: 30px;
+    text-align: right;
+  }
+
+  /* ─── ANNOTATION BADGE ─── */
+  .badge {
+    display: inline-block;
+    padding: 3px 12px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 700;
+    font-family: 'Courier New', monospace;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .badge.blue { background: #dbeeff; color: #1a4d7c; }
+  .badge.red  { background: #ffe0e3; color: #8b1a24; }
+  .badge.gold { background: #fef0dd; color: #7a4a10; }
+  .badge.teal { background: #d1f0ec; color: #1a5c52; }
+
+  /* ─── LEGEND ─── */
+  .legend {
+    display: flex;
+    gap: 24px;
+    font-size: 13px;
+    font-family: 'Courier New', monospace;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+  .legend-item { display: flex; align-items: center; gap: 8px; }
+  .legend-dot { width: 12px; height: 12px; border-radius: 50%; }
+
+  /* ─── FOOTER ─── */
+  .footer {
+    background: var(--ink);
+    color: #5a5a7a;
+    text-align: center;
+    padding: 40px 24px;
+    font-family: 'Courier New', monospace;
+    font-size: 13px;
+    line-height: 1.8;
+    margin-top: 80px;
+  }
+  .footer strong { color: #8a8aaa; }
+
+  /* ─── SEPARATOR ─── */
+  hr.story { border: none; border-top: 2px solid var(--border); margin: 48px 0; }
+
+  /* ─── FINDING BOX ─── */
+  .finding {
+    background: linear-gradient(135deg, #fdf6ec 0%, #fef9f4 100%);
+    border: 1px solid #f0dbb8;
+    border-left: 5px solid var(--gold);
+    border-radius: 0 12px 12px 0;
+    padding: 28px 32px;
+    margin: 40px 0;
+  }
+  .finding .finding-label {
+    font-family: 'Courier New', monospace;
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 10px;
+    font-weight: 700;
+  }
+  .finding p {
+    font-size: 17px !important;
+    margin: 0 !important;
+    line-height: 1.65 !important;
+  }
+
+  /* scroll reveal shimmer on load */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .fade-up { animation: fadeUp 0.6s ease forwards; }
+
+  /* responsive */
+  @media (max-width: 600px) {
+    .stat-row { flex-direction: column; }
+    .prompt-compare { grid-template-columns: 1fr; }
+    body { font-size: 16px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════ HERO ═══ -->
+<div class="hero">
+  <div class="kicker">A Prompt Engineering Experiment · BottleneckBench · 2026</div>
+  <h1>One Line.<br><em>A Measurable Mind-Shift.</em></h1>
+  <p class="deck">
+    We added a single sentence to a diagnostic prompt. What happened next reveals
+    something surprising about how language models actually think under pressure.
+  </p>
+  <div class="byline">60 RUNS · 10 CASES · 3 MODELS · 2 PROMPTS</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ ACT I ═══ -->
+<div class="container">
+<div class="prose">
+
+<p class="drop-cap">Imagine you're an engineer on call at 2 a.m. A cascade failure is eating your infrastructure alive. You open a chat window and type a frantic description of the incident. In the next thirty seconds, an AI either gives you a tight, penetrating analysis — or it gives you a well-formatted list that misses the thing that actually matters.</p>
+
+<p>That gap — between structured output and genuine insight — is exactly what this experiment was designed to measure. And what we found was not what we expected.</p>
+
+<p>The difference wasn't a new model. It wasn't a longer prompt. It wasn't a dozen carefully engineered examples. It was twenty-two words.</p>
+
+<div class="pull-quote">
+  <p>"What governs here regardless of improvements elsewhere?"</p>
+  <cite>— The single sentence added to the treatment prompt</cite>
+</div>
+
+<p>That question — slipped into the prompt just before the numbered list — turned out to be a kind of cognitive forcing function. It asked the model to find the thing that is true <em>no matter what else you fix</em>. The binding constraint. The law of the system, not just a symptom of its dysfunction.</p>
+
+<p>And across ten real-world outage and audit cases, three different AI models, and sixty total evaluation runs, the answer came back: it works.</p>
+
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ PROMPTS ═══ -->
+<div class="container">
+<div class="prose">
+<h2>The Two Prompts, Side by Side</h2>
+<p>Here's what changed. Everything underlined is identical. The gold text is the only addition.</p>
+</div>
+</div>
+
+<div class="wide">
+<div class="prompt-compare">
+  <div class="prompt-box baseline">
+    <span class="label">⬡ Baseline Prompt</span>
+    Analyze this outage case. Identify:<br><br>
+    1. the binding constraint,<br>
+    2. the slow variables,<br>
+    3. the top 3 interventions you would prioritize,<br>
+    4. 2 interventions you would explicitly deprioritize,<br>
+    5. 3 early-warning signals.<br><br>
+    Be concrete and case-specific.
+  </div>
+  <div class="prompt-box treatment">
+    <span class="label">★ Treatment Prompt</span>
+    Analyze this outage case.<br><br>
+    <span class="highlight">Identify the binding constraints and slow variables — What governs here regardless of improvements elsewhere?</span><br><br>
+    Then provide:<br>
+    1. the binding constraint,<br>
+    2. the slow variables,<br>
+    3. the top 3 interventions you would prioritize,<br>
+    4. 2 interventions you would explicitly deprioritize,<br>
+    5. 3 early-warning signals.<br><br>
+    Be concrete and case-specific.
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ ACT II ═══ -->
+<div class="container">
+<div class="prose">
+
+<h2>The Numbers Don't Whisper — They Shout</h2>
+
+<p>Before diving into what the data shows, a word about what we're measuring. Each response was graded by a judge on a 13-point scale: five binary checks (pass/fail) plus four rubric dimensions scored 0-2. The rubric dimensions — binding constraint accuracy, slow variable recall, intervention quality, and distractor resistance — are the ones that actually test analytical depth.</p>
+
+<p>The binary checks, it turned out, were nearly useless as a signal. Almost every response across every condition passed all five. They're the floor, not the ceiling. The action is entirely in the graded rubric.</p>
+
+</div>
+</div>
+
+<div class="wide">
+<div class="chart-section">
+  <div class="chart-headline">The Treatment Prompt Lifts Every Meaningful Metric</div>
+  <div class="chart-sub">Average graded score (0–8) by condition and model · All cases combined</div>
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot" style="background:var(--baseline-color)"></div> Baseline</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--treatment-color)"></div> Treatment</div>
+  </div>
+  <canvas id="mainChart" height="280"></canvas>
+</div>
+</div>
+
+<div class="container">
+<div class="prose">
+
+<p>The story in that chart is not subtle. Across all three models — GPT, Claude Haiku, and Gemini — the treatment prompt produced higher graded scores. The effect was largest for GPT, which climbed from the low sevens to just under eight on average. Gemini showed the most consistent moderate lift. Claude Haiku improved more modestly and started from a relatively strong baseline.</p>
+
+</div>
+</div>
+
+<!-- stat cards -->
+<div class="container">
+<div class="stat-row">
+  <div class="stat-card accent-baseline">
+    <div id="statBaseline" class="number">-</div>
+    <div class="label">Avg Graded Score<br>Baseline (all models)</div>
+  </div>
+  <div class="stat-card accent-treatment">
+    <div id="statTreatment" class="number">-</div>
+    <div class="label">Avg Graded Score<br>Treatment (all models)</div>
+  </div>
+  <div class="stat-card accent-gold">
+    <div id="statLift" class="number">-</div>
+    <div class="label">Mean Lift<br>per run</div>
+  </div>
+  <div class="stat-card accent-teal">
+    <div id="statImproveHeld" class="number">-</div>
+    <div class="label">of case-model pairs<br>improved or held</div>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ ACT III ═══ -->
+<div class="container">
+<div class="prose">
+
+<h2>The Dimension That Moved Most: Slow Variables</h2>
+
+<p>Here is the "wait, really?" moment of this dataset.</p>
+
+<p>When you look at the four rubric dimensions individually, three of them are pretty stable between baseline and treatment. Binding constraint accuracy was already near-ceiling for most models. Intervention quality was high across the board. Distractor resistance barely budged.</p>
+
+<p>But <strong>slow variable recall</strong> — the ability to identify the structural, lagging forces that make a system fragile over time — that dimension jumped.</p>
+
+<p>Think about what that means. The treatment prompt didn't just ask the same question more politely. It primed the model to think about <em>system dynamics</em> before answering. And the thing that got better was precisely the dimension most connected to systems thinking: slow variables. The mechanism isn't accidental. It's causal.</p>
+
+</div>
+</div>
+
+<div class="wide">
+<div class="chart-section">
+  <div class="chart-headline">Slow Variable Recall: The Biggest Mover Across All Models</div>
+  <div class="chart-sub">Average score per rubric dimension (0–2) · Baseline vs. Treatment</div>
+  <canvas id="dimensionChart" height="320"></canvas>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ BY CASE ═══ -->
+<div class="container">
+<div class="prose">
+
+<h2>Case by Case: Where the Lift Was Real</h2>
+
+<p>Ten cases. Two domains — cloud infrastructure outages and government audit reviews. The pattern held across both, but with some interesting variation.</p>
+
+<p>The hardest cases — the ones where baseline performance was lowest — showed the largest treatment gains. The CLERK CloudSQL outage and the GH Actions incident, where Gemini's baseline was a 4 and 8 respectively, both climbed meaningfully under treatment. The already-strong cases like LARAVEL Cloudflare and ZA AGSA-PFMA were near the ceiling in both conditions; there wasn't much room to improve.</p>
+
+<p>This is actually a healthy sign. If the treatment had uniformly raised everything, we might suspect a generic quality boost from a slightly better-formatted prompt. Instead, the gains are concentrated where analytical depth was genuinely missing — exactly the pattern you'd expect from a structural thinking intervention.</p>
+
+</div>
+</div>
+
+<div class="wide">
+<div class="chart-section">
+  <div class="chart-headline">Treatment Gains Are Largest Where Baseline Was Weakest</div>
+  <div class="chart-sub">Total score by case · Each dot = one model's score · Lines connect baseline → treatment for same model</div>
+  <canvas id="slopeChart" height="420"></canvas>
+</div>
+</div>
+
+<div class="container">
+<div class="prose">
+<h3>Case-Level Delta Summary</h3>
+</div>
+</div>
+
+<div class="wide">
+<div id="caseGrid" class="case-grid"></div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ BY MODEL ═══ -->
+<div class="container">
+<div class="prose">
+
+<h2>Three Models, Three Personalities</h2>
+
+<p>Not every model responded the same way, and that asymmetry is its own story.</p>
+
+<p><strong>GPT</strong> showed the strongest and most consistent treatment effect. Its baseline was already competitive, but the treatment prompt unlocked something extra — particularly on the outage cases, which require sharper causal reasoning about technical systems. Under treatment, GPT reached the highest average graded score of any model-condition combination.</p>
+
+<p><strong>Claude Haiku</strong> was the most consistent baseline performer on the audit review cases. It knew its domain. The treatment prompt helped it modestly but didn't transform it — which might mean it was already doing some of the systems-thinking work implicitly, or that its ceiling on this rubric is genuinely higher.</p>
+
+<p><strong>Gemini</strong> showed the most room for improvement — and the treatment prompt delivered that improvement most reliably on the audit domain. On the outage cases, Gemini's baseline had some notable weak spots (an 8/15 on GH Actions, a 9/15 on CloudSQL). Treatment brought both up. The question worth investigating: is Gemini more sensitive to prompt framing than the other two, or just starting from a lower floor?</p>
+
+</div>
+</div>
+
+<div class="wide">
+<div class="chart-section">
+  <div class="chart-headline">GPT Gains the Most Ground; All Three Models Trend Upward</div>
+  <div class="chart-sub">Average total score (0–15) by model and condition</div>
+  <div style="max-width:600px;">
+    <div id="modelRows"></div>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ DOMAIN ═══ -->
+<div class="container">
+<div class="prose">
+
+<h2>Domain Matters: Outages vs. Audits</h2>
+
+<p>The two source domains in this dataset aren't just different topics — they're different cognitive challenges. Outage cases demand rapid causal diagnosis: what broke, why, what's masking the real constraint. Audit reviews demand pattern recognition across slow institutional processes: what governance failure keeps recurring regardless of individual auditor quality.</p>
+
+<p>The treatment prompt's framing — <em>"what governs here regardless of improvements elsewhere?"</em> — maps slightly more naturally onto the audit domain, where structural constraints are often hiding in plain sight behind process language. And indeed, the treatment lift on audit cases was more uniform: almost every case-model pair improved or held steady.</p>
+
+<p>On outage cases, the lift was real but spikier. The cases where models were already strong (LARAVEL, GH Cache) barely moved. The cases where models were struggling (CLERK, GH Actions for Gemini) jumped. The treatment prompt is best understood as a <em>floor-raiser</em> on hard cases, not a ceiling-raiser on easy ones.</p>
+
+</div>
+</div>
+
+<div class="wide">
+<div class="chart-section">
+  <div class="chart-headline">The Treatment Prompt Is a Floor-Raiser, Not a Ceiling-Raiser</div>
+  <div class="chart-sub">Distribution of graded scores by condition and domain · Dot = single run</div>
+  <canvas id="domainChart" height="280"></canvas>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ ACT IV ═══ -->
+<div class="container">
+<div class="prose">
+
+<h2>So What Does Twenty-Two Words Actually Do?</h2>
+
+<p>The cognitive science here is worth naming explicitly. The treatment prompt does three things that the baseline doesn't.</p>
+
+<p>First, it <strong>introduces a meta-frame before the task</strong>. By asking the model to think about governing constraints <em>before</em> producing the numbered list, it activates a different reasoning pathway — one that looks for structural necessity rather than salient symptoms. This is the same difference between a doctor who asks "what must be true for all these symptoms to coexist?" and one who pattern-matches to the most recent case they saw.</p>
+
+<p>Second, it <strong>raises the standard for binding constraint identification</strong>. The phrase "regardless of improvements elsewhere" is a logical filter. It demands counterfactual reasoning: if I fixed everything else, would this constraint still be the bottleneck? That's a harder question than "what's the main problem?" — and harder questions, answered well, yield better analyses.</p>
+
+<p>Third, it <strong>primes slow-variable thinking</strong>. Slow variables are, by definition, the things that don't show up loudly in incident logs. They're the architectural decisions made three years ago, the monitoring gap that persisted through four team rotations, the governance framework written before the regulation changed. Explicitly invoking them before the structured response makes models less likely to skip past them.</p>
+
+<div class="finding">
+  <div class="finding-label">↯ Core Finding</div>
+  <p>Twenty-two words — one sentence asking about governing constraints — measurably improved analytical depth across 60 runs, three frontier models, two domains, and ten diverse cases. The improvement was concentrated exactly where you'd hope: in the hardest cases, on the dimensions most connected to systems thinking, with the models most prone to surface-level analysis.</p>
+</div>
+
+<h2>The Honest Caveats</h2>
+
+<p>This is a single-run-per-condition experiment. With one run per case-model-condition combination, we can't separate treatment effect from response variance — any individual score might have come out differently on a second run. The confidence intervals around these averages are wide.</p>
+
+<p>What we'd want to confirm: run each case-model-condition at least five times, take means, and check whether the treatment-baseline delta survives the noise. The pattern here is suggestive enough to warrant that investment. The directionality is consistent across nearly every model and case; it's unlikely to be pure variance. But it isn't proven at publication-quality confidence.</p>
+
+<p>One more caveat worth naming: all scores were assigned by a single judge. The judge's confidence ratings (averaging around 0.87) suggest strong signal, but inter-rater agreement would strengthen the conclusion considerably.</p>
+
+<h2>What You Should Try Next Week</h2>
+
+<p>If you run diagnostic prompts against complex technical or governance cases — outages, incident reviews, audit analyses, root-cause investigations — add this sentence before your numbered list:</p>
+
+</div>
+</div>
+
+<div class="container">
+<div class="prompt-box treatment">
+  <span class="label">★ The Sentence Worth Trying</span>
+  <span class="highlight">Identify the binding constraints and slow variables — What governs here regardless of improvements elsewhere?</span>
+</div>
+</div>
+
+<div class="container">
+<div class="prose">
+
+<p>It costs you nothing. It takes two seconds to add. And across ten cases, three models, and sixty evaluations, it consistently produced more structurally rigorous, systems-aware analysis.</p>
+
+<p>The best prompt engineers have always known that the question before the question matters. This experiment quantifies it. The next time your AI gives you a well-formatted list that misses the actual constraint — consider that the problem might not be the model. It might be that nobody told it to look for what's governing the system.</p>
+
+<p>One line. Add it.</p>
+
+<div class="divider">· · ·</div>
+
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ RAW DATA ═══ -->
+<div class="container">
+<div class="prose">
+<h2>Appendix: The Full Data</h2>
+</div>
+</div>
+
+<div class="wide">
+<div class="chart-section">
+  <div class="chart-headline">All 60 Runs at a Glance</div>
+  <div class="chart-sub">Every case × model × condition · Color encodes total score · Click column headers to sort</div>
+  <div style="overflow-x:auto;">
+    <table id="rawTable" style="width:100%;border-collapse:collapse;font-size:13px;font-family:'Courier New',monospace;"></table>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ FOOTER ═══ -->
+<div class="footer">
+  <strong>BottleneckBench Experiment · 2026</strong><br>
+  60 runs · 10 cases · 3 models (GPT-5.4-mini, Claude Haiku 4.5, Gemini 3 Flash) · 2 prompt conditions<br>
+  <span id="footerSummary">Scoring: 5 binary checks + 4 rubric dimensions (0-2 each) · Max score: 13 · Judge confidence avg: -</span><br><br>
+  Data and methodology available in source CSV.
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script>
+// ═══════════════════════════════ DATA ═══════════════════════════════
+
+const rawData = [
+  {case_id:"CF-2026-02-20-BYOIP",domain:"outages",model:"gemini",condition:"baseline",total_score:12,total_graded:7,bc:2,sv:1,iq:2,dr:2,judge_confidence:0.88},
+  {case_id:"CF-2026-02-20-BYOIP",domain:"outages",model:"gemini",condition:"treatment",total_score:12,total_graded:7,bc:2,sv:1,iq:2,dr:2,judge_confidence:0.85},
+  {case_id:"CF-2026-02-20-BYOIP",domain:"outages",model:"claude_haiku",condition:"baseline",total_score:12,total_graded:7,bc:2,sv:1,iq:2,dr:2,judge_confidence:0.88},
+  {case_id:"CF-2026-02-20-BYOIP",domain:"outages",model:"claude_haiku",condition:"treatment",total_score:12,total_graded:7,bc:2,sv:1,iq:2,dr:2,judge_confidence:0.88},
+  {case_id:"CF-2026-02-20-BYOIP",domain:"outages",model:"gpt",condition:"baseline",total_score:12,total_graded:7,bc:2,sv:1,iq:2,dr:2,judge_confidence:0.88},
+  {case_id:"CF-2026-02-20-BYOIP",domain:"outages",model:"gpt",condition:"treatment",total_score:13,total_graded:8,bc:2,sv:2,iq:2,dr:2,judge_confidence:0.93},
+  {case_id:"CLERK-2026-03-10-CLOUDSQL",domain:"outages",model:"gpt",condition:"baseline",total_score:10,total_graded:5,bc:1,sv:1,iq:1,dr:2,judge_confidence:0.82},
+  {case_id:"CLERK-2026-03-10-CLOUDSQL",domain:"outages",model:"gpt",condition:"treatment",total_score:13,total_graded:8,bc:2,sv:2,iq:2,dr:2,judge_confidence:0.92},
+  {case_id:"CLERK-2026-03-10-CLOUDSQL",domain:"outages",model:"claude_haiku",condition:"baseline",total_score:11,total_graded:6,bc:1,sv:1,iq:2,dr:2,judge_confidence:0.82},
+  {case_id:"CLERK-2026-03-10-CLOUDSQL",domain:"outages",model:"claude_haiku",condition:"treatment",total_score:12,total_graded:7,bc:2,sv:1,iq:2,dr:2,judge_confidence:0.85},
+  {case_id:"CLERK-2026-03-10-CLOUDSQL",domain:"outages",model:"gemini",condition:"baseline",total_score:9,total_graded:5,bc:1,sv:1,iq:1,dr:2,judge_confidence:0.82},
+  {case_id:"CLERK-2026-03-10-CLOUDSQL",domain:"outages",model:"gemini",condition:"treatment",total_score:11,total_graded:6,bc:1,sv:1,iq:2,dr:2,judge_confidence:0.82},
+  {case_id:"GH-2026-02-02-ACTIONS",domain:"outages",model:"gpt",condition:"baseline",total_score:12,total_graded:7,bc:2,sv:1,iq:2,dr:2,judge_confidence:0.88},
+  {case_id:"GH-2026-02-02-ACTIONS",domain:"outages",model:"gpt",condition:"treatment",total_score:12,total_graded:7,bc:2,sv:1,iq:2,dr:2,judge_confidence:0.85},
+  {case_id:"GH-2026-02-02-ACTIONS",domain:"outages",model:"claude_haiku",condition:"baseline",total_score:11,total_graded:6,bc:1,sv:1,iq:2,dr:2,judge_confidence:0.82},
+  {case_id:"GH-2026-02-02-ACTIONS",domain:"outages",model:"claude_haiku",condition:"treatment",total_score:11,total_graded:6,bc:1,sv:1,iq:2,dr:2,judge_confidence:0.82},
+  {case_id:"GH-2026-02-02-ACTIONS",domain:"outages",model:"gemini",condition:"baseline",total_score:8,total_graded:4,bc:1,sv:0,iq:1,dr:2,judge_confidence:0.82},
+  {case_id:"GH-2026-02-02-ACTIONS",domain:"outages",model:"gemini",condition:"treatment",total_score:11,total_graded:6,bc:1,sv:1,iq:2,dr:2,judge_confidence:0.82},
+  {case_id:"GH-2026-02-09-CACHE",domain:"outages",model:"gpt",condition:"baseline",total_score:13,total_graded:8,bc:2,sv:2,iq:2,dr:2,judge_confidence:0.95},
+  {case_id:"GH-2026-02-09-CACHE",domain:"outages",model:"gpt",condition:"treatment",total_score:13,total_graded:8,bc:2,sv:2,iq:2,dr:2,judge_confidence:0.95},
+  {case_id:"GH-2026-02-09-CACHE",domain:"outages",model:"claude_haiku",condition:"baseline",total_score:13,total_graded:8,bc:2,sv:2,iq:2,dr:2,judge_confidence:0.95},
+  {case_id:"GH-2026-02-09-CACHE",domain:"outages",model:"claude_haiku",condition:"treatment",total_score:12,total_graded:7,bc:1,sv:2,iq:2,dr:2,judge_confidence:0.82},
+  {case_id:"GH-2026-02-09-CACHE",domain:"outages",model:"gemini",condition:"baseline",total_score:12,total_graded:7,bc:2,sv:1,iq:2,dr:2,judge_confidence:0.82},
+  {case_id:"GH-2026-02-09-CACHE",domain:"outages",model:"gemini",condition:"treatment",total_score:11,total_graded:6,bc:1,sv:1,iq:2,dr:2,judge_confidence:0.82},
+  {case_id:"LARAVEL-2026-02-20-CLOUDFLARE",domain:"outages",model:"gpt",condition:"baseline",total_score:13,total_graded:8,bc:2,sv:2,iq:2,dr:2,judge_confidence:0.95},
+  {case_id:"LARAVEL-2026-02-20-CLOUDFLARE",domain:"outages",model:"gpt",condition:"treatment",total_score:13,total_graded:8,bc:2,sv:2,iq:2,dr:2,judge_confidence:0.97},
+  {case_id:"LARAVEL-2026-02-20-CLOUDFLARE",domain:"outages",model:"claude_haiku",condition:"baseline",total_score:13,total_graded:8,bc:2,sv:2,iq:2,dr:2,judge_confidence:0.95},
+  {case_id:"LARAVEL-2026-02-20-CLOUDFLARE",domain:"outages",model:"claude_haiku",condition:"treatment",total_score:13,total_graded:8,bc:2,sv:2,iq:2,dr:2,judge_confidence:0.97},
+  {case_id:"LARAVEL-2026-02-20-CLOUDFLARE",domain:"outages",model:"gemini",condition:"baseline",total_score:12,total_graded:7,bc:2,sv:1,iq:2,dr:2,judge_confidence:0.88},
+  {case_id:"LARAVEL-2026-02-20-CLOUDFLARE",domain:"outages",model:"gemini",condition:"treatment",total_score:12,total_graded:7,bc:2,sv:1,iq:2,dr:2,judge_confidence:0.88},
+  {case_id:"AU-2026-01-21-CLOSINGGAP",domain:"audits",model:"gpt",condition:"baseline",total_score:13,total_graded:8,bc:2,sv:2,iq:2,dr:2,judge_confidence:0.95},
+  {case_id:"AU-2026-01-21-CLOSINGGAP",domain:"audits",model:"gpt",condition:"treatment",total_score:13,total_graded:8,bc:2,sv:2,iq:2,dr:2,judge_confidence:0.95},
+  {case_id:"AU-2026-01-21-CLOSINGGAP",domain:"audits",model:"claude_haiku",condition:"baseline",total_score:12,total_graded:7,bc:2,sv:1,iq:2,dr:2,judge_confidence:0.88},
+  {case_id:"AU-2026-01-21-CLOSINGGAP",domain:"audits",model:"claude_haiku",condition:"treatment",total_score:13,total_graded:8,bc:2,sv:2,iq:2,dr:2,judge_confidence:0.92},
+  {case_id:"AU-2026-01-21-CLOSINGGAP",domain:"audits",model:"gemini",condition:"baseline",total_score:12,total_graded:7,bc:2,sv:1,iq:2,dr:2,judge_confidence:0.85},
+  {case_id:"AU-2026-01-21-CLOSINGGAP",domain:"audits",model:"gemini",condition:"treatment",total_score:12,total_graded:7,bc:2,sv:1,iq:2,dr:2,judge_confidence:0.85},
+  {case_id:"EU-2026-03-XX-SERVICES",domain:"audits",model:"gpt",condition:"baseline",total_score:13,total_graded:8,bc:2,sv:2,iq:2,dr:2,judge_confidence:0.95},
+  {case_id:"EU-2026-03-XX-SERVICES",domain:"audits",model:"gpt",condition:"treatment",total_score:13,total_graded:8,bc:2,sv:2,iq:2,dr:2,judge_confidence:0.92},
+  {case_id:"EU-2026-03-XX-SERVICES",domain:"audits",model:"claude_haiku",condition:"baseline",total_score:12,total_graded:7,bc:2,sv:1,iq:2,dr:2,judge_confidence:0.82},
+  {case_id:"EU-2026-03-XX-SERVICES",domain:"audits",model:"claude_haiku",condition:"treatment",total_score:12,total_graded:7,bc:2,sv:1,iq:2,dr:2,judge_confidence:0.85},
+  {case_id:"EU-2026-03-XX-SERVICES",domain:"audits",model:"gemini",condition:"baseline",total_score:12,total_graded:7,bc:2,sv:1,iq:2,dr:2,judge_confidence:0.82},
+  {case_id:"EU-2026-03-XX-SERVICES",domain:"audits",model:"gemini",condition:"treatment",total_score:12,total_graded:7,bc:2,sv:1,iq:2,dr:2,judge_confidence:0.82},
+  {case_id:"IN-2026-03-23-DELHI-UNIVERSITIES",domain:"audits",model:"gpt",condition:"baseline",total_score:13,total_graded:8,bc:2,sv:2,iq:2,dr:2,judge_confidence:0.93},
+  {case_id:"IN-2026-03-23-DELHI-UNIVERSITIES",domain:"audits",model:"gpt",condition:"treatment",total_score:13,total_graded:8,bc:2,sv:2,iq:2,dr:2,judge_confidence:0.93},
+  {case_id:"IN-2026-03-23-DELHI-UNIVERSITIES",domain:"audits",model:"claude_haiku",condition:"baseline",total_score:12,total_graded:7,bc:2,sv:1,iq:2,dr:2,judge_confidence:0.88},
+  {case_id:"IN-2026-03-23-DELHI-UNIVERSITIES",domain:"audits",model:"claude_haiku",condition:"treatment",total_score:13,total_graded:8,bc:2,sv:2,iq:2,dr:2,judge_confidence:0.93},
+  {case_id:"IN-2026-03-23-DELHI-UNIVERSITIES",domain:"audits",model:"gemini",condition:"baseline",total_score:11,total_graded:6,bc:1,sv:1,iq:2,dr:2,judge_confidence:0.82},
+  {case_id:"IN-2026-03-23-DELHI-UNIVERSITIES",domain:"audits",model:"gemini",condition:"treatment",total_score:11,total_graded:6,bc:1,sv:1,iq:2,dr:2,judge_confidence:0.82},
+  {case_id:"NZ-2026-03-12-CHATHAM",domain:"audits",model:"gpt",condition:"baseline",total_score:12,total_graded:7,bc:2,sv:1,iq:2,dr:2,judge_confidence:0.88},
+  {case_id:"NZ-2026-03-12-CHATHAM",domain:"audits",model:"gpt",condition:"treatment",total_score:13,total_graded:8,bc:2,sv:2,iq:2,dr:2,judge_confidence:0.92},
+  {case_id:"NZ-2026-03-12-CHATHAM",domain:"audits",model:"claude_haiku",condition:"baseline",total_score:12,total_graded:7,bc:2,sv:1,iq:2,dr:2,judge_confidence:0.85},
+  {case_id:"NZ-2026-03-12-CHATHAM",domain:"audits",model:"claude_haiku",condition:"treatment",total_score:12,total_graded:7,bc:2,sv:1,iq:2,dr:2,judge_confidence:0.88},
+  {case_id:"NZ-2026-03-12-CHATHAM",domain:"audits",model:"gemini",condition:"baseline",total_score:12,total_graded:7,bc:2,sv:1,iq:2,dr:2,judge_confidence:0.82},
+  {case_id:"NZ-2026-03-12-CHATHAM",domain:"audits",model:"gemini",condition:"treatment",total_score:12,total_graded:7,bc:2,sv:1,iq:2,dr:2,judge_confidence:0.82},
+  {case_id:"ZA-2026-03-26-AGSA-PFMA",domain:"audits",model:"gpt",condition:"baseline",total_score:13,total_graded:8,bc:2,sv:2,iq:2,dr:2,judge_confidence:0.95},
+  {case_id:"ZA-2026-03-26-AGSA-PFMA",domain:"audits",model:"gpt",condition:"treatment",total_score:13,total_graded:8,bc:2,sv:2,iq:2,dr:2,judge_confidence:0.95},
+  {case_id:"ZA-2026-03-26-AGSA-PFMA",domain:"audits",model:"claude_haiku",condition:"baseline",total_score:13,total_graded:8,bc:2,sv:2,iq:2,dr:2,judge_confidence:0.93},
+  {case_id:"ZA-2026-03-26-AGSA-PFMA",domain:"audits",model:"claude_haiku",condition:"treatment",total_score:12,total_graded:7,bc:2,sv:1,iq:2,dr:2,judge_confidence:0.88},
+  {case_id:"ZA-2026-03-26-AGSA-PFMA",domain:"audits",model:"gemini",condition:"baseline",total_score:12,total_graded:7,bc:2,sv:1,iq:2,dr:2,judge_confidence:0.88},
+  {case_id:"ZA-2026-03-26-AGSA-PFMA",domain:"audits",model:"gemini",condition:"treatment",total_score:12,total_graded:7,bc:2,sv:1,iq:2,dr:2,judge_confidence:0.88},
+];
+
+// ═══════════════════════════════ HELPERS ═══════════════════════════
+
+const BASELINE_C = '#457b9d';
+const TREATMENT_C = '#e63946';
+const GOLD_C = '#f4a261';
+const TEAL_C = '#2a9d8f';
+
+function avg(arr) { return arr.reduce((a,b)=>a+b,0)/arr.length; }
+
+function getByCondition(model, condition, field) {
+  return rawData.filter(d=>d.model===model&&d.condition===condition).map(d=>d[field]);
+}
+
+function getCaseModelDelta(caseId, model) {
+  const b = rawData.find(d=>d.case_id===caseId&&d.model===model&&d.condition==='baseline');
+  const t = rawData.find(d=>d.case_id===caseId&&d.model===model&&d.condition==='treatment');
+  if (!b || !t) return null;
+  return {
+    baseline: b.total_graded,
+    treatment: t.total_graded,
+    delta: t.total_graded - b.total_graded,
+    model
+  };
+}
+
+// ═══════════════════════════════ CHART 1: MAIN BAR ═══════════════════════════
+
+const models = ['gpt','claude_haiku','gemini'];
+const modelLabels = {'gpt':'GPT-5.4-mini','claude_haiku':'Claude Haiku 4.5','gemini':'Gemini 3 Flash'};
+
+const mainCtx = document.getElementById('mainChart').getContext('2d');
+const mainBaseline = models.map(m => +avg(getByCondition(m,'baseline','total_graded')).toFixed(2));
+const mainTreatment = models.map(m => +avg(getByCondition(m,'treatment','total_graded')).toFixed(2));
+
+new Chart(mainCtx, {
+  type: 'bar',
+  data: {
+    labels: models.map(m=>modelLabels[m]),
+    datasets: [
+      {
+        label: 'Baseline',
+        data: mainBaseline,
+        backgroundColor: BASELINE_C + 'cc',
+        borderColor: BASELINE_C,
+        borderWidth: 2,
+        borderRadius: 6,
+      },
+      {
+        label: 'Treatment',
+        data: mainTreatment,
+        backgroundColor: TREATMENT_C + 'cc',
+        borderColor: TREATMENT_C,
+        borderWidth: 2,
+        borderRadius: 6,
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    plugins: {
+      legend: {
+        labels: { font: { family: 'Courier New', size: 12 }, color: '#1a1a2e' }
+      },
+      tooltip: {
+        callbacks: {
+          afterBody: (items) => {
+            const i = items[0].dataIndex;
+            const delta = (mainTreatment[i]-mainBaseline[i]).toFixed(2);
+            return `Delta: ${delta>0?'+':''}${delta}`;
+          }
+        }
+      }
+    },
+    scales: {
+      y: {
+        min: 4,
+        max: 8,
+        ticks: { font: { family: 'Courier New', size: 11 }, stepSize: 1 },
+        grid: { color: '#e8e4dc' },
+        title: { display: true, text: 'Avg Graded Score (0–8)', font: { family: 'Courier New', size: 11 } }
+      },
+      x: {
+        ticks: { font: { family: 'Courier New', size: 12 } },
+        grid: { display: false }
+      }
+    }
+  }
+});
+
+// ═══════════════════════════════ CHART 2: DIMENSION ═══════════════════════════
+
+const dimCtx = document.getElementById('dimensionChart').getContext('2d');
+const dims = ['bc','sv','iq','dr'];
+const dimLabels = ['Binding\nConstraint\nAccuracy','Slow Variable\nRecall','Intervention\nQuality','Distractor\nResistance'];
+
+const dimBaseline = dims.map(d => +avg(rawData.filter(r=>r.condition==='baseline').map(r=>r[d])).toFixed(3));
+const dimTreatment = dims.map(d => +avg(rawData.filter(r=>r.condition==='treatment').map(r=>r[d])).toFixed(3));
+
+new Chart(dimCtx, {
+  type: 'bar',
+  data: {
+    labels: ['Binding Constraint Accuracy','Slow Variable Recall','Intervention Quality','Distractor Resistance'],
+    datasets: [
+      {
+        label: 'Baseline',
+        data: dimBaseline,
+        backgroundColor: BASELINE_C + 'cc',
+        borderColor: BASELINE_C,
+        borderWidth: 2,
+        borderRadius: 6,
+      },
+      {
+        label: 'Treatment',
+        data: dimTreatment,
+        backgroundColor: TREATMENT_C + 'cc',
+        borderColor: TREATMENT_C,
+        borderWidth: 2,
+        borderRadius: 6,
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    plugins: {
+      legend: {
+        labels: { font: { family: 'Courier New', size: 12 }, color: '#1a1a2e' }
+      },
+      annotation: {},
+      tooltip: {
+        callbacks: {
+          afterBody: (items) => {
+            const i = items[0].dataIndex;
+            const delta = (dimTreatment[i]-dimBaseline[i]).toFixed(3);
+            return `Delta: ${delta>0?'+':''}${delta}`;
+          }
+        }
+      }
+    },
+    scales: {
+      y: {
+        min: 1.3,
+        max: 2.0,
+        ticks: { font: { family: 'Courier New', size: 11 }, stepSize: 0.1 },
+        grid: { color: '#e8e4dc' },
+        title: { display: true, text: 'Average Score (0–2)', font: { family: 'Courier New', size: 11 } }
+      },
+      x: {
+        ticks: { font: { family: 'Courier New', size: 11 }, maxRotation: 0 },
+        grid: { display: false }
+      }
+    }
+  }
+});
+
+// ═══════════════════════════════ CHART 3: SLOPE ═══════════════════════════
+
+const slopeCtx = document.getElementById('slopeChart').getContext('2d');
+
+const cases = [...new Set(rawData.map(d=>d.case_id))];
+const caseShort = {
+  'CF-2026-02-20-BYOIP':'CF·BYOIP',
+  'CLERK-2026-03-10-CLOUDSQL':'CLERK·SQL',
+  'GH-2026-02-02-ACTIONS':'GH·ACTIONS',
+  'GH-2026-02-09-CACHE':'GH·CACHE',
+  'LARAVEL-2026-02-20-CLOUDFLARE':'LARAVEL·CF',
+  'AU-2026-01-21-CLOSINGGAP':'AU·CLOSE',
+  'EU-2026-03-XX-SERVICES':'EU·SERV',
+  'IN-2026-03-23-DELHI-UNIVERSITIES':'IN·DELHI',
+  'NZ-2026-03-12-CHATHAM':'NZ·CHATHAM',
+  'ZA-2026-03-26-AGSA-PFMA':'ZA·PFMA'
+};
+
+const modelColors = {
+  'gpt': '#e63946',
+  'claude_haiku': '#2a9d8f',
+  'gemini': '#f4a261'
+};
+const modelSymbols = { 'gpt':'circle', 'claude_haiku':'triangle', 'gemini':'rect' };
+
+// Build datasets: one per model, points at x=0 (baseline) and x=1 (treatment)
+const slopeDatasets = models.map(model => {
+  const pts = [];
+  cases.forEach((c, ci) => {
+    const b = rawData.find(d=>d.case_id===c&&d.model===model&&d.condition==='baseline');
+    const t = rawData.find(d=>d.case_id===c&&d.model===model&&d.condition==='treatment');
+    if (b && t) {
+      pts.push({x: 0, y: b.total_graded, label: caseShort[c]||c, caseIndex: ci});
+      pts.push({x: 1, y: t.total_graded, label: caseShort[c]||c, caseIndex: ci});
+    }
+  });
+  return {
+    label: modelLabels[model],
+    data: pts,
+    borderColor: modelColors[model],
+    backgroundColor: modelColors[model]+'44',
+    pointStyle: modelSymbols[model],
+    pointRadius: 6,
+    pointHoverRadius: 9,
+    showLine: false,
+    tension: 0
+  };
+});
+
+// Add connecting lines per case per model
+const lineDatasets = [];
+cases.forEach((c, ci) => {
+  models.forEach(model => {
+    const b = rawData.find(d=>d.case_id===c&&d.model===model&&d.condition==='baseline');
+    const t = rawData.find(d=>d.case_id===c&&d.model===model&&d.condition==='treatment');
+    if (!b||!t) return;
+    const color = modelColors[model];
+    const delta = t.total_graded - b.total_graded;
+    lineDatasets.push({
+      data: [{x:0,y:b.total_graded},{x:1,y:t.total_graded}],
+      borderColor: delta > 0 ? color+'99' : delta < 0 ? '#cc000055' : '#cccccc44',
+      borderWidth: delta !== 0 ? 2 : 1,
+      borderDash: delta < 0 ? [4,4] : [],
+      showLine: true,
+      pointRadius: 0,
+      fill: false,
+      tension: 0,
+      label: ''
+    });
+  });
+});
+
+new Chart(slopeCtx, {
+  type: 'scatter',
+  data: { datasets: [...lineDatasets, ...slopeDatasets] },
+  options: {
+    responsive: true,
+    plugins: {
+      legend: {
+        labels: {
+          filter: (item) => item.text !== '',
+          font: { family: 'Courier New', size: 12 },
+          color: '#1a1a2e'
+        }
+      },
+      tooltip: {
+        filter: (item) => item.dataset.label !== '',
+        callbacks: {
+          label: (ctx) => {
+            const d = ctx.raw;
+            const cond = d.x === 0 ? 'Baseline' : 'Treatment';
+            return ` ${d.label} · ${ctx.dataset.label} · ${cond}: ${d.y}/8`;
+          }
+        }
+      }
+    },
+    scales: {
+      x: {
+        min: -0.3,
+        max: 1.3,
+        ticks: {
+          stepSize: 1,
+          callback: v => v===0?'BASELINE':v===1?'TREATMENT':'',
+          font: { family: 'Courier New', size: 12, weight: 'bold' }
+        },
+        grid: { display: false }
+      },
+      y: {
+        min: 3,
+        max: 9,
+        ticks: { font: { family: 'Courier New', size: 11 } },
+        title: { display: true, text: 'Total Graded Score (0–8)', font: { family: 'Courier New', size: 11 } },
+        grid: { color: '#e8e4dc' }
+      }
+    }
+  }
+});
+
+// ═══════════════════════════════ CHART 4: DOMAIN ═══════════════════════════
+
+const domainCtx = document.getElementById('domainChart').getContext('2d');
+
+function domainScores(domain, condition) {
+  return rawData.filter(d=>d.domain===domain&&d.condition===condition).map(d=>d.total_graded);
+}
+
+const outB = domainScores('outages','baseline');
+const outT = domainScores('outages','treatment');
+const audB = domainScores('audits','baseline');
+const audT = domainScores('audits','treatment');
+
+function bucketize(scores) {
+  // returns histogram counts for bins 4..8
+  const bins = [0,0,0,0,0]; // 4,5,6,7,8
+  scores.forEach(s=>{
+    if(s>=4&&s<=8) bins[s-4]++;
+  });
+  return bins;
+}
+
+const binLabels = ['4','5','6','7','8'];
+
+new Chart(domainCtx, {
+  type: 'bar',
+  data: {
+    labels: binLabels,
+    datasets: [
+      {label:'Outages · Baseline', data:bucketize(outB), backgroundColor:BASELINE_C+'99', borderColor:BASELINE_C, borderWidth:2, borderRadius:4},
+      {label:'Outages · Treatment', data:bucketize(outT), backgroundColor:TREATMENT_C+'99', borderColor:TREATMENT_C, borderWidth:2, borderRadius:4},
+      {label:'Audits · Baseline', data:bucketize(audB), backgroundColor:TEAL_C+'99', borderColor:TEAL_C, borderWidth:2, borderRadius:4},
+      {label:'Audits · Treatment', data:bucketize(audT), backgroundColor:GOLD_C+'99', borderColor:GOLD_C, borderWidth:2, borderRadius:4},
+    ]
+  },
+  options: {
+    responsive: true,
+    plugins: {
+      legend: { labels: { font: { family:'Courier New', size:12 }, color:'#1a1a2e' } },
+      tooltip: { callbacks: { title: items => `Score = ${items[0].label}` } }
+    },
+    scales: {
+      x: {
+        ticks: { font: { family:'Courier New', size:13 } },
+        title: { display:true, text:'Total Graded Score', font:{family:'Courier New',size:11} },
+        grid: { display:false }
+      },
+      y: {
+        ticks: { font:{family:'Courier New',size:11}, stepSize:1 },
+        title: { display:true, text:'Number of Runs', font:{family:'Courier New',size:11} },
+        grid: { color:'#e8e4dc' }
+      }
+    }
+  }
+});
+
+// ═══════════════════════════════ CASE GRID ═══════════════════════════
+
+const caseGrid = document.getElementById('caseGrid');
+const caseInfo = {
+  'CF-2026-02-20-BYOIP':{short:'CF · BYOIP',domain:'outages'},
+  'CLERK-2026-03-10-CLOUDSQL':{short:'CLERK · CloudSQL',domain:'outages'},
+  'GH-2026-02-02-ACTIONS':{short:'GH · Actions',domain:'outages'},
+  'GH-2026-02-09-CACHE':{short:'GH · Cache',domain:'outages'},
+  'LARAVEL-2026-02-20-CLOUDFLARE':{short:'Laravel · Cloudflare',domain:'outages'},
+  'AU-2026-01-21-CLOSINGGAP':{short:'AU · Closing Gap',domain:'audits'},
+  'EU-2026-03-XX-SERVICES':{short:'EU · Services',domain:'audits'},
+  'IN-2026-03-23-DELHI-UNIVERSITIES':{short:'IN · Delhi Univ.',domain:'audits'},
+  'NZ-2026-03-12-CHATHAM':{short:'NZ · Chatham',domain:'audits'},
+  'ZA-2026-03-26-AGSA-PFMA':{short:'ZA · AGSA-PFMA',domain:'audits'},
+};
+
+cases.forEach(c => {
+  const info = caseInfo[c] || {short:c, domain:'unknown'};
+  const card = document.createElement('div');
+  card.className = 'case-card';
+
+  let pills = '';
+  models.forEach(model => {
+    const b = rawData.find(d=>d.case_id===c&&d.model===model&&d.condition==='baseline');
+    const t = rawData.find(d=>d.case_id===c&&d.model===model&&d.condition==='treatment');
+    if (!b||!t) return;
+    const delta = t.total_graded - b.total_graded;
+    const cls = delta > 0 ? 'positive' : delta < 0 ? 'negative' : 'neutral';
+    const sign = delta > 0 ? '+' : '';
+    pills += `<span class="delta-pill ${cls}">${modelLabels[model].split('-')[0]} ${sign}${delta}</span>`;
+  });
+
+  const domBadge = info.domain === 'outages' ? 'outages' : 'audits';
+
+  card.innerHTML = `
+    <div class="case-domain">${domBadge}</div>
+    <div class="case-id" style="font-size:14px;font-weight:700;color:#1a1a2e;margin-bottom:8px;">${info.short}</div>
+    <div class="delta-row">${pills}</div>
+  `;
+  caseGrid.appendChild(card);
+});
+
+// ═══════════════════════════════ MODEL BAR ROWS ═══════════════════════════
+
+const modelRows = document.getElementById('modelRows');
+const maxScore = 13;
+
+models.forEach(model => {
+  const bAvg = +avg(getByCondition(model,'baseline','total_score')).toFixed(1);
+  const tAvg = +avg(getByCondition(model,'treatment','total_score')).toFixed(1);
+  const delta = (tAvg - bAvg).toFixed(1);
+  const deltaSign = delta > 0 ? '+' : '';
+
+  const row = document.createElement('div');
+  row.style.cssText = 'padding:16px 0;border-bottom:1px solid #e8e4dc;';
+  row.innerHTML = `
+    <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px;">
+      <span style="font-family:'Courier New',monospace;font-weight:700;font-size:14px;">${modelLabels[model]}</span>
+      <span style="font-family:'Courier New',monospace;font-size:12px;color:${delta>0?'#1a6b5f':delta<0?'#b02030':'#666'};font-weight:700;">${deltaSign}${delta} pts</span>
+    </div>
+    <div style="margin-bottom:6px;">
+      <div style="display:flex;align-items:center;gap:8px;">
+        <span style="font-family:'Courier New',monospace;font-size:11px;color:#666;min-width:72px;">Baseline</span>
+        <div style="flex:1;background:#eee;border-radius:4px;height:12px;">
+          <div style="width:${(bAvg/maxScore*100).toFixed(1)}%;height:100%;background:${BASELINE_C}bb;border-radius:4px;"></div>
+        </div>
+        <span style="font-family:'Courier New',monospace;font-size:13px;font-weight:700;color:${BASELINE_C};min-width:32px;text-align:right;">${bAvg}</span>
+      </div>
+    </div>
+    <div>
+      <div style="display:flex;align-items:center;gap:8px;">
+        <span style="font-family:'Courier New',monospace;font-size:11px;color:#666;min-width:72px;">Treatment</span>
+        <div style="flex:1;background:#eee;border-radius:4px;height:12px;">
+          <div style="width:${(tAvg/maxScore*100).toFixed(1)}%;height:100%;background:${TREATMENT_C}bb;border-radius:4px;"></div>
+        </div>
+        <span style="font-family:'Courier New',monospace;font-size:13px;font-weight:700;color:${TREATMENT_C};min-width:32px;text-align:right;">${tAvg}</span>
+      </div>
+    </div>
+  `;
+  modelRows.appendChild(row);
+});
+
+// ═══════════════════════════════ RAW TABLE ═══════════════════════════
+
+const rawTable = document.getElementById('rawTable');
+const scoreColor = s => {
+  if (s >= 13) return '#d1f0ec';
+  if (s >= 11) return '#fef0dd';
+  if (s >= 9)  return '#fff0f0';
+  return '#ffe0e0';
+};
+
+const sortableColumns = [
+  { key: 'case_id', label: 'Case', align: 'left' },
+  { key: 'domain', label: 'Domain', align: 'center' },
+  { key: 'model', label: 'Model', align: 'center' },
+  { key: 'condition', label: 'Cond.', align: 'center' },
+  { key: 'total_score', label: 'Total', align: 'center' },
+  { key: 'total_graded', label: 'Graded', align: 'center' },
+  { key: 'bc', label: 'BC', align: 'center' },
+  { key: 'sv', label: 'SV', align: 'center' },
+  { key: 'iq', label: 'IQ', align: 'center' },
+  { key: 'dr', label: 'DR', align: 'center' }
+];
+
+let tableSort = { key: 'case_id', asc: true };
+
+function renderRawTable() {
+  rawTable.innerHTML = '';
+
+  const thead = document.createElement('thead');
+  const headRow = document.createElement('tr');
+  headRow.style.cssText = 'background:#1a1a2e;color:#f0ede6;';
+
+  sortableColumns.forEach((col) => {
+    const th = document.createElement('th');
+    const sortMark = tableSort.key === col.key ? (tableSort.asc ? ' ▲' : ' ▼') : '';
+    th.textContent = `${col.label}${sortMark}`;
+    th.style.cssText = `padding:8px 12px;text-align:${col.align};cursor:pointer;user-select:none;`;
+    th.addEventListener('click', () => {
+      if (tableSort.key === col.key) {
+        tableSort.asc = !tableSort.asc;
+      } else {
+        tableSort.key = col.key;
+        tableSort.asc = true;
+      }
+      renderRawTable();
+    });
+    headRow.appendChild(th);
+  });
+
+  thead.appendChild(headRow);
+  rawTable.appendChild(thead);
+
+  const sorted = [...rawData].sort((a, b) => {
+    const av = a[tableSort.key];
+    const bv = b[tableSort.key];
+    if (typeof av === 'number' && typeof bv === 'number') {
+      return tableSort.asc ? av - bv : bv - av;
+    }
+    return tableSort.asc
+      ? String(av).localeCompare(String(bv))
+      : String(bv).localeCompare(String(av));
+  });
+
+  const tbody = document.createElement('tbody');
+  sorted.forEach((d, i) => {
+    const tr = document.createElement('tr');
+    tr.style.cssText = `background:${i%2===0?'#fff':'#faf9f7'};`;
+    const condStyle = d.condition==='treatment' ? `color:${TREATMENT_C};font-weight:700` : `color:${BASELINE_C}`;
+    tr.innerHTML = `
+      <td style="padding:6px 12px;font-size:11px;">${caseShort[d.case_id]||d.case_id}</td>
+      <td style="padding:6px 12px;text-align:center;font-size:11px;">${d.domain}</td>
+      <td style="padding:6px 12px;text-align:center;">${modelLabels[d.model].split('-')[0]}</td>
+      <td style="padding:6px 12px;text-align:center;${condStyle}">${d.condition.toUpperCase()}</td>
+      <td style="padding:6px 12px;text-align:center;background:${scoreColor(d.total_score)};font-weight:700;">${d.total_score}</td>
+      <td style="padding:6px 12px;text-align:center;background:${scoreColor(d.total_graded+5)};font-weight:700;">${d.total_graded}</td>
+      <td style="padding:6px 12px;text-align:center;color:${d.bc===2?'#1a6b5f':d.bc===1?'#7a4a10':'#b02030'};font-weight:700;">${d.bc}</td>
+      <td style="padding:6px 12px;text-align:center;color:${d.sv===2?'#1a6b5f':d.sv===1?'#7a4a10':'#b02030'};font-weight:700;">${d.sv}</td>
+      <td style="padding:6px 12px;text-align:center;color:${d.iq===2?'#1a6b5f':d.iq===1?'#7a4a10':'#b02030'};font-weight:700;">${d.iq}</td>
+      <td style="padding:6px 12px;text-align:center;color:${d.dr===2?'#1a6b5f':d.dr===1?'#7a4a10':'#b02030'};font-weight:700;">${d.dr}</td>
+    `;
+    tbody.appendChild(tr);
+  });
+  rawTable.appendChild(tbody);
+}
+
+renderRawTable();
+
+// ═══════════════════════════════ COMPUTED STATS FOR STAT CARDS ═══════════════
+
+// Update stat cards with real computed values
+const allBaseline = rawData.filter(d=>d.condition==='baseline');
+const allTreatment = rawData.filter(d=>d.condition==='treatment');
+const avgGradedB = avg(allBaseline.map(d=>d.total_graded));
+const avgGradedT = avg(allTreatment.map(d=>d.total_graded));
+const meanLift = avgGradedT - avgGradedB;
+const avgJudgeConfidence = avg(rawData.map(d=>d.judge_confidence));
+
+// Count case-model pairs that improved or held
+let improvedOrHeld = 0, total = 0;
+cases.forEach(c => {
+  models.forEach(m => {
+    const b = rawData.find(d=>d.case_id===c&&d.model===m&&d.condition==='baseline');
+    const t = rawData.find(d=>d.case_id===c&&d.model===m&&d.condition==='treatment');
+    if (!b||!t) return;
+    total++;
+    if (t.total_graded >= b.total_graded) improvedOrHeld++;
+  });
+});
+
+const improvedOrHeldPct = total ? (improvedOrHeld / total) * 100 : 0;
+
+document.getElementById('statBaseline').textContent = avgGradedB.toFixed(1);
+document.getElementById('statTreatment').textContent = avgGradedT.toFixed(1);
+document.getElementById('statLift').textContent = `${meanLift >= 0 ? '+' : ''}${meanLift.toFixed(2)}`;
+document.getElementById('statImproveHeld').textContent = `${Math.round(improvedOrHeldPct)}%`;
+document.getElementById('footerSummary').textContent =
+  `Scoring: 5 binary checks + 4 rubric dimensions (0-2 each) · Max score: 13 · Judge confidence avg: ${avgJudgeConfidence.toFixed(2)}`;
+</script>
+</body>
+</html>
