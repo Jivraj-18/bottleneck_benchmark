@@ -39,27 +39,6 @@ OUTPUT_SCHEMA = {
     "early_warning_signals": ["string", "string", "string"],
 }
 
-AUDIT_BASELINE_PROMPT = (
-    "Analyze this case. Identify:\n"
-    "the main bottleneck, the slow variables, the top 3 interventions, "
-    "2 things to deprioritize, and the earliest warning signals that leadership should track."
-)
-
-TREATMENT_LINE = (
-    'Identify  the binding constraints and slow variables - What governs here regardless of improvements elsewhere?'
-)
-
-OUTAGE_BASELINE_PROMPT = (
-    "Analyze this outage case. Identify:\n"
-    "1. the binding constraint,\n"
-    "2. the slow variables,\n"
-    "3. the top 3 interventions you would prioritize,\n"
-    "4. 2 interventions you would explicitly deprioritize,\n"
-    "5. 3 early-warning signals.\n\n"
-    "Be concrete and case-specific."
-)
-
-
 @dataclass
 class ModelSpec:
     name: str
@@ -76,6 +55,12 @@ class CaseSpec:
     gold_packet: dict[str, Any]
 
 
+@dataclass
+class PromptTemplates:
+    baseline: str
+    treatment: str
+
+
 def load_json(path: Path) -> dict[str, Any]:
     with path.open("r", encoding="utf-8") as f:
         return json.load(f)
@@ -83,6 +68,7 @@ def load_json(path: Path) -> dict[str, Any]:
 
 def list_cases(root: Path) -> list[CaseSpec]:
     cases: list[CaseSpec] = []
+
     for item in sorted(root.iterdir()):
         if not item.is_dir():
             continue
@@ -108,6 +94,26 @@ def list_cases(root: Path) -> list[CaseSpec]:
             )
         )
     return cases
+
+
+def load_prompt_templates(config_path: Path) -> PromptTemplates:
+    if not config_path.exists():
+        raise FileNotFoundError(
+            f"Missing prompt template config: {config_path}. "
+            "Create prompt_templates.json with baseline and treatment fields."
+        )
+
+    cfg = load_json(config_path)
+    baseline = str(cfg.get("baseline", "")).strip()
+    treatment = str(cfg.get("treatment", "")).strip()
+
+    if not baseline or not treatment:
+        raise ValueError(
+            f"Invalid prompt_templates.json at {config_path}. "
+            "Both 'baseline' and 'treatment' must be non-empty strings."
+        )
+
+    return PromptTemplates(baseline=baseline, treatment=treatment)
 
 
 def extract_json_block(text: str) -> str:
@@ -142,31 +148,16 @@ def build_prompt_packet(model_packet: dict[str, Any]) -> dict[str, Any]:
     return packet
 
 
-def build_task_instruction(source_root: str, condition: str) -> str:
-    is_outage = "outage" in source_root.lower()
-
-    if is_outage:
-        if condition == "treatment":
-            return (
-                "Analyze this outage case.\n\n"
-                f"{TREATMENT_LINE}\n\n"
-                "Then provide:\n"
-                "1. the binding constraint,\n"
-                "2. the slow variables,\n"
-                "3. the top 3 interventions you would prioritize,\n"
-                "4. 2 interventions you would explicitly deprioritize,\n"
-                "5. 3 early-warning signals.\n\n"
-                "Be concrete and case-specific."
-            )
-        return OUTAGE_BASELINE_PROMPT
-
+def build_task_instruction(prompt_templates: PromptTemplates, condition: str) -> str:
+    if condition == "baseline":
+        return prompt_templates.baseline
     if condition == "treatment":
-        return "\n\n".join([AUDIT_BASELINE_PROMPT, TREATMENT_LINE])
-    return AUDIT_BASELINE_PROMPT
+        return prompt_templates.treatment
+    raise ValueError(f"Unknown condition: {condition}")
 
 
-def build_case_prompt(case: CaseSpec, condition: str) -> str:
-    task = build_task_instruction(case.source_root, condition)
+def build_case_prompt(case: CaseSpec, condition: str, prompt_templates: PromptTemplates) -> str:
+    task = build_task_instruction(prompt_templates, condition)
 
     prompt_packet = build_prompt_packet(case.model_packet)
 
@@ -371,8 +362,12 @@ def build_summary_row(record: dict[str, Any]) -> dict[str, Any]:
 def main() -> int:
     parser = argparse.ArgumentParser(description="Run BottleneckBench across GPT/Gemini/Claude")
     parser.add_argument("--root", default=".", help="Repo root path")
-    parser.add_argument("--audit-dir", default="bottleneckbench_recent_audit_reviews")
-    parser.add_argument("--outages-dir", default="bottleneckbench_recent_outages")
+    parser.add_argument("--cases-dir", required=True, help="Single directory containing case subfolders.")
+    parser.add_argument(
+        "--prompt-config",
+        default="prompt_templates.json",
+        help="Prompt config JSON path (relative to --root or absolute) with baseline/treatment.",
+    )
     parser.add_argument("--output-dir", default="benchmark_outputs")
     parser.add_argument("--repeats", type=int, default=1)
     parser.add_argument("--max-cases", type=int, default=0, help="0 = all")
@@ -402,12 +397,16 @@ def main() -> int:
     aipipe_key = os.getenv("AIPIPE_API_KEY", "")
 
     root = Path(args.root).resolve()
-    audit_root = root / args.audit_dir
-    outages_root = root / args.outages_dir
     out_root = ensure_output_dir(root / args.output_dir)
+    cases_root = root / args.cases_dir
+    prompt_config = Path(args.prompt_config)
+    if not prompt_config.is_absolute():
+        prompt_config = root / prompt_config
 
-    if not audit_root.exists() or not outages_root.exists():
-        raise FileNotFoundError("Expected both audit and outage dataset folders to exist")
+    if not cases_root.exists():
+        raise FileNotFoundError(f"Cases directory does not exist: {cases_root}")
+
+    prompt_templates = load_prompt_templates(prompt_config)
 
     models = [
         ModelSpec(name="gpt", provider="aipipe_openrouter", model=args.gpt_model),
@@ -417,7 +416,7 @@ def main() -> int:
 
     conditions = ["baseline", "treatment"]
 
-    all_cases = list_cases(audit_root) + list_cases(outages_root)
+    all_cases = list_cases(cases_root)
     if args.max_cases > 0:
         all_cases = all_cases[: args.max_cases]
 
@@ -426,7 +425,7 @@ def main() -> int:
 
     results_jsonl = out_root / "results.jsonl"
     errors_jsonl = out_root / "errors.jsonl"
-    summary_csv = out_root / "summary.csv"
+    summary_csv = root / "summary.csv"
 
     rows: list[dict[str, Any]] = []
 
@@ -455,7 +454,7 @@ def main() -> int:
                         }
 
                         try:
-                            prompt = build_case_prompt(case, condition)
+                            prompt = build_case_prompt(case, condition, prompt_templates)
                             record["prompt"] = prompt
                             answer_text, raw_response = call_model(model, prompt, claude_key, aipipe_key)
                             candidate = parse_candidate_output(answer_text)

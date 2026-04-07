@@ -1,0 +1,4 @@
+{
+  "baseline": "Analyze this outage case. Identify:\n1. the binding constraint,\n2. the slow variables,\n3. the top 3 interventions you would prioritize,\n4. 2 interventions you would explicitly deprioritize,\n5. 3 early-warning signals.\n\nBe concrete and case-specific.",
+  "treatment": "Analyze this outage case.\n\nIdentify  the binding constraints and slow variables - What governs here regardless of improvements elsewhere?\n\nThen provide:\n1. the binding constraint,\n2. the slow variables,\n3. the top 3 interventions you would prioritize,\n4. 2 interventions you would explicitly deprioritize,\n5. 3 early-warning signals.\n\nBe concrete and case-specific."
+}
