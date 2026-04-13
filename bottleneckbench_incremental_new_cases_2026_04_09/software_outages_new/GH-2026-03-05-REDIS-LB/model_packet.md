@@ -1,0 +1,24 @@
+# GH-2026-03-05-REDIS-LB — GitHub March 5 Actions Redis load-balancer incident
+
+## Background
+A CI/CD service experienced severe delays in starting workflows and a smaller but important set of outright infrastructure failures. The incident occurred during resiliency-related infrastructure updates.
+
+## System context
+- The affected service depends on Redis-backed infrastructure and an internal load balancer.
+- The update was intended to improve resiliency, not to change product behavior.
+- Queue buildup continued even after the immediate fault was corrected.
+- A second-order effect mattered: recovery time included draining the accumulated job backlog.
+
+## Timeline
+- 2026-03-05 16:24 UTC: incident begins.
+- 2026-03-05 17:24 UTC: jobs begin running successfully after the immediate misconfiguration is corrected.
+- 2026-03-05 19:30 UTC: incident closed after backlog burn-down.
+
+## Observations
+- 95% of workflow runs failed to start within 5 minutes.
+- Average delay reached 30 minutes.
+- 10% of workflow runs failed with infrastructure error.
+- The issue was introduced while rolling out Redis infrastructure updates meant to improve resiliency.
+
+## Task
+Analyze this case. Identify the main binding constraint, the slow variables, the top 3 interventions, 2 things to deprioritize, and the earliest warning signals leadership should track.

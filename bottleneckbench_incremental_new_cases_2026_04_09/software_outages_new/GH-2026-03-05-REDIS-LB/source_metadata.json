@@ -1,0 +1,13 @@
+{
+  "case_id": "GH-2026-03-05-REDIS-LB",
+  "title": "GitHub March 5 Actions Redis load-balancer incident",
+  "publisher": "GitHub",
+  "source_type": "Availability report / incident recap",
+  "publication_date": "2026-04-08",
+  "incident_or_program_date": "2026-03-05",
+  "geography": "Global software platform",
+  "url": "https://github.blog/news-insights/company-news/github-availability-report-march-2026/",
+  "source_title": "GitHub availability report: March 2026",
+  "why_selected": "Recent provider-authored availability report with measurable impact, a clear control-plane misconfiguration, and follow-up actions.",
+  "selection_notes": "Good case for distinguishing the queue backlog symptom from the real bottleneck: unsafe configuration propagation in critical Redis/load-balancer infrastructure."
+}

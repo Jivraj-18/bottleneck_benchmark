@@ -1,0 +1,48 @@
+{
+  "binding_constraint_top1": "A shared user-settings cache architecture whose invalidation / rewrite behavior could trigger system-wide write amplification and replication delays across many dependent services.",
+  "binding_constraint_top3": [
+    "Centralized cache-write path with unsafe blast radius",
+    "Lack of isolation around a high-fan-out user-settings caching mechanism",
+    "Architecture that allows cache recalculation and rewrite storms to cascade into core services"
+  ],
+  "slow_variables": [
+    "Architectural decoupling / isolation of the cache mechanism",
+    "Protection mechanisms around mass invalidation and rewrite events",
+    "Monitoring and killswitch maturity for shared infrastructure components",
+    "Resilience of downstream services to replication lag from shared-state overload"
+  ],
+  "contributing_factors": [
+    "A bug caused every user's cache to expire, get recalculated, and get rewritten",
+    "The increased load caused replication delays that cascaded to affected services",
+    "The same underlying cause had already appeared in a prior incident",
+    "Many product surfaces depended on the stressed mechanism"
+  ],
+  "good_interventions_ranked": [
+    "Isolate the user-settings cache mechanism on dedicated infrastructure or partitioned fault domains so failures do not cascade broadly.",
+    "Add guardrails against mass expiry / rewrite events, including staged invalidation, quotas, and rollbackable killswitches.",
+    "Instrument leading indicators on cache write amplification and replication delay, with automatic abort thresholds during risky deployments."
+  ],
+  "bad_interventions": [
+    "Optimizing user-facing retry messaging while leaving the write-storm path intact",
+    "Treating this as only a deployment bug rather than an architectural blast-radius problem",
+    "Adding more frontend failover without fixing the shared cache dependency"
+  ],
+  "early_warning_signals": [
+    "Sudden spike in cache expirations, recalculations, or rewrite volume per user",
+    "Replication lag crossing predefined thresholds during or immediately after deployment",
+    "Cross-service error increases tied to shared user-settings reads/writes",
+    "Repeat incidents linked to the same mechanism"
+  ],
+  "distractors_to_penalize": [
+    "Generic rollback speed improvements alone",
+    "Surface-level SRE playbook updates without architecture change",
+    "Focusing on Copilot or API symptoms separately rather than the shared dependency"
+  ],
+  "evidence": [
+    "GitHub reports roughly 40% github.com request failures and 43% API failures during the incident.",
+    "The report says the same underlying cause had appeared in an early-February incident.",
+    "A bug caused every user's cache to expire, get recalculated, and get rewritten.",
+    "The increased load caused replication delays that cascaded to affected services.",
+    "GitHub says it added a killswitch, improved monitoring, and is moving the cache mechanism to a dedicated host."
+  ]
+}

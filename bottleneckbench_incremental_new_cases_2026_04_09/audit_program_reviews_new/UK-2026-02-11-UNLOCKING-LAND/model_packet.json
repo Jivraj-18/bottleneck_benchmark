@@ -1,0 +1,22 @@
+{
+  "background": "A housing ministry has spent for years on multiple programs designed to unlock land for housing where the market would otherwise underdeliver because sites are not profitable or attractive enough. A new consolidated fund is about to launch with much larger resources.",
+  "system_context": [
+    "The existing approach uses multiple programs, funding types, and delivery partners.",
+    "Unlocking land and actually building homes both take many years.",
+    "The ministry has supported hundreds of sites and expects hundreds of thousands of homes over time.",
+    "The new fund is expected to simplify the system and support faster delivery, but it inherits lessons and unresolved measurement challenges from prior programs."
+  ],
+  "timeline": [
+    "2016/17 onward: current unlocking-land programs run across many sites.",
+    "2025: Homes England publishes an investment roadmap.",
+    "2026-02-11: the NAO publishes its report.",
+    "2026-04-01: the ministry expects the new National Housing Delivery Fund and housing bank to be operational."
+  ],
+  "observations": [
+    "The system intervenes because land may be unattractive due to remediation needs, infrastructure gaps, or fragmented ownership.",
+    "Many projects will continue spending on unlocking work for years, with housebuilding extending much longer.",
+    "The ministry did not initially set out to track homes built on some major funds that account for a large share of intended capacity.",
+    "The report stresses the need for common metrics, clearer risk language, place priorities, and better understanding of what interventions actually work."
+  ],
+  "task": "Analyze this case. Identify the main binding constraint, the slow variables, the top 3 interventions, 2 things to deprioritize, and the earliest warning signals leadership should track."
+}

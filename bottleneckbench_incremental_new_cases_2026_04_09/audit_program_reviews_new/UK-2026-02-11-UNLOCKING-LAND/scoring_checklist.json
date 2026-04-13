@@ -1,0 +1,32 @@
+{
+  "case_id": "UK-2026-02-11-UNLOCKING-LAND",
+  "binary_checks": [
+    "Did the answer identify measurement-and-portfolio discipline around translating land unlocking into actual homes as the main bottleneck, not merely a symptom or generic concern?",
+    "Did the answer name at least one real slow variable such as long delivery cycles, harmonized metrics, portfolio risk appetite, and place-based investment strategy?",
+    "Did the top intervention target tracking real housing outcomes and improving portfolio logic directly?",
+    "Did the answer avoid generic distractors such as bigger funds, raw site counts, or process simplification without evidence?",
+    "Did the answer include at least one concrete early-warning signal?"
+  ],
+  "graded_checks": {
+    "binding_constraint_accuracy_0_to_2": {
+      "0": "Missed or generic",
+      "1": "Partially right / near-equivalent",
+      "2": "Correct and case-specific"
+    },
+    "slow_variable_recall_0_to_2": {
+      "0": "No real slow variables",
+      "1": "One real slow variable or mixed with symptoms",
+      "2": "Multiple real slow variables, clearly separated from symptoms"
+    },
+    "intervention_quality_0_to_2": {
+      "0": "Mostly non-binding or cosmetic",
+      "1": "Mixed",
+      "2": "Targets the real bottleneck directly"
+    },
+    "distractor_resistance_0_to_2": {
+      "0": "Chases distractors",
+      "1": "Some distractor contamination",
+      "2": "Stays focused on the real constraint"
+    }
+  }
+}

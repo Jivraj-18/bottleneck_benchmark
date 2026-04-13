@@ -1,0 +1,21 @@
+{
+  "background": "A cloud application platform experienced a security-affecting incident where some user-facing HTTP GET responses were cached and then served to the wrong users. The platform normally treats CDN caching as opt-in for customer domains.",
+  "system_context": [
+    "The platform recently introduced a configuration change related to surrogate keys and per-domain caching behavior.",
+    "Domains without CDN enabled are supposed to bypass edge caching entirely.",
+    "Origin cache directives are respected where explicitly set, but many applications do not set them comprehensively.",
+    "The platform is scaling quickly and is shipping infrastructure changes frequently."
+  ],
+  "timeline": [
+    "2026-03-30 10:42 UTC: an engineer deployed a CDN-provider configuration update.",
+    "2026-03-30 11:14 UTC: the team identified a possible issue through internal signals and user reports.",
+    "2026-03-30 11:34 UTC: the change was reverted and cached assets were purged globally."
+  ],
+  "observations": [
+    "Impact window was 52 minutes.",
+    "Approximately 0.05% of domains with CDN disabled were affected.",
+    "Responses without explicit cache headers were vulnerable during the window.",
+    "The incident exposed a mismatch between product-level assumptions ('CDN is opt-in') and infrastructure-level behavior under rollout."
+  ],
+  "task": "Analyze this case. Identify the main binding constraint, the slow variables, the top 3 interventions, 2 things to deprioritize, and the earliest warning signals leadership should track."
+}

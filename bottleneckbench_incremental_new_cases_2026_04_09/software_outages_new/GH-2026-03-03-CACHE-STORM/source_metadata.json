@@ -1,0 +1,13 @@
+{
+  "case_id": "GH-2026-03-03-CACHE-STORM",
+  "title": "GitHub March 3 cache-expiry write storm incident",
+  "publisher": "GitHub",
+  "source_type": "Availability report / incident recap",
+  "publication_date": "2026-04-08",
+  "incident_or_program_date": "2026-03-03",
+  "geography": "Global software platform",
+  "url": "https://github.blog/news-insights/company-news/github-availability-report-march-2026/",
+  "source_title": "GitHub availability report: March 2026",
+  "why_selected": "Recent provider-authored availability report with clear metrics, recurrence against an earlier pattern, and specific remediation steps.",
+  "selection_notes": "Good case for separating the visible outage from the deeper bottleneck: a shared cache write path whose failure mode can cascade across many dependent services."
+}

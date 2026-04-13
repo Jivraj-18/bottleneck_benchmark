@@ -1,0 +1,32 @@
+{
+  "case_id": "IN-2026-02-19-UPSIDA",
+  "binary_checks": [
+    "Did the answer identify planning-and-governance failure as the core bottleneck, not just isolated contract or allotment problems as the main bottleneck, not merely a symptom or generic concern?",
+    "Did the answer name at least one real slow variable such as planning capability, regulatory approvals, financial controls, and institutional governance?",
+    "Did the top intervention target restoring foundational planning and financial-control discipline directly?",
+    "Did the answer avoid generic distractors such as isolated anti-corruption rhetoric, target inflation, or cosmetic digitization?",
+    "Did the answer include at least one concrete early-warning signal?"
+  ],
+  "graded_checks": {
+    "binding_constraint_accuracy_0_to_2": {
+      "0": "Missed or generic",
+      "1": "Partially right / near-equivalent",
+      "2": "Correct and case-specific"
+    },
+    "slow_variable_recall_0_to_2": {
+      "0": "No real slow variables",
+      "1": "One real slow variable or mixed with symptoms",
+      "2": "Multiple real slow variables, clearly separated from symptoms"
+    },
+    "intervention_quality_0_to_2": {
+      "0": "Mostly non-binding or cosmetic",
+      "1": "Mixed",
+      "2": "Targets the real bottleneck directly"
+    },
+    "distractor_resistance_0_to_2": {
+      "0": "Chases distractors",
+      "1": "Some distractor contamination",
+      "2": "Stays focused on the real constraint"
+    }
+  }
+}

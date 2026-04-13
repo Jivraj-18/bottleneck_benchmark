@@ -411,7 +411,7 @@
     We added a single sentence to a diagnostic prompt. What happened next reveals
     something surprising about how language models actually think under pressure.
   </p>
-  <div class="byline">60 RUNS · 10 CASES · 3 MODELS · 2 PROMPTS</div>
+  <div class="byline">120 RUNS · 20 CASES · 3 MODELS · 2 PROMPTS</div>
 </div>
 
 <!-- ═══════════════════════════════════════════════ ACT I ═══ -->
@@ -557,7 +557,7 @@
 
 <h2>Case by Case: Where the Lift Was Real</h2>
 
-<p>Ten cases. Two domains — cloud infrastructure outages and government audit reviews. The pattern held across both, but with some interesting variation.</p>
+<p>Twenty cases. Two domains — cloud infrastructure outages and government audit reviews. The pattern held across both, but with some interesting variation.</p>
 
 <p>The hardest cases — the ones where baseline performance was lowest — showed the largest treatment gains. The CLERK CloudSQL outage and the GH Actions incident, where Gemini's baseline was a 4 and 8 respectively, both climbed meaningfully under treatment. The already-strong cases like LARAVEL Cloudflare and ZA AGSA-PFMA were near the ceiling in both conditions; there wasn't much room to improve.</p>
 
@@ -650,7 +650,7 @@
 
 <div class="finding">
   <div class="finding-label">↯ Core Finding</div>
-  <p>Twenty-two words — one sentence asking about governing constraints — measurably improved analytical depth across 60 runs, three frontier models, two domains, and ten diverse cases. The improvement was concentrated exactly where you'd hope: in the hardest cases, on the dimensions most connected to systems thinking, with the models most prone to surface-level analysis.</p>
+  <p>Twenty-two words — one sentence asking about governing constraints — measurably improved analytical depth across 120 runs, three frontier models, two domains, and twenty diverse cases. The improvement was concentrated exactly where you'd hope: in the hardest cases, on the dimensions most connected to systems thinking, with the models most prone to surface-level analysis.</p>
 </div>
 
 <h2>The Honest Caveats</h2>
@@ -678,7 +678,7 @@
 <div class="container">
 <div class="prose">
 
-<p>It costs you nothing. It takes two seconds to add. And across ten cases, three models, and sixty evaluations, it consistently produced more structurally rigorous, systems-aware analysis.</p>
+<p>It costs you nothing. It takes two seconds to add. And across twenty cases, three models, and one hundred twenty evaluations, it consistently produced more structurally rigorous, systems-aware analysis.</p>
 
 <p>The best prompt engineers have always known that the question before the question matters. This experiment quantifies it. The next time your AI gives you a well-formatted list that misses the actual constraint — consider that the problem might not be the model. It might be that nobody told it to look for what's governing the system.</p>
 
@@ -698,7 +698,7 @@
 
 <div class="wide">
 <div class="chart-section">
-  <div class="chart-headline">All 60 Runs at a Glance</div>
+  <div class="chart-headline">All 120 Runs at a Glance</div>
   <div class="chart-sub">Every case × model × condition · Color encodes total score · Click column headers to sort</div>
   <div style="overflow-x:auto;">
     <table id="rawTable" style="width:100%;border-collapse:collapse;font-size:13px;font-family:'Courier New',monospace;"></table>
@@ -709,7 +709,7 @@
 <!-- ═══════════════════════════════════════════════ FOOTER ═══ -->
 <div class="footer">
   <strong>BottleneckBench Experiment · 2026</strong><br>
-  60 runs · 10 cases · 3 models (GPT-5.4-mini, Claude Haiku 4.5, Gemini 3 Flash) · 2 prompt conditions<br>
+  120 runs · 20 cases · 3 models (GPT-5.4-mini, Claude Haiku 4.5, Gemini 3 Flash) · 2 prompt conditions<br>
   <span id="footerSummary">Scoring: 5 binary checks + 4 rubric dimensions (0-2 each) · Max score: 13 · Judge confidence avg: -</span><br><br>
   Data and methodology available in source CSV.
 </div>
@@ -729,56 +729,116 @@ const rawData = [
   {case_id:"CLERK-2026-03-10-CLOUDSQL",domain:"outages",model:"gpt",condition:"treatment",total_score:13,total_graded:8,bc:2,sv:2,iq:2,dr:2,judge_confidence:0.92},
   {case_id:"CLERK-2026-03-10-CLOUDSQL",domain:"outages",model:"claude_haiku",condition:"baseline",total_score:11,total_graded:6,bc:1,sv:1,iq:2,dr:2,judge_confidence:0.82},
   {case_id:"CLERK-2026-03-10-CLOUDSQL",domain:"outages",model:"claude_haiku",condition:"treatment",total_score:12,total_graded:7,bc:2,sv:1,iq:2,dr:2,judge_confidence:0.85},
-  {case_id:"CLERK-2026-03-10-CLOUDSQL",domain:"outages",model:"gemini",condition:"baseline",total_score:9,total_graded:5,bc:1,sv:1,iq:1,dr:2,judge_confidence:0.82},
-  {case_id:"CLERK-2026-03-10-CLOUDSQL",domain:"outages",model:"gemini",condition:"treatment",total_score:11,total_graded:6,bc:1,sv:1,iq:2,dr:2,judge_confidence:0.82},
   {case_id:"GH-2026-02-02-ACTIONS",domain:"outages",model:"gpt",condition:"baseline",total_score:12,total_graded:7,bc:2,sv:1,iq:2,dr:2,judge_confidence:0.88},
   {case_id:"GH-2026-02-02-ACTIONS",domain:"outages",model:"gpt",condition:"treatment",total_score:12,total_graded:7,bc:2,sv:1,iq:2,dr:2,judge_confidence:0.85},
   {case_id:"GH-2026-02-02-ACTIONS",domain:"outages",model:"claude_haiku",condition:"baseline",total_score:11,total_graded:6,bc:1,sv:1,iq:2,dr:2,judge_confidence:0.82},
   {case_id:"GH-2026-02-02-ACTIONS",domain:"outages",model:"claude_haiku",condition:"treatment",total_score:11,total_graded:6,bc:1,sv:1,iq:2,dr:2,judge_confidence:0.82},
-  {case_id:"GH-2026-02-02-ACTIONS",domain:"outages",model:"gemini",condition:"baseline",total_score:8,total_graded:4,bc:1,sv:0,iq:1,dr:2,judge_confidence:0.82},
-  {case_id:"GH-2026-02-02-ACTIONS",domain:"outages",model:"gemini",condition:"treatment",total_score:11,total_graded:6,bc:1,sv:1,iq:2,dr:2,judge_confidence:0.82},
   {case_id:"GH-2026-02-09-CACHE",domain:"outages",model:"gpt",condition:"baseline",total_score:13,total_graded:8,bc:2,sv:2,iq:2,dr:2,judge_confidence:0.95},
   {case_id:"GH-2026-02-09-CACHE",domain:"outages",model:"gpt",condition:"treatment",total_score:13,total_graded:8,bc:2,sv:2,iq:2,dr:2,judge_confidence:0.95},
   {case_id:"GH-2026-02-09-CACHE",domain:"outages",model:"claude_haiku",condition:"baseline",total_score:13,total_graded:8,bc:2,sv:2,iq:2,dr:2,judge_confidence:0.95},
   {case_id:"GH-2026-02-09-CACHE",domain:"outages",model:"claude_haiku",condition:"treatment",total_score:12,total_graded:7,bc:1,sv:2,iq:2,dr:2,judge_confidence:0.82},
-  {case_id:"GH-2026-02-09-CACHE",domain:"outages",model:"gemini",condition:"baseline",total_score:12,total_graded:7,bc:2,sv:1,iq:2,dr:2,judge_confidence:0.82},
-  {case_id:"GH-2026-02-09-CACHE",domain:"outages",model:"gemini",condition:"treatment",total_score:11,total_graded:6,bc:1,sv:1,iq:2,dr:2,judge_confidence:0.82},
   {case_id:"LARAVEL-2026-02-20-CLOUDFLARE",domain:"outages",model:"gpt",condition:"baseline",total_score:13,total_graded:8,bc:2,sv:2,iq:2,dr:2,judge_confidence:0.95},
   {case_id:"LARAVEL-2026-02-20-CLOUDFLARE",domain:"outages",model:"gpt",condition:"treatment",total_score:13,total_graded:8,bc:2,sv:2,iq:2,dr:2,judge_confidence:0.97},
   {case_id:"LARAVEL-2026-02-20-CLOUDFLARE",domain:"outages",model:"claude_haiku",condition:"baseline",total_score:13,total_graded:8,bc:2,sv:2,iq:2,dr:2,judge_confidence:0.95},
   {case_id:"LARAVEL-2026-02-20-CLOUDFLARE",domain:"outages",model:"claude_haiku",condition:"treatment",total_score:13,total_graded:8,bc:2,sv:2,iq:2,dr:2,judge_confidence:0.97},
-  {case_id:"LARAVEL-2026-02-20-CLOUDFLARE",domain:"outages",model:"gemini",condition:"baseline",total_score:12,total_graded:7,bc:2,sv:1,iq:2,dr:2,judge_confidence:0.88},
-  {case_id:"LARAVEL-2026-02-20-CLOUDFLARE",domain:"outages",model:"gemini",condition:"treatment",total_score:12,total_graded:7,bc:2,sv:1,iq:2,dr:2,judge_confidence:0.88},
   {case_id:"AU-2026-01-21-CLOSINGGAP",domain:"audits",model:"gpt",condition:"baseline",total_score:13,total_graded:8,bc:2,sv:2,iq:2,dr:2,judge_confidence:0.95},
   {case_id:"AU-2026-01-21-CLOSINGGAP",domain:"audits",model:"gpt",condition:"treatment",total_score:13,total_graded:8,bc:2,sv:2,iq:2,dr:2,judge_confidence:0.95},
   {case_id:"AU-2026-01-21-CLOSINGGAP",domain:"audits",model:"claude_haiku",condition:"baseline",total_score:12,total_graded:7,bc:2,sv:1,iq:2,dr:2,judge_confidence:0.88},
   {case_id:"AU-2026-01-21-CLOSINGGAP",domain:"audits",model:"claude_haiku",condition:"treatment",total_score:13,total_graded:8,bc:2,sv:2,iq:2,dr:2,judge_confidence:0.92},
-  {case_id:"AU-2026-01-21-CLOSINGGAP",domain:"audits",model:"gemini",condition:"baseline",total_score:12,total_graded:7,bc:2,sv:1,iq:2,dr:2,judge_confidence:0.85},
-  {case_id:"AU-2026-01-21-CLOSINGGAP",domain:"audits",model:"gemini",condition:"treatment",total_score:12,total_graded:7,bc:2,sv:1,iq:2,dr:2,judge_confidence:0.85},
   {case_id:"EU-2026-03-XX-SERVICES",domain:"audits",model:"gpt",condition:"baseline",total_score:13,total_graded:8,bc:2,sv:2,iq:2,dr:2,judge_confidence:0.95},
   {case_id:"EU-2026-03-XX-SERVICES",domain:"audits",model:"gpt",condition:"treatment",total_score:13,total_graded:8,bc:2,sv:2,iq:2,dr:2,judge_confidence:0.92},
   {case_id:"EU-2026-03-XX-SERVICES",domain:"audits",model:"claude_haiku",condition:"baseline",total_score:12,total_graded:7,bc:2,sv:1,iq:2,dr:2,judge_confidence:0.82},
   {case_id:"EU-2026-03-XX-SERVICES",domain:"audits",model:"claude_haiku",condition:"treatment",total_score:12,total_graded:7,bc:2,sv:1,iq:2,dr:2,judge_confidence:0.85},
-  {case_id:"EU-2026-03-XX-SERVICES",domain:"audits",model:"gemini",condition:"baseline",total_score:12,total_graded:7,bc:2,sv:1,iq:2,dr:2,judge_confidence:0.82},
-  {case_id:"EU-2026-03-XX-SERVICES",domain:"audits",model:"gemini",condition:"treatment",total_score:12,total_graded:7,bc:2,sv:1,iq:2,dr:2,judge_confidence:0.82},
   {case_id:"IN-2026-03-23-DELHI-UNIVERSITIES",domain:"audits",model:"gpt",condition:"baseline",total_score:13,total_graded:8,bc:2,sv:2,iq:2,dr:2,judge_confidence:0.93},
   {case_id:"IN-2026-03-23-DELHI-UNIVERSITIES",domain:"audits",model:"gpt",condition:"treatment",total_score:13,total_graded:8,bc:2,sv:2,iq:2,dr:2,judge_confidence:0.93},
   {case_id:"IN-2026-03-23-DELHI-UNIVERSITIES",domain:"audits",model:"claude_haiku",condition:"baseline",total_score:12,total_graded:7,bc:2,sv:1,iq:2,dr:2,judge_confidence:0.88},
   {case_id:"IN-2026-03-23-DELHI-UNIVERSITIES",domain:"audits",model:"claude_haiku",condition:"treatment",total_score:13,total_graded:8,bc:2,sv:2,iq:2,dr:2,judge_confidence:0.93},
-  {case_id:"IN-2026-03-23-DELHI-UNIVERSITIES",domain:"audits",model:"gemini",condition:"baseline",total_score:11,total_graded:6,bc:1,sv:1,iq:2,dr:2,judge_confidence:0.82},
-  {case_id:"IN-2026-03-23-DELHI-UNIVERSITIES",domain:"audits",model:"gemini",condition:"treatment",total_score:11,total_graded:6,bc:1,sv:1,iq:2,dr:2,judge_confidence:0.82},
   {case_id:"NZ-2026-03-12-CHATHAM",domain:"audits",model:"gpt",condition:"baseline",total_score:12,total_graded:7,bc:2,sv:1,iq:2,dr:2,judge_confidence:0.88},
   {case_id:"NZ-2026-03-12-CHATHAM",domain:"audits",model:"gpt",condition:"treatment",total_score:13,total_graded:8,bc:2,sv:2,iq:2,dr:2,judge_confidence:0.92},
   {case_id:"NZ-2026-03-12-CHATHAM",domain:"audits",model:"claude_haiku",condition:"baseline",total_score:12,total_graded:7,bc:2,sv:1,iq:2,dr:2,judge_confidence:0.85},
   {case_id:"NZ-2026-03-12-CHATHAM",domain:"audits",model:"claude_haiku",condition:"treatment",total_score:12,total_graded:7,bc:2,sv:1,iq:2,dr:2,judge_confidence:0.88},
-  {case_id:"NZ-2026-03-12-CHATHAM",domain:"audits",model:"gemini",condition:"baseline",total_score:12,total_graded:7,bc:2,sv:1,iq:2,dr:2,judge_confidence:0.82},
-  {case_id:"NZ-2026-03-12-CHATHAM",domain:"audits",model:"gemini",condition:"treatment",total_score:12,total_graded:7,bc:2,sv:1,iq:2,dr:2,judge_confidence:0.82},
   {case_id:"ZA-2026-03-26-AGSA-PFMA",domain:"audits",model:"gpt",condition:"baseline",total_score:13,total_graded:8,bc:2,sv:2,iq:2,dr:2,judge_confidence:0.95},
   {case_id:"ZA-2026-03-26-AGSA-PFMA",domain:"audits",model:"gpt",condition:"treatment",total_score:13,total_graded:8,bc:2,sv:2,iq:2,dr:2,judge_confidence:0.95},
   {case_id:"ZA-2026-03-26-AGSA-PFMA",domain:"audits",model:"claude_haiku",condition:"baseline",total_score:13,total_graded:8,bc:2,sv:2,iq:2,dr:2,judge_confidence:0.93},
   {case_id:"ZA-2026-03-26-AGSA-PFMA",domain:"audits",model:"claude_haiku",condition:"treatment",total_score:12,total_graded:7,bc:2,sv:1,iq:2,dr:2,judge_confidence:0.88},
+  {case_id:"CLERK-2026-03-10-CLOUDSQL",domain:"outages",model:"gemini",condition:"baseline",total_score:9,total_graded:5,bc:1,sv:1,iq:1,dr:2,judge_confidence:0.82},
+  {case_id:"CLERK-2026-03-10-CLOUDSQL",domain:"outages",model:"gemini",condition:"treatment",total_score:11,total_graded:6,bc:1,sv:1,iq:2,dr:2,judge_confidence:0.82},
+  {case_id:"GH-2026-02-02-ACTIONS",domain:"outages",model:"gemini",condition:"baseline",total_score:8,total_graded:4,bc:1,sv:0,iq:1,dr:2,judge_confidence:0.82},
+  {case_id:"GH-2026-02-02-ACTIONS",domain:"outages",model:"gemini",condition:"treatment",total_score:11,total_graded:6,bc:1,sv:1,iq:2,dr:2,judge_confidence:0.82},
+  {case_id:"GH-2026-02-09-CACHE",domain:"outages",model:"gemini",condition:"baseline",total_score:12,total_graded:7,bc:2,sv:1,iq:2,dr:2,judge_confidence:0.82},
+  {case_id:"GH-2026-02-09-CACHE",domain:"outages",model:"gemini",condition:"treatment",total_score:11,total_graded:6,bc:1,sv:1,iq:2,dr:2,judge_confidence:0.82},
+  {case_id:"LARAVEL-2026-02-20-CLOUDFLARE",domain:"outages",model:"gemini",condition:"baseline",total_score:12,total_graded:7,bc:2,sv:1,iq:2,dr:2,judge_confidence:0.88},
+  {case_id:"LARAVEL-2026-02-20-CLOUDFLARE",domain:"outages",model:"gemini",condition:"treatment",total_score:12,total_graded:7,bc:2,sv:1,iq:2,dr:2,judge_confidence:0.88},
+  {case_id:"AU-2026-01-21-CLOSINGGAP",domain:"audits",model:"gemini",condition:"baseline",total_score:12,total_graded:7,bc:2,sv:1,iq:2,dr:2,judge_confidence:0.85},
+  {case_id:"AU-2026-01-21-CLOSINGGAP",domain:"audits",model:"gemini",condition:"treatment",total_score:12,total_graded:7,bc:2,sv:1,iq:2,dr:2,judge_confidence:0.85},
+  {case_id:"EU-2026-03-XX-SERVICES",domain:"audits",model:"gemini",condition:"baseline",total_score:12,total_graded:7,bc:2,sv:1,iq:2,dr:2,judge_confidence:0.82},
+  {case_id:"EU-2026-03-XX-SERVICES",domain:"audits",model:"gemini",condition:"treatment",total_score:12,total_graded:7,bc:2,sv:1,iq:2,dr:2,judge_confidence:0.82},
+  {case_id:"IN-2026-03-23-DELHI-UNIVERSITIES",domain:"audits",model:"gemini",condition:"baseline",total_score:11,total_graded:6,bc:1,sv:1,iq:2,dr:2,judge_confidence:0.82},
+  {case_id:"IN-2026-03-23-DELHI-UNIVERSITIES",domain:"audits",model:"gemini",condition:"treatment",total_score:11,total_graded:6,bc:1,sv:1,iq:2,dr:2,judge_confidence:0.82},
+  {case_id:"NZ-2026-03-12-CHATHAM",domain:"audits",model:"gemini",condition:"baseline",total_score:12,total_graded:7,bc:2,sv:1,iq:2,dr:2,judge_confidence:0.82},
+  {case_id:"NZ-2026-03-12-CHATHAM",domain:"audits",model:"gemini",condition:"treatment",total_score:12,total_graded:7,bc:2,sv:1,iq:2,dr:2,judge_confidence:0.82},
   {case_id:"ZA-2026-03-26-AGSA-PFMA",domain:"audits",model:"gemini",condition:"baseline",total_score:12,total_graded:7,bc:2,sv:1,iq:2,dr:2,judge_confidence:0.88},
   {case_id:"ZA-2026-03-26-AGSA-PFMA",domain:"audits",model:"gemini",condition:"treatment",total_score:12,total_graded:7,bc:2,sv:1,iq:2,dr:2,judge_confidence:0.88},
+  {case_id:"GH-2026-03-03-CACHE-STORM",domain:"outages",model:"claude_haiku",condition:"baseline",total_score:8,total_graded:4,bc:1,sv:1,iq:1,dr:1,judge_confidence:0.78},
+  {case_id:"GH-2026-03-03-CACHE-STORM",domain:"outages",model:"claude_haiku",condition:"treatment",total_score:12,total_graded:7,bc:2,sv:1,iq:2,dr:2,judge_confidence:0.82},
+  {case_id:"GH-2026-03-05-REDIS-LB",domain:"outages",model:"claude_haiku",condition:"baseline",total_score:7,total_graded:4,bc:1,sv:1,iq:1,dr:1,judge_confidence:0.82},
+  {case_id:"GH-2026-03-05-REDIS-LB",domain:"outages",model:"claude_haiku",condition:"treatment",total_score:7,total_graded:4,bc:1,sv:1,iq:1,dr:1,judge_confidence:0.82},
+  {case_id:"NB-2026-02-26-EUNORTH1-RESTART",domain:"outages",model:"claude_haiku",condition:"baseline",total_score:13,total_graded:8,bc:2,sv:2,iq:2,dr:2,judge_confidence:0.93},
+  {case_id:"NB-2026-02-26-EUNORTH1-RESTART",domain:"outages",model:"claude_haiku",condition:"treatment",total_score:12,total_graded:7,bc:2,sv:1,iq:2,dr:2,judge_confidence:0.82},
+  {case_id:"NB-2026-03-10-USCENTRAL1-POWER",domain:"outages",model:"claude_haiku",condition:"baseline",total_score:9,total_graded:4,bc:1,sv:1,iq:1,dr:1,judge_confidence:0.78},
+  {case_id:"NB-2026-03-10-USCENTRAL1-POWER",domain:"outages",model:"claude_haiku",condition:"treatment",total_score:8,total_graded:4,bc:1,sv:1,iq:1,dr:1,judge_confidence:0.82},
+  {case_id:"RW-2026-03-30-CDN-CACHE",domain:"outages",model:"claude_haiku",condition:"baseline",total_score:12,total_graded:7,bc:2,sv:1,iq:2,dr:2,judge_confidence:0.88},
+  {case_id:"RW-2026-03-30-CDN-CACHE",domain:"outages",model:"claude_haiku",condition:"treatment",total_score:12,total_graded:7,bc:2,sv:1,iq:2,dr:2,judge_confidence:0.88},
+  {case_id:"AU-2026-03-12-COMMUNITY-BATTERIES",domain:"audits",model:"claude_haiku",condition:"baseline",total_score:11,total_graded:6,bc:1,sv:1,iq:2,dr:2,judge_confidence:0.82},
+  {case_id:"AU-2026-03-12-COMMUNITY-BATTERIES",domain:"audits",model:"claude_haiku",condition:"treatment",total_score:9,total_graded:4,bc:1,sv:1,iq:1,dr:1,judge_confidence:0.78},
+  {case_id:"EU-2026-02-02-CRITICAL-RAW-MATERIALS",domain:"audits",model:"claude_haiku",condition:"baseline",total_score:13,total_graded:8,bc:2,sv:2,iq:2,dr:2,judge_confidence:0.93},
+  {case_id:"EU-2026-02-02-CRITICAL-RAW-MATERIALS",domain:"audits",model:"claude_haiku",condition:"treatment",total_score:12,total_graded:7,bc:2,sv:1,iq:2,dr:2,judge_confidence:0.85},
+  {case_id:"IN-2026-02-19-UPSIDA",domain:"audits",model:"claude_haiku",condition:"baseline",total_score:7,total_graded:4,bc:1,sv:1,iq:1,dr:1,judge_confidence:0.78},
+  {case_id:"IN-2026-02-19-UPSIDA",domain:"audits",model:"claude_haiku",condition:"treatment",total_score:7,total_graded:4,bc:1,sv:1,iq:1,dr:1,judge_confidence:0.82},
+  {case_id:"NZ-2026-04-01-CORRECTIONS-HOUSING",domain:"audits",model:"claude_haiku",condition:"baseline",total_score:12,total_graded:7,bc:2,sv:1,iq:2,dr:2,judge_confidence:0.85},
+  {case_id:"NZ-2026-04-01-CORRECTIONS-HOUSING",domain:"audits",model:"claude_haiku",condition:"treatment",total_score:12,total_graded:7,bc:1,sv:2,iq:2,dr:2,judge_confidence:0.82},
+  {case_id:"UK-2026-02-11-UNLOCKING-LAND",domain:"audits",model:"claude_haiku",condition:"baseline",total_score:13,total_graded:8,bc:2,sv:2,iq:2,dr:2,judge_confidence:0.93},
+  {case_id:"UK-2026-02-11-UNLOCKING-LAND",domain:"audits",model:"claude_haiku",condition:"treatment",total_score:12,total_graded:7,bc:1,sv:2,iq:2,dr:2,judge_confidence:0.82},
+  {case_id:"GH-2026-03-03-CACHE-STORM",domain:"outages",model:"gpt",condition:"baseline",total_score:13,total_graded:8,bc:2,sv:2,iq:2,dr:2,judge_confidence:0.93},
+  {case_id:"GH-2026-03-03-CACHE-STORM",domain:"outages",model:"gpt",condition:"treatment",total_score:13,total_graded:8,bc:2,sv:2,iq:2,dr:2,judge_confidence:0.92},
+  {case_id:"GH-2026-03-03-CACHE-STORM",domain:"outages",model:"gemini",condition:"baseline",total_score:7,total_graded:4,bc:1,sv:1,iq:1,dr:1,judge_confidence:0.78},
+  {case_id:"GH-2026-03-03-CACHE-STORM",domain:"outages",model:"gemini",condition:"treatment",total_score:10,total_graded:5,bc:1,sv:1,iq:1,dr:2,judge_confidence:0.82},
+  {case_id:"GH-2026-03-05-REDIS-LB",domain:"outages",model:"gpt",condition:"baseline",total_score:12,total_graded:7,bc:2,sv:1,iq:2,dr:2,judge_confidence:0.82},
+  {case_id:"GH-2026-03-05-REDIS-LB",domain:"outages",model:"gpt",condition:"treatment",total_score:13,total_graded:8,bc:2,sv:2,iq:2,dr:2,judge_confidence:0.88},
+  {case_id:"GH-2026-03-05-REDIS-LB",domain:"outages",model:"gemini",condition:"baseline",total_score:2,total_graded:1,bc:0,sv:0,iq:1,dr:0,judge_confidence:0.92},
+  {case_id:"GH-2026-03-05-REDIS-LB",domain:"outages",model:"gemini",condition:"treatment",total_score:7,total_graded:4,bc:1,sv:1,iq:1,dr:1,judge_confidence:0.82},
+  {case_id:"NB-2026-02-26-EUNORTH1-RESTART",domain:"outages",model:"gpt",condition:"baseline",total_score:13,total_graded:8,bc:2,sv:2,iq:2,dr:2,judge_confidence:0.95},
+  {case_id:"NB-2026-02-26-EUNORTH1-RESTART",domain:"outages",model:"gpt",condition:"treatment",total_score:13,total_graded:8,bc:2,sv:2,iq:2,dr:2,judge_confidence:0.97},
+  {case_id:"NB-2026-02-26-EUNORTH1-RESTART",domain:"outages",model:"gemini",condition:"baseline",total_score:13,total_graded:8,bc:2,sv:2,iq:2,dr:2,judge_confidence:0.88},
+  {case_id:"NB-2026-02-26-EUNORTH1-RESTART",domain:"outages",model:"gemini",condition:"treatment",total_score:12,total_graded:7,bc:2,sv:1,iq:2,dr:2,judge_confidence:0.85},
+  {case_id:"NB-2026-03-10-USCENTRAL1-POWER",domain:"outages",model:"gpt",condition:"baseline",total_score:11,total_graded:6,bc:1,sv:1,iq:2,dr:2,judge_confidence:0.82},
+  {case_id:"NB-2026-03-10-USCENTRAL1-POWER",domain:"outages",model:"gpt",condition:"treatment",total_score:13,total_graded:8,bc:2,sv:2,iq:2,dr:2,judge_confidence:0.93},
+  {case_id:"NB-2026-03-10-USCENTRAL1-POWER",domain:"outages",model:"gemini",condition:"baseline",total_score:8,total_graded:4,bc:1,sv:1,iq:1,dr:1,judge_confidence:0.78},
+  {case_id:"NB-2026-03-10-USCENTRAL1-POWER",domain:"outages",model:"gemini",condition:"treatment",total_score:6,total_graded:3,bc:1,sv:0,iq:1,dr:1,judge_confidence:0.78},
+  {case_id:"RW-2026-03-30-CDN-CACHE",domain:"outages",model:"gpt",condition:"baseline",total_score:12,total_graded:7,bc:2,sv:1,iq:2,dr:2,judge_confidence:0.88},
+  {case_id:"RW-2026-03-30-CDN-CACHE",domain:"outages",model:"gpt",condition:"treatment",total_score:12,total_graded:7,bc:2,sv:1,iq:2,dr:2,judge_confidence:0.88},
+  {case_id:"RW-2026-03-30-CDN-CACHE",domain:"outages",model:"gemini",condition:"baseline",total_score:9,total_graded:6,bc:1,sv:1,iq:2,dr:2,judge_confidence:0.82},
+  {case_id:"RW-2026-03-30-CDN-CACHE",domain:"outages",model:"gemini",condition:"treatment",total_score:10,total_graded:6,bc:1,sv:1,iq:2,dr:2,judge_confidence:0.82},
+  {case_id:"AU-2026-03-12-COMMUNITY-BATTERIES",domain:"audits",model:"gpt",condition:"baseline",total_score:12,total_graded:7,bc:2,sv:1,iq:2,dr:2,judge_confidence:0.85},
+  {case_id:"AU-2026-03-12-COMMUNITY-BATTERIES",domain:"audits",model:"gpt",condition:"treatment",total_score:11,total_graded:6,bc:1,sv:1,iq:2,dr:2,judge_confidence:0.82},
+  {case_id:"AU-2026-03-12-COMMUNITY-BATTERIES",domain:"audits",model:"gemini",condition:"baseline",total_score:12,total_graded:7,bc:2,sv:1,iq:2,dr:2,judge_confidence:0.82},
+  {case_id:"AU-2026-03-12-COMMUNITY-BATTERIES",domain:"audits",model:"gemini",condition:"treatment",total_score:12,total_graded:7,bc:2,sv:1,iq:2,dr:2,judge_confidence:0.82},
+  {case_id:"EU-2026-02-02-CRITICAL-RAW-MATERIALS",domain:"audits",model:"gpt",condition:"baseline",total_score:13,total_graded:8,bc:2,sv:2,iq:2,dr:2,judge_confidence:0.95},
+  {case_id:"EU-2026-02-02-CRITICAL-RAW-MATERIALS",domain:"audits",model:"gpt",condition:"treatment",total_score:13,total_graded:8,bc:2,sv:2,iq:2,dr:2,judge_confidence:0.95},
+  {case_id:"EU-2026-02-02-CRITICAL-RAW-MATERIALS",domain:"audits",model:"gemini",condition:"baseline",total_score:11,total_graded:6,bc:2,sv:1,iq:2,dr:1,judge_confidence:0.82},
+  {case_id:"EU-2026-02-02-CRITICAL-RAW-MATERIALS",domain:"audits",model:"gemini",condition:"treatment",total_score:11,total_graded:6,bc:1,sv:1,iq:2,dr:2,judge_confidence:0.82},
+  {case_id:"IN-2026-02-19-UPSIDA",domain:"audits",model:"gpt",condition:"baseline",total_score:9,total_graded:5,bc:1,sv:1,iq:1,dr:2,judge_confidence:0.82},
+  {case_id:"IN-2026-02-19-UPSIDA",domain:"audits",model:"gpt",condition:"treatment",total_score:12,total_graded:7,bc:2,sv:1,iq:2,dr:2,judge_confidence:0.82},
+  {case_id:"IN-2026-02-19-UPSIDA",domain:"audits",model:"gemini",condition:"baseline",total_score:11,total_graded:6,bc:1,sv:1,iq:2,dr:2,judge_confidence:0.82},
+  {case_id:"IN-2026-02-19-UPSIDA",domain:"audits",model:"gemini",condition:"treatment",total_score:11,total_graded:6,bc:1,sv:1,iq:2,dr:2,judge_confidence:0.82},
+  {case_id:"NZ-2026-04-01-CORRECTIONS-HOUSING",domain:"audits",model:"gpt",condition:"baseline",total_score:13,total_graded:8,bc:2,sv:2,iq:2,dr:2,judge_confidence:0.93},
+  {case_id:"NZ-2026-04-01-CORRECTIONS-HOUSING",domain:"audits",model:"gpt",condition:"treatment",total_score:13,total_graded:8,bc:2,sv:2,iq:2,dr:2,judge_confidence:0.95},
+  {case_id:"NZ-2026-04-01-CORRECTIONS-HOUSING",domain:"audits",model:"gemini",condition:"baseline",total_score:12,total_graded:7,bc:2,sv:1,iq:2,dr:2,judge_confidence:0.82},
+  {case_id:"NZ-2026-04-01-CORRECTIONS-HOUSING",domain:"audits",model:"gemini",condition:"treatment",total_score:9,total_graded:4,bc:1,sv:1,iq:1,dr:1,judge_confidence:0.78},
+  {case_id:"UK-2026-02-11-UNLOCKING-LAND",domain:"audits",model:"gpt",condition:"baseline",total_score:11,total_graded:6,bc:1,sv:1,iq:2,dr:2,judge_confidence:0.82},
+  {case_id:"UK-2026-02-11-UNLOCKING-LAND",domain:"audits",model:"gpt",condition:"treatment",total_score:13,total_graded:8,bc:2,sv:2,iq:2,dr:2,judge_confidence:0.92},
+  {case_id:"UK-2026-02-11-UNLOCKING-LAND",domain:"audits",model:"gemini",condition:"baseline",total_score:11,total_graded:6,bc:1,sv:1,iq:2,dr:2,judge_confidence:0.82},
+  {case_id:"UK-2026-02-11-UNLOCKING-LAND",domain:"audits",model:"gemini",condition:"treatment",total_score:10,total_graded:6,bc:1,sv:1,iq:2,dr:2,judge_confidence:0.78},
 ];
 
 // ═══════════════════════════════ HELPERS ═══════════════════════════
@@ -945,11 +1005,21 @@ const caseShort = {
   'CLERK-2026-03-10-CLOUDSQL':'CLERK·SQL',
   'GH-2026-02-02-ACTIONS':'GH·ACTIONS',
   'GH-2026-02-09-CACHE':'GH·CACHE',
+  'GH-2026-03-03-CACHE-STORM':'GH·CSTORM',
+  'GH-2026-03-05-REDIS-LB':'GH·REDIS',
   'LARAVEL-2026-02-20-CLOUDFLARE':'LARAVEL·CF',
+  'NB-2026-02-26-EUNORTH1-RESTART':'NB·EUN1',
+  'NB-2026-03-10-USCENTRAL1-POWER':'NB·USC1',
+  'RW-2026-03-30-CDN-CACHE':'RW·CDN',
   'AU-2026-01-21-CLOSINGGAP':'AU·CLOSE',
+  'AU-2026-03-12-COMMUNITY-BATTERIES':'AU·BATT',
+  'EU-2026-02-02-CRITICAL-RAW-MATERIALS':'EU·CRM',
   'EU-2026-03-XX-SERVICES':'EU·SERV',
+  'IN-2026-02-19-UPSIDA':'IN·UPSIDA',
   'IN-2026-03-23-DELHI-UNIVERSITIES':'IN·DELHI',
   'NZ-2026-03-12-CHATHAM':'NZ·CHATHAM',
+  'NZ-2026-04-01-CORRECTIONS-HOUSING':'NZ·CORR',
+  'UK-2026-02-11-UNLOCKING-LAND':'UK·LAND',
   'ZA-2026-03-26-AGSA-PFMA':'ZA·PFMA'
 };
 
@@ -1117,11 +1187,21 @@ const caseInfo = {
   'CLERK-2026-03-10-CLOUDSQL':{short:'CLERK · CloudSQL',domain:'outages'},
   'GH-2026-02-02-ACTIONS':{short:'GH · Actions',domain:'outages'},
   'GH-2026-02-09-CACHE':{short:'GH · Cache',domain:'outages'},
+  'GH-2026-03-03-CACHE-STORM':{short:'GH · Cache Storm',domain:'outages'},
+  'GH-2026-03-05-REDIS-LB':{short:'GH · Redis LB',domain:'outages'},
   'LARAVEL-2026-02-20-CLOUDFLARE':{short:'Laravel · Cloudflare',domain:'outages'},
+  'NB-2026-02-26-EUNORTH1-RESTART':{short:'NetBird · EUN1 Restart',domain:'outages'},
+  'NB-2026-03-10-USCENTRAL1-POWER':{short:'NetBird · USC1 Power',domain:'outages'},
+  'RW-2026-03-30-CDN-CACHE':{short:'Render · CDN Cache',domain:'outages'},
   'AU-2026-01-21-CLOSINGGAP':{short:'AU · Closing Gap',domain:'audits'},
+  'AU-2026-03-12-COMMUNITY-BATTERIES':{short:'AU · Community Batteries',domain:'audits'},
+  'EU-2026-02-02-CRITICAL-RAW-MATERIALS':{short:'EU · Critical Raw Materials',domain:'audits'},
   'EU-2026-03-XX-SERVICES':{short:'EU · Services',domain:'audits'},
+  'IN-2026-02-19-UPSIDA':{short:'IN · UPSIDA',domain:'audits'},
   'IN-2026-03-23-DELHI-UNIVERSITIES':{short:'IN · Delhi Univ.',domain:'audits'},
   'NZ-2026-03-12-CHATHAM':{short:'NZ · Chatham',domain:'audits'},
+  'NZ-2026-04-01-CORRECTIONS-HOUSING':{short:'NZ · Corrections Housing',domain:'audits'},
+  'UK-2026-02-11-UNLOCKING-LAND':{short:'UK · Unlocking Land',domain:'audits'},
   'ZA-2026-03-26-AGSA-PFMA':{short:'ZA · AGSA-PFMA',domain:'audits'},
 };
 

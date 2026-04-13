@@ -1,0 +1,32 @@
+{
+  "case_id": "RW-2026-03-30-CDN-CACHE",
+  "binary_checks": [
+    "Did the answer identify cache-boundary / rollout-safety failure around enabling shared caching on domains that should never have been cached as the main bottleneck, not merely a symptom or generic concern?",
+    "Did the answer name at least one real slow variable such as cache invariants, negative test coverage, rollout discipline, and safety-vs-speed culture?",
+    "Did the top intervention target hard no-cache guardrails and rollout validation directly?",
+    "Did the answer avoid generic distractors such as generic communication fixes, customer cache-header education, or dashboard polish?",
+    "Did the answer include at least one concrete early-warning signal?"
+  ],
+  "graded_checks": {
+    "binding_constraint_accuracy_0_to_2": {
+      "0": "Missed or generic",
+      "1": "Partially right / near-equivalent",
+      "2": "Correct and case-specific"
+    },
+    "slow_variable_recall_0_to_2": {
+      "0": "No real slow variables",
+      "1": "One real slow variable or mixed with symptoms",
+      "2": "Multiple real slow variables, clearly separated from symptoms"
+    },
+    "intervention_quality_0_to_2": {
+      "0": "Mostly non-binding or cosmetic",
+      "1": "Mixed",
+      "2": "Targets the real bottleneck directly"
+    },
+    "distractor_resistance_0_to_2": {
+      "0": "Chases distractors",
+      "1": "Some distractor contamination",
+      "2": "Stays focused on the real constraint"
+    }
+  }
+}

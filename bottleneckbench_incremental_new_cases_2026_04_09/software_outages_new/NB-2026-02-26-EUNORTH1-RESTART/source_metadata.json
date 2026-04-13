@@ -1,0 +1,13 @@
+{
+  "case_id": "NB-2026-02-26-EUNORTH1-RESTART",
+  "title": "Nebius eu-north-1 power fault and mass-restart recovery incident",
+  "publisher": "Nebius",
+  "source_type": "Incident postmortem",
+  "publication_date": "2026-03-17",
+  "incident_or_program_date": "2026-02-26",
+  "geography": "Europe region (eu-north-1)",
+  "url": "https://nebius.com/blog/posts/incident-post-mortem-analysis-eu-north-1-service-disruption",
+  "source_title": "Incident post-mortem analysis: eu-north-1 service disruption on February 26, 2026",
+  "why_selected": "Recent, detailed postmortem with a concise distinction between trigger and recovery bottlenecks across power, compute, and storage layers.",
+  "selection_notes": "Good case for testing whether the model spots the real bottleneck after the initiating electrical fault: compute-control-plane throughput and storage-state reconciliation under mass restarts."
+}

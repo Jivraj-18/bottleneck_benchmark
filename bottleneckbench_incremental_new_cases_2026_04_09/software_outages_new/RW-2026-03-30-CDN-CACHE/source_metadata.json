@@ -1,0 +1,13 @@
+{
+  "case_id": "RW-2026-03-30-CDN-CACHE",
+  "title": "Railway authenticated-content cache exposure incident",
+  "publisher": "Railway",
+  "source_type": "Incident report / postmortem",
+  "publication_date": "2026-03-30",
+  "incident_or_program_date": "2026-03-30",
+  "geography": "Global cloud platform",
+  "url": "https://blog.railway.com/p/incident-report-march-30-2026-authenticated-user-data-cached",
+  "source_title": "Incident Report: March 30th, 2026 — Authenticated user data cached",
+  "why_selected": "Recent provider-authored incident report with a crisp timeline, clear accidental trigger, explicit blast radius, and preventive measures.",
+  "selection_notes": "Good case for distinguishing headline symptom (wrong-user data exposure) from the true bottleneck (unsafe cache-control defaults plus rollout safeguards)."
+}

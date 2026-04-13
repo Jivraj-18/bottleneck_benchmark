@@ -1,0 +1,26 @@
+# NB-2026-02-26-EUNORTH1-RESTART — Nebius eu-north-1 power fault and mass-restart recovery incident
+
+## Background
+A cloud region experienced a brief power interruption to a subset of compute hosts. The visible trigger was an electrical fault, but the full customer impact lasted far longer because recovery across compute and storage layers was slower than expected under simultaneous host restarts.
+
+## System context
+- The incident was limited to one region.
+- Power protection mechanisms were designed to prevent hardware damage.
+- Affected hosts rebooted at roughly the same time.
+- Some customer resources depended on storage attachments that had to be reconciled during recovery.
+
+## Timeline
+- 2026-02-26 15:16 CET: short circuit in cooling-infrastructure cabling triggers UPS protection and brief power interruption.
+- 2026-02-26 15:40 CET: incident formally declared.
+- 2026-02-26 ~16:00–18:00 CET: mass host recovery and VM restarts underway, but slower than expected.
+- 2026-02-26 19:25 CET: storage attachment conflicts identified as a contributing factor.
+- 2026-02-27 13:34 CET: all identified customer-facing impact resolved.
+
+## Observations
+- The electrical interruption itself was brief.
+- Extended customer impact came from simultaneous restarts and recovery constraints.
+- The provider highlights both compute-control-plane throughput limits and storage-attachment inconsistencies.
+- This is a cross-layer recovery bottleneck, not just an electrical one.
+
+## Task
+Analyze this case. Identify the main binding constraint, the slow variables, the top 3 interventions, 2 things to deprioritize, and the earliest warning signals leadership should track.

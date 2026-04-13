@@ -1,0 +1,1155 @@
+[
+  {
+    "case_id": "RW-2026-03-30-CDN-CACHE",
+    "category": "software_outage",
+    "title": "Railway authenticated-content cache exposure incident",
+    "publisher": "Railway",
+    "source_type": "Incident report / postmortem",
+    "publication_date": "2026-03-30",
+    "incident_or_program_date": "2026-03-30",
+    "geography": "Global cloud platform",
+    "url": "https://blog.railway.com/p/incident-report-march-30-2026-authenticated-user-data-cached",
+    "source_title": "Incident Report: March 30th, 2026 — Authenticated user data cached",
+    "why_selected": "Recent provider-authored incident report with a crisp timeline, clear accidental trigger, explicit blast radius, and preventive measures.",
+    "selection_notes": "Good case for distinguishing headline symptom (wrong-user data exposure) from the true bottleneck (unsafe cache-control defaults plus rollout safeguards).",
+    "model_packet": {
+      "background": "A cloud application platform experienced a security-affecting incident where some user-facing HTTP GET responses were cached and then served to the wrong users. The platform normally treats CDN caching as opt-in for customer domains.",
+      "system_context": [
+        "The platform recently introduced a configuration change related to surrogate keys and per-domain caching behavior.",
+        "Domains without CDN enabled are supposed to bypass edge caching entirely.",
+        "Origin cache directives are respected where explicitly set, but many applications do not set them comprehensively.",
+        "The platform is scaling quickly and is shipping infrastructure changes frequently."
+      ],
+      "timeline": [
+        "2026-03-30 10:42 UTC: an engineer deployed a CDN-provider configuration update.",
+        "2026-03-30 11:14 UTC: the team identified a possible issue through internal signals and user reports.",
+        "2026-03-30 11:34 UTC: the change was reverted and cached assets were purged globally."
+      ],
+      "observations": [
+        "Impact window was 52 minutes.",
+        "Approximately 0.05% of domains with CDN disabled were affected.",
+        "Responses without explicit cache headers were vulnerable during the window.",
+        "The incident exposed a mismatch between product-level assumptions ('CDN is opt-in') and infrastructure-level behavior under rollout."
+      ],
+      "task": "Analyze this case. Identify the main binding constraint, the slow variables, the top 3 interventions, 2 things to deprioritize, and the earliest warning signals leadership should track."
+    },
+    "gold_packet": {
+      "binding_constraint_top1": "Configuration safety around shared-cache enablement for domains that were supposed to be uncached — specifically, the lack of a hard, testable guardrail that prevents infrastructure changes from turning opt-in caching into implicit shared caching.",
+      "binding_constraint_top3": [
+        "Unsafe cache-boundary enforcement between CDN-enabled and CDN-disabled domains",
+        "Rollout safety and pre-production validation for CDN behavior changes",
+        "Reliance on application-origin cache headers where the platform contract itself should have enforced no-cache behavior"
+      ],
+      "slow_variables": [
+        "Platform configuration hygiene and invariants around cache eligibility",
+        "Test coverage for negative caching cases and auth-sensitive responses",
+        "Rollout discipline and shard size for edge/platform changes",
+        "Safety-vs-speed engineering culture during rapid growth"
+      ],
+      "contributing_factors": [
+        "A surrogate-key update accidentally enabled caching on domains where it should have been disabled",
+        "Most GET responses without explicit cache headers were cached by default during the incident window",
+        "Detection relied partly on user reports rather than a hard pre-release block",
+        "The product contract ('CDN disabled') was not enforced as a non-bypassable control"
+      ],
+      "good_interventions_ranked": [
+        "Enforce a hard platform invariant that CDN-disabled domains can never enter shared-cache paths, regardless of provider configuration.",
+        "Add pre-production and canary tests that explicitly verify wrong-user / auth-sensitive responses cannot be cached on uncached domains.",
+        "Slow and shard CDN/infrastructure rollouts with automatic rollback on anomalous cache-hit behavior or cross-domain cache activation."
+      ],
+      "bad_interventions": [
+        "Generic incident communication improvements without changing cache invariants",
+        "Telling customers to set better cache headers as the primary fix",
+        "Focusing mainly on faster purge tooling while leaving cache enablement guardrails weak"
+      ],
+      "early_warning_signals": [
+        "Unexpected cache-hit activity on domains marked CDN-disabled",
+        "Any increase in cacheable GET responses from auth-protected routes during rollout canaries",
+        "User/session mismatch anomalies or sudden spikes in cross-user content complaints",
+        "Configuration diffs that widen cache eligibility scope"
+      ],
+      "distractors_to_penalize": [
+        "More dashboards without policy enforcement",
+        "Customer education as the main fix",
+        "Broad calls for 'better security culture' without specific cache-boundary controls"
+      ],
+      "evidence": [
+        "The report says CDN features were accidentally enabled for some domains without users enabling them.",
+        "The impact window ran from 10:42 UTC to 11:34 UTC and affected ~0.05% of domains with CDN disabled.",
+        "Responses, including authenticated ones without Set-Cookie, were stored and served from edge cache.",
+        "Railway says most GET responses without explicit cache headers were cached by default during the window.",
+        "The stated preventions were more tests and slower sharded rollouts."
+      ]
+    },
+    "scoring_checklist": {
+      "case_id": "RW-2026-03-30-CDN-CACHE",
+      "binary_checks": [
+        "Did the answer identify cache-boundary / rollout-safety failure around enabling shared caching on domains that should never have been cached as the main bottleneck, not merely a symptom or generic concern?",
+        "Did the answer name at least one real slow variable such as cache invariants, negative test coverage, rollout discipline, and safety-vs-speed culture?",
+        "Did the top intervention target hard no-cache guardrails and rollout validation directly?",
+        "Did the answer avoid generic distractors such as generic communication fixes, customer cache-header education, or dashboard polish?",
+        "Did the answer include at least one concrete early-warning signal?"
+      ],
+      "graded_checks": {
+        "binding_constraint_accuracy_0_to_2": {
+          "0": "Missed or generic",
+          "1": "Partially right / near-equivalent",
+          "2": "Correct and case-specific"
+        },
+        "slow_variable_recall_0_to_2": {
+          "0": "No real slow variables",
+          "1": "One real slow variable or mixed with symptoms",
+          "2": "Multiple real slow variables, clearly separated from symptoms"
+        },
+        "intervention_quality_0_to_2": {
+          "0": "Mostly non-binding or cosmetic",
+          "1": "Mixed",
+          "2": "Targets the real bottleneck directly"
+        },
+        "distractor_resistance_0_to_2": {
+          "0": "Chases distractors",
+          "1": "Some distractor contamination",
+          "2": "Stays focused on the real constraint"
+        }
+      }
+    }
+  },
+  {
+    "case_id": "GH-2026-03-03-CACHE-STORM",
+    "category": "software_outage",
+    "title": "GitHub March 3 cache-expiry write storm incident",
+    "publisher": "GitHub",
+    "source_type": "Availability report / incident recap",
+    "publication_date": "2026-04-08",
+    "incident_or_program_date": "2026-03-03",
+    "geography": "Global software platform",
+    "url": "https://github.blog/news-insights/company-news/github-availability-report-march-2026/",
+    "source_title": "GitHub availability report: March 2026",
+    "why_selected": "Recent provider-authored availability report with clear metrics, recurrence against an earlier pattern, and specific remediation steps.",
+    "selection_notes": "Good case for separating the visible outage from the deeper bottleneck: a shared cache write path whose failure mode can cascade across many dependent services.",
+    "model_packet": {
+      "background": "A large developer platform experienced widespread degraded availability across the web app, API, Git operations, Copilot, and other dependent services. The incident followed a deployment intended to reduce system burden.",
+      "system_context": [
+        "Multiple services depend on a user settings caching mechanism.",
+        "A previous incident had already revealed stress around large volumes of writes to this mechanism.",
+        "A deployment was intended to reduce write burden rather than add a new user-facing feature.",
+        "The platform is highly interconnected: replication delays in one area can cascade into many product surfaces."
+      ],
+      "timeline": [
+        "2026-03-03 18:46 UTC: incident period begins.",
+        "2026-03-03 20:09 UTC: customer impact ends after rollback.",
+        "2026-04-08: the provider publishes the monthly availability report with root-cause notes and remediation items."
+      ],
+      "observations": [
+        "At peak, github.com request failures were about 40%.",
+        "API request failures were about 43%.",
+        "Copilot requests saw about 21% errors.",
+        "The platform itself notes this incident shared the same underlying cause pattern as an early-February incident."
+      ],
+      "task": "Analyze this case. Identify the main binding constraint, the slow variables, the top 3 interventions, 2 things to deprioritize, and the earliest warning signals leadership should track."
+    },
+    "gold_packet": {
+      "binding_constraint_top1": "A shared user-settings cache architecture whose invalidation / rewrite behavior could trigger system-wide write amplification and replication delays across many dependent services.",
+      "binding_constraint_top3": [
+        "Centralized cache-write path with unsafe blast radius",
+        "Lack of isolation around a high-fan-out user-settings caching mechanism",
+        "Architecture that allows cache recalculation and rewrite storms to cascade into core services"
+      ],
+      "slow_variables": [
+        "Architectural decoupling / isolation of the cache mechanism",
+        "Protection mechanisms around mass invalidation and rewrite events",
+        "Monitoring and killswitch maturity for shared infrastructure components",
+        "Resilience of downstream services to replication lag from shared-state overload"
+      ],
+      "contributing_factors": [
+        "A bug caused every user's cache to expire, get recalculated, and get rewritten",
+        "The increased load caused replication delays that cascaded to affected services",
+        "The same underlying cause had already appeared in a prior incident",
+        "Many product surfaces depended on the stressed mechanism"
+      ],
+      "good_interventions_ranked": [
+        "Isolate the user-settings cache mechanism on dedicated infrastructure or partitioned fault domains so failures do not cascade broadly.",
+        "Add guardrails against mass expiry / rewrite events, including staged invalidation, quotas, and rollbackable killswitches.",
+        "Instrument leading indicators on cache write amplification and replication delay, with automatic abort thresholds during risky deployments."
+      ],
+      "bad_interventions": [
+        "Optimizing user-facing retry messaging while leaving the write-storm path intact",
+        "Treating this as only a deployment bug rather than an architectural blast-radius problem",
+        "Adding more frontend failover without fixing the shared cache dependency"
+      ],
+      "early_warning_signals": [
+        "Sudden spike in cache expirations, recalculations, or rewrite volume per user",
+        "Replication lag crossing predefined thresholds during or immediately after deployment",
+        "Cross-service error increases tied to shared user-settings reads/writes",
+        "Repeat incidents linked to the same mechanism"
+      ],
+      "distractors_to_penalize": [
+        "Generic rollback speed improvements alone",
+        "Surface-level SRE playbook updates without architecture change",
+        "Focusing on Copilot or API symptoms separately rather than the shared dependency"
+      ],
+      "evidence": [
+        "GitHub reports roughly 40% github.com request failures and 43% API failures during the incident.",
+        "The report says the same underlying cause had appeared in an early-February incident.",
+        "A bug caused every user's cache to expire, get recalculated, and get rewritten.",
+        "The increased load caused replication delays that cascaded to affected services.",
+        "GitHub says it added a killswitch, improved monitoring, and is moving the cache mechanism to a dedicated host."
+      ]
+    },
+    "scoring_checklist": {
+      "case_id": "GH-2026-03-03-CACHE-STORM",
+      "binary_checks": [
+        "Did the answer identify the shared cache write-amplification / replication-lag architecture as the bottleneck as the main bottleneck, not merely a symptom or generic concern?",
+        "Did the answer name at least one real slow variable such as architectural isolation, invalidation controls, monitoring, and dependency decoupling?",
+        "Did the top intervention target isolation and guardrails around the shared cache mechanism directly?",
+        "Did the answer avoid generic distractors such as frontend retries, generic rollback process changes, or service-by-service symptom fixes?",
+        "Did the answer include at least one concrete early-warning signal?"
+      ],
+      "graded_checks": {
+        "binding_constraint_accuracy_0_to_2": {
+          "0": "Missed or generic",
+          "1": "Partially right / near-equivalent",
+          "2": "Correct and case-specific"
+        },
+        "slow_variable_recall_0_to_2": {
+          "0": "No real slow variables",
+          "1": "One real slow variable or mixed with symptoms",
+          "2": "Multiple real slow variables, clearly separated from symptoms"
+        },
+        "intervention_quality_0_to_2": {
+          "0": "Mostly non-binding or cosmetic",
+          "1": "Mixed",
+          "2": "Targets the real bottleneck directly"
+        },
+        "distractor_resistance_0_to_2": {
+          "0": "Chases distractors",
+          "1": "Some distractor contamination",
+          "2": "Stays focused on the real constraint"
+        }
+      }
+    }
+  },
+  {
+    "case_id": "GH-2026-03-05-REDIS-LB",
+    "category": "software_outage",
+    "title": "GitHub March 5 Actions Redis load-balancer incident",
+    "publisher": "GitHub",
+    "source_type": "Availability report / incident recap",
+    "publication_date": "2026-04-08",
+    "incident_or_program_date": "2026-03-05",
+    "geography": "Global software platform",
+    "url": "https://github.blog/news-insights/company-news/github-availability-report-march-2026/",
+    "source_title": "GitHub availability report: March 2026",
+    "why_selected": "Recent provider-authored availability report with measurable impact, a clear control-plane misconfiguration, and follow-up actions.",
+    "selection_notes": "Good case for distinguishing the queue backlog symptom from the real bottleneck: unsafe configuration propagation in critical Redis/load-balancer infrastructure.",
+    "model_packet": {
+      "background": "A CI/CD service experienced severe delays in starting workflows and a smaller but important set of outright infrastructure failures. The incident occurred during resiliency-related infrastructure updates.",
+      "system_context": [
+        "The affected service depends on Redis-backed infrastructure and an internal load balancer.",
+        "The update was intended to improve resiliency, not to change product behavior.",
+        "Queue buildup continued even after the immediate fault was corrected.",
+        "A second-order effect mattered: recovery time included draining the accumulated job backlog."
+      ],
+      "timeline": [
+        "2026-03-05 16:24 UTC: incident begins.",
+        "2026-03-05 17:24 UTC: jobs begin running successfully after the immediate misconfiguration is corrected.",
+        "2026-03-05 19:30 UTC: incident closed after backlog burn-down."
+      ],
+      "observations": [
+        "95% of workflow runs failed to start within 5 minutes.",
+        "Average delay reached 30 minutes.",
+        "10% of workflow runs failed with infrastructure error.",
+        "The issue was introduced while rolling out Redis infrastructure updates meant to improve resiliency."
+      ],
+      "task": "Analyze this case. Identify the main binding constraint, the slow variables, the top 3 interventions, 2 things to deprioritize, and the earliest warning signals leadership should track."
+    },
+    "gold_packet": {
+      "binding_constraint_top1": "Configuration safety and validation around critical Redis / load-balancer infrastructure changes, where a bad internal-routing change can stall the Actions control path and create a large queue backlog.",
+      "binding_constraint_top3": [
+        "Unsafe propagation of infrastructure config changes into Redis / load-balancer control planes",
+        "Lack of guardrails preventing misrouted internal traffic in critical queueing infrastructure",
+        "Weak pre-deployment validation and blast-radius control for resiliency-layer changes"
+      ],
+      "slow_variables": [
+        "Infrastructure configuration management and change validation",
+        "Automated policy checks that block invalid load-balancer routing",
+        "Client resiliency to brief cache / routing interruptions",
+        "Backlog-recovery planning for high-throughput workflow queues"
+      ],
+      "contributing_factors": [
+        "Incorrect configuration changes were introduced into the Redis load balancer",
+        "Internal traffic was routed to the wrong host",
+        "The change was part of a production rollout in critical infrastructure",
+        "Residual user pain persisted through queue draining after the immediate routing fix"
+      ],
+      "good_interventions_ranked": [
+        "Add automated configuration validation and policy enforcement that blocks unsafe Redis/load-balancer changes before production.",
+        "Reduce blast radius for critical infra updates through narrower canaries, staged rollout, and fast auto-abort criteria.",
+        "Improve Actions client and queue-path resiliency so short cache/routing interruptions do not become long workflow delays."
+      ],
+      "bad_interventions": [
+        "Only improving queue-drain speed after incidents",
+        "Treating the problem as merely a Redis capacity issue",
+        "Relying on manual alert triage without stronger config-prevention controls"
+      ],
+      "early_warning_signals": [
+        "Load-balancer config diffs that introduce unexpected target-host mappings",
+        "Sharp rise in workflows not starting within SLA minutes after infra changes",
+        "Mismatch between Redis health and downstream scheduler start latency",
+        "Queue depth and age rising while worker capacity appears nominal"
+      ],
+      "distractors_to_penalize": [
+        "Generic scaling of worker pools before fixing routing safety",
+        "User-facing comms improvements as the main remediation",
+        "Treating queue backlog alone as the root cause"
+      ],
+      "evidence": [
+        "GitHub reports 95% of workflow runs failed to start within 5 minutes, with average delay of 30 minutes.",
+        "10% of workflow runs failed with an infrastructure error.",
+        "The report says incorrect configuration changes in the Redis load balancer routed internal traffic to an incorrect host.",
+        "GitHub says it rolled back the changes, froze further work in that area, and is improving automation, alerting, and client resiliency."
+      ]
+    },
+    "scoring_checklist": {
+      "case_id": "GH-2026-03-05-REDIS-LB",
+      "binary_checks": [
+        "Did the answer identify unsafe config propagation in Redis/load-balancer infrastructure as the main bottleneck, not merely a symptom or generic concern?",
+        "Did the answer name at least one real slow variable such as configuration validation, blast-radius controls, client resiliency, and backlog recovery mechanics?",
+        "Did the top intervention target preventing bad routing changes from reaching production directly?",
+        "Did the answer avoid generic distractors such as worker scaling, generic comms fixes, or queue-drain optics?",
+        "Did the answer include at least one concrete early-warning signal?"
+      ],
+      "graded_checks": {
+        "binding_constraint_accuracy_0_to_2": {
+          "0": "Missed or generic",
+          "1": "Partially right / near-equivalent",
+          "2": "Correct and case-specific"
+        },
+        "slow_variable_recall_0_to_2": {
+          "0": "No real slow variables",
+          "1": "One real slow variable or mixed with symptoms",
+          "2": "Multiple real slow variables, clearly separated from symptoms"
+        },
+        "intervention_quality_0_to_2": {
+          "0": "Mostly non-binding or cosmetic",
+          "1": "Mixed",
+          "2": "Targets the real bottleneck directly"
+        },
+        "distractor_resistance_0_to_2": {
+          "0": "Chases distractors",
+          "1": "Some distractor contamination",
+          "2": "Stays focused on the real constraint"
+        }
+      }
+    }
+  },
+  {
+    "case_id": "NB-2026-03-10-USCENTRAL1-POWER",
+    "category": "software_outage",
+    "title": "Nebius us-central1 provider-maintenance power incident",
+    "publisher": "Nebius",
+    "source_type": "Incident postmortem",
+    "publication_date": "2026-03-20",
+    "incident_or_program_date": "2026-03-10",
+    "geography": "United States region (us-central1)",
+    "url": "https://nebius.com/blog/posts/incident-post-mortem-analysis-us-central1-service-disruption-on-march-10",
+    "source_title": "Incident post-mortem analysis: us-central1 service disruption on March 10, 2026",
+    "why_selected": "Detailed multi-hour postmortem showing both the initiating infrastructure failure and the deeper recovery-sequencing bottleneck.",
+    "selection_notes": "Excellent case where the first visible cause is power maintenance, but the more benchmark-interesting bottleneck is the provider’s preparation and dependency-ordered regional recovery discipline.",
+    "model_packet": {
+      "background": "A cloud provider suffered a major regional outage during scheduled provider-led electrical maintenance. The customer impact spread across networking, storage, Kubernetes, and shared control-plane services, and the incident involved repeated interruptions while recovery was already underway.",
+      "system_context": [
+        "The maintenance had been planned around a narrower and more controlled expected impact.",
+        "Customer-facing networking, storage, Kubernetes, and control functions share regional dependencies.",
+        "Power returned to different parts of the site at different times.",
+        "Some services required manual intervention during restoration."
+      ],
+      "timeline": [
+        "2026-03-10 15:18 UTC: unexpected power event affects multiple racks during provider-led electrical maintenance.",
+        "2026-03-10 15:24 UTC: incident is declared.",
+        "2026-03-10 17:04 UTC: broad external VM connectivity impact begins to ease.",
+        "2026-03-10 19:53 UTC, 20:54 UTC, 22:37 UTC: later interruptions affect recovering services.",
+        "2026-03-11 00:50 UTC: customer impact fully mitigated."
+      ],
+      "observations": [
+        "External VM connectivity, public S3 endpoints, Kubernetes clusters, and control-plane workloads were all affected.",
+        "The report emphasizes that repeated outages interacted badly with platform architecture.",
+        "Recovery was prolonged not just by the initial outage but by how restoration was organized.",
+        "This is a region-level dependency and incident-command problem as much as a hardware event."
+      ],
+      "task": "Analyze this case. Identify the main binding constraint, the slow variables, the top 3 interventions, 2 things to deprioritize, and the earliest warning signals leadership should track."
+    },
+    "gold_packet": {
+      "binding_constraint_top1": "Readiness for region-level dependency-ordered recovery under broader-than-planned power events — including provider risk assumptions, blast-radius planning, and restoration sequencing for shared control-plane dependencies.",
+      "binding_constraint_top3": [
+        "Insufficient preparation for a wider power-maintenance blast radius plus repeated interruptions",
+        "Lack of a strict dependency-ordered regional recovery algorithm",
+        "Shared regional control-plane and networking dependencies that did not recover automatically after staggered power return"
+      ],
+      "slow_variables": [
+        "Maintenance governance and joint planning quality with the facility provider",
+        "Regional architecture and auto-recovery behavior for shared control-plane workloads",
+        "Runbook maturity for region-level recovery sequencing",
+        "Operational discipline around stop-and-review criteria during unstable maintenance"
+      ],
+      "contributing_factors": [
+        "Provider-led work expanded beyond the announced maintenance profile",
+        "Unexpected power failures affected additional racks serving networking and shared control-plane services",
+        "Later interruptions happened while recovery was already underway",
+        "Too much recovery was handled as parallel service-by-service restoration instead of a stricter dependency-ordered regional sequence"
+      ],
+      "good_interventions_ranked": [
+        "Adopt dependency-ordered regional recovery playbooks and drills for large-scale power incidents, rather than relying on parallel service-by-service restoration.",
+        "Strengthen provider maintenance governance with wider blast-radius assumptions, explicit stop-and-review triggers, and higher planning-quality thresholds.",
+        "Harden and test auto-recovery of shared networking/control-plane services when power returns unevenly across the region."
+      ],
+      "bad_interventions": [
+        "Only improving customer status messaging without changing maintenance and recovery practices",
+        "Treating the incident as just a single hardware anomaly",
+        "Adding more service-specific dashboards without region-level restoration logic"
+      ],
+      "early_warning_signals": [
+        "Maintenance changes whose assumed blast radius excludes shared control-plane or networking racks",
+        "Recovery progression where hosts come back before dependent control services are healthy",
+        "Repeated power interruptions during an active restoration window",
+        "Manual reconciliation counts rising for gateways, control-plane components, or storage-backed workloads"
+      ],
+      "distractors_to_penalize": [
+        "General calls for more redundancy without addressing recovery sequencing",
+        "Purely service-local fixes",
+        "Comms-only remediations"
+      ],
+      "evidence": [
+        "Nebius says maintenance had been planned around a much narrower expected impact, but unexpected power failures hit additional racks serving networking and shared control-plane services.",
+        "The report states some networking gateways, control-plane components, and storage-backed workloads did not recover automatically.",
+        "Nebius explicitly says too much recovery was handled as parallel service-by-service restoration instead of a stricter dependency-ordered regional sequence.",
+        "The action plan includes wider blast-radius assumptions, stop-and-review criteria, and regional recovery drills."
+      ]
+    },
+    "scoring_checklist": {
+      "case_id": "NB-2026-03-10-USCENTRAL1-POWER",
+      "binary_checks": [
+        "Did the answer identify region-level maintenance preparedness and dependency-ordered recovery discipline as the main bottleneck, not merely a symptom or generic concern?",
+        "Did the answer name at least one real slow variable such as maintenance governance, shared-control-plane recovery behavior, and region-level runbook maturity?",
+        "Did the top intervention target region-level recovery sequencing and broader maintenance risk controls directly?",
+        "Did the answer avoid generic distractors such as comms-only fixes, service-local patching, or generic redundancy talk?",
+        "Did the answer include at least one concrete early-warning signal?"
+      ],
+      "graded_checks": {
+        "binding_constraint_accuracy_0_to_2": {
+          "0": "Missed or generic",
+          "1": "Partially right / near-equivalent",
+          "2": "Correct and case-specific"
+        },
+        "slow_variable_recall_0_to_2": {
+          "0": "No real slow variables",
+          "1": "One real slow variable or mixed with symptoms",
+          "2": "Multiple real slow variables, clearly separated from symptoms"
+        },
+        "intervention_quality_0_to_2": {
+          "0": "Mostly non-binding or cosmetic",
+          "1": "Mixed",
+          "2": "Targets the real bottleneck directly"
+        },
+        "distractor_resistance_0_to_2": {
+          "0": "Chases distractors",
+          "1": "Some distractor contamination",
+          "2": "Stays focused on the real constraint"
+        }
+      }
+    }
+  },
+  {
+    "case_id": "NB-2026-02-26-EUNORTH1-RESTART",
+    "category": "software_outage",
+    "title": "Nebius eu-north-1 power fault and mass-restart recovery incident",
+    "publisher": "Nebius",
+    "source_type": "Incident postmortem",
+    "publication_date": "2026-03-17",
+    "incident_or_program_date": "2026-02-26",
+    "geography": "Europe region (eu-north-1)",
+    "url": "https://nebius.com/blog/posts/incident-post-mortem-analysis-eu-north-1-service-disruption",
+    "source_title": "Incident post-mortem analysis: eu-north-1 service disruption on February 26, 2026",
+    "why_selected": "Recent, detailed postmortem with a concise distinction between trigger and recovery bottlenecks across power, compute, and storage layers.",
+    "selection_notes": "Good case for testing whether the model spots the real bottleneck after the initiating electrical fault: compute-control-plane throughput and storage-state reconciliation under mass restarts.",
+    "model_packet": {
+      "background": "A cloud region experienced a brief power interruption to a subset of compute hosts. The visible trigger was an electrical fault, but the full customer impact lasted far longer because recovery across compute and storage layers was slower than expected under simultaneous host restarts.",
+      "system_context": [
+        "The incident was limited to one region.",
+        "Power protection mechanisms were designed to prevent hardware damage.",
+        "Affected hosts rebooted at roughly the same time.",
+        "Some customer resources depended on storage attachments that had to be reconciled during recovery."
+      ],
+      "timeline": [
+        "2026-02-26 15:16 CET: short circuit in cooling-infrastructure cabling triggers UPS protection and brief power interruption.",
+        "2026-02-26 15:40 CET: incident formally declared.",
+        "2026-02-26 ~16:00–18:00 CET: mass host recovery and VM restarts underway, but slower than expected.",
+        "2026-02-26 19:25 CET: storage attachment conflicts identified as a contributing factor.",
+        "2026-02-27 13:34 CET: all identified customer-facing impact resolved."
+      ],
+      "observations": [
+        "The electrical interruption itself was brief.",
+        "Extended customer impact came from simultaneous restarts and recovery constraints.",
+        "The provider highlights both compute-control-plane throughput limits and storage-attachment inconsistencies.",
+        "This is a cross-layer recovery bottleneck, not just an electrical one."
+      ],
+      "task": "Analyze this case. Identify the main binding constraint, the slow variables, the top 3 interventions, 2 things to deprioritize, and the earliest warning signals leadership should track."
+    },
+    "gold_packet": {
+      "binding_constraint_top1": "Cross-layer recovery throughput under region-level mass restarts — especially compute control-plane capacity and storage-state reconciliation after simultaneous host reboot events.",
+      "binding_constraint_top3": [
+        "Insufficient compute control-plane recovery throughput for mass VM restarts",
+        "Storage attachment state inconsistencies after host reboots",
+        "Lack of region-level restart readiness across power, compute, and storage layers"
+      ],
+      "slow_variables": [
+        "Compute control-plane throughput and restart behavior under mass failure conditions",
+        "Storage state persistence and reconciliation logic after host reboot",
+        "Cross-layer observability spanning power, compute, and storage during restart events",
+        "Electrical protection selectivity and configuration at the facility layer"
+      ],
+      "contributing_factors": [
+        "A short circuit in cooling-infrastructure cabling triggered UPS protection and a brief power interruption",
+        "Affected compute hosts restarted simultaneously",
+        "Recovery throughput was slower than expected under mass-restart conditions",
+        "Storage attachment conflicts prevented some VMs from starting or regaining disk access cleanly"
+      ],
+      "good_interventions_ranked": [
+        "Increase compute control-plane recovery throughput and validate restart behavior under region-level mass-restart scenarios.",
+        "Fix storage attachment state handling and reconciliation after host reboots to avoid stale attachment conflicts.",
+        "Add cross-layer monitoring and drills for region-level restart scenarios spanning power, compute, and storage."
+      ],
+      "bad_interventions": [
+        "Focusing only on the initiating electrical fault while ignoring restart behavior",
+        "Customer-communication-only remediation",
+        "Generic capacity additions that do not address mass-restart recovery paths"
+      ],
+      "early_warning_signals": [
+        "Recovery throughput dropping below expected VM-restart rates during bulk events",
+        "Storage attach / detach conflict rates increasing after host reboot storms",
+        "Large gaps between host power return and workload restoration",
+        "Cross-layer alerting that shows compute recovery lagging despite electrical stability"
+      ],
+      "distractors_to_penalize": [
+        "Treating the incident purely as a datacenter power-quality problem",
+        "Dashboard/UI improvements",
+        "Generic redundancy talk without mass-restart recovery fixes"
+      ],
+      "evidence": [
+        "Nebius says the initial interruption was brief but recovery constraints in compute and storage extended time to full restoration.",
+        "The report names throughput limitations in compute control-plane recovery operations during mass VM restarts.",
+        "It also names storage attachment state inconsistencies after host reboots as a contributing factor.",
+        "The action plan includes improving compute recovery throughput, refining storage state handling, and enhancing cross-layer monitoring."
+      ]
+    },
+    "scoring_checklist": {
+      "case_id": "NB-2026-02-26-EUNORTH1-RESTART",
+      "binary_checks": [
+        "Did the answer identify cross-layer mass-restart recovery throughput, especially compute control-plane and storage reconciliation as the main bottleneck, not merely a symptom or generic concern?",
+        "Did the answer name at least one real slow variable such as compute-recovery throughput, storage-state reconciliation, cross-layer observability, and facility protection settings?",
+        "Did the top intervention target mass-restart recovery behavior across compute and storage directly?",
+        "Did the answer avoid generic distractors such as communications, generic capacity expansion, or electrical-fault-only explanations?",
+        "Did the answer include at least one concrete early-warning signal?"
+      ],
+      "graded_checks": {
+        "binding_constraint_accuracy_0_to_2": {
+          "0": "Missed or generic",
+          "1": "Partially right / near-equivalent",
+          "2": "Correct and case-specific"
+        },
+        "slow_variable_recall_0_to_2": {
+          "0": "No real slow variables",
+          "1": "One real slow variable or mixed with symptoms",
+          "2": "Multiple real slow variables, clearly separated from symptoms"
+        },
+        "intervention_quality_0_to_2": {
+          "0": "Mostly non-binding or cosmetic",
+          "1": "Mixed",
+          "2": "Targets the real bottleneck directly"
+        },
+        "distractor_resistance_0_to_2": {
+          "0": "Chases distractors",
+          "1": "Some distractor contamination",
+          "2": "Stays focused on the real constraint"
+        }
+      }
+    }
+  },
+  {
+    "case_id": "NZ-2026-04-01-CORRECTIONS-HOUSING",
+    "category": "audit_program_review",
+    "title": "Department of Corrections: Planning for stable housing outcomes",
+    "publisher": "Office of the Auditor-General New Zealand",
+    "source_type": "Program review / performance audit",
+    "publication_date": "2026-04-01",
+    "incident_or_program_date": "2026-04-01",
+    "geography": "New Zealand",
+    "url": "https://oag.parliament.nz/2026/corrections-housing",
+    "source_title": "Department of Corrections: Planning for stable housing outcomes",
+    "why_selected": "Recent official review with a clear target population, known social objective, and explicit diagnosis that the system lacks enough planning support and outcome visibility.",
+    "selection_notes": "Good case for testing whether the model identifies the bottleneck as planning coverage and outcome visibility, rather than simply 'more housing supply'.",
+    "model_packet": {
+      "background": "A corrections system is expected to help people leaving prison find secure, stable housing so they can re-enter the community successfully and reduce the likelihood of reoffending. Housing need is significant, and a large share of the prison population is on remand rather than serving a sentence.",
+      "system_context": [
+        "People on remand represent a substantial and growing share of the prison population.",
+        "Case managers and probation officers are supposed to support planning for release.",
+        "Stable housing after release has meaningful social and economic benefits.",
+        "The department depends partly on support organisations and wider housing availability."
+      ],
+      "timeline": [
+        "2021/22 onward: the number of people on remand in prison has been steadily increasing.",
+        "2024/25: over 11,000 individuals were released from prison.",
+        "2026-04-01: the Auditor-General publishes the review and recommendations."
+      ],
+      "observations": [
+        "Many people on remand have limited or no time with a case manager.",
+        "More than half of people leaving prison are estimated to have an unmet housing need.",
+        "The department does not know how many people leave prison with a housing need or a reintegration plan.",
+        "This is partly a service-delivery and measurement problem, not only a housing-market problem."
+      ],
+      "task": "Analyze this case. Identify the main binding constraint, the slow variables, the top 3 interventions, 2 things to deprioritize, and the earliest warning signals leadership should track."
+    },
+    "gold_packet": {
+      "binding_constraint_top1": "Insufficient planning coverage and outcome visibility for people leaving prison — especially remand prisoners — which prevents the system from reliably identifying need, delivering support early enough, and learning what works.",
+      "binding_constraint_top3": [
+        "Weak pre-release housing planning coverage for remand populations",
+        "Lack of operational data on housing need, reintegration plans, and release outcomes",
+        "Case-management capacity and process design that underserves people on remand"
+      ],
+      "slow_variables": [
+        "Case-management capacity and process coverage before release",
+        "Data systems for measuring housing need, reintegration plans, and outcomes",
+        "Relationships and coordination with support organisations and housing providers",
+        "Underlying housing-market scarcity and landlord reluctance"
+      ],
+      "contributing_factors": [
+        "People on remand receive less planning support than sentenced prisoners",
+        "Many on remand have limited time with a case manager or do not see one at all",
+        "The department does not know how many people leave prison with a housing need or a reintegration plan",
+        "The review estimates that more than half of people leaving prison have an unmet housing need"
+      ],
+      "good_interventions_ranked": [
+        "Expand and redesign pre-release planning coverage for remand populations so support starts earlier and more consistently.",
+        "Build operational visibility: track housing need, reintegration plans, support quality, and release outcomes as core management metrics.",
+        "Strengthen structured coordination with support organisations and housing pathways, but tie it to measurable case-level follow-through."
+      ],
+      "bad_interventions": [
+        "Treating the issue only as a broad national housing shortage with no corrections-process redesign",
+        "Launching new slogans or high-level reintegration strategies without better coverage and data",
+        "Focusing only on sentenced prisoners while remand populations continue to grow"
+      ],
+      "early_warning_signals": [
+        "Share of remand prisoners who receive housing planning support before release",
+        "Proportion of releases with documented housing status and reintegration plan",
+        "Rate of post-release unstable housing among people the department supported",
+        "Growing gap in planning support between remand and sentenced populations"
+      ],
+      "distractors_to_penalize": [
+        "Generic calls for more housing funding without corrections-process change",
+        "Narrative-only reintegration campaigns",
+        "One-off pilots that do not close measurement gaps"
+      ],
+      "evidence": [
+        "The Auditor-General says people on remand receive less planning support than people serving sentences.",
+        "Many people on remand have limited time with a case manager or do not see one at all.",
+        "The department does not know how many people leave prison with a housing need or a reintegration plan.",
+        "The review says more than half of people leaving prison are estimated to have an unmet housing need."
+      ]
+    },
+    "scoring_checklist": {
+      "case_id": "NZ-2026-04-01-CORRECTIONS-HOUSING",
+      "binary_checks": [
+        "Did the answer identify planning coverage and outcome visibility for release housing support, especially for remand prisoners as the main bottleneck, not merely a symptom or generic concern?",
+        "Did the answer name at least one real slow variable such as case-management coverage, data systems, coordination with support organisations, and housing-market frictions?",
+        "Did the top intervention target earlier and broader planning plus measurable outcome tracking directly?",
+        "Did the answer avoid generic distractors such as generic more-funding claims, slogan changes, or exclusive focus on sentenced prisoners?",
+        "Did the answer include at least one concrete early-warning signal?"
+      ],
+      "graded_checks": {
+        "binding_constraint_accuracy_0_to_2": {
+          "0": "Missed or generic",
+          "1": "Partially right / near-equivalent",
+          "2": "Correct and case-specific"
+        },
+        "slow_variable_recall_0_to_2": {
+          "0": "No real slow variables",
+          "1": "One real slow variable or mixed with symptoms",
+          "2": "Multiple real slow variables, clearly separated from symptoms"
+        },
+        "intervention_quality_0_to_2": {
+          "0": "Mostly non-binding or cosmetic",
+          "1": "Mixed",
+          "2": "Targets the real bottleneck directly"
+        },
+        "distractor_resistance_0_to_2": {
+          "0": "Chases distractors",
+          "1": "Some distractor contamination",
+          "2": "Stays focused on the real constraint"
+        }
+      }
+    }
+  },
+  {
+    "case_id": "AU-2026-03-12-COMMUNITY-BATTERIES",
+    "category": "audit_program_review",
+    "title": "Community Batteries for Household Solar Program",
+    "publisher": "Australian National Audit Office (ANAO)",
+    "source_type": "Performance audit report",
+    "publication_date": "2026-03-12",
+    "incident_or_program_date": "2026-03-12",
+    "geography": "Australia",
+    "url": "https://www.anao.gov.au/work/performance-audit/community-batteries-household-solar-program",
+    "source_title": "Community Batteries for Household Solar Program",
+    "why_selected": "Recent national audit with enough operational detail to separate apparent progress from the deeper bottlenecks in evaluation design, coordination, and value-for-money controls.",
+    "selection_notes": "Useful benchmark item because the obvious story is 'program largely effective', but the real bottlenecks sit in evaluation design, cross-entity coordination, and cost/value discipline.",
+    "model_packet": {
+      "background": "A national clean-energy program funds community batteries through two delivery channels. The program is intended to reduce electricity costs, support emissions goals, expand solar hosting capacity, and spread benefits more broadly.",
+      "system_context": [
+        "Two entities deliver different parts of the program with different approaches.",
+        "The program is expected to deliver more than the originally planned number of batteries.",
+        "A meaningful share of projects has seen end-date extensions.",
+        "Public reporting and program evaluation matter because the program aims at multiple policy outcomes, not just asset deployment."
+      ],
+      "timeline": [
+        "2022: the government committed funding for the program.",
+        "2023–2025: grant rounds and project delivery proceed through two entities.",
+        "2026-03-12: ANAO publishes its performance audit."
+      ],
+      "observations": [
+        "The audit says delivery is largely effective overall.",
+        "At the same time, DCCEEW-funded projects have experienced major delays.",
+        "Evaluation was not adequately considered during program planning.",
+        "There were weaknesses around coordination, conflicts of interest, and value-for-money assessment."
+      ],
+      "task": "Analyze this case. Identify the main binding constraint, the slow variables, the top 3 interventions, 2 things to deprioritize, and the earliest warning signals leadership should track."
+    },
+    "gold_packet": {
+      "binding_constraint_top1": "Weak program evaluation and cross-entity outcome governance — including insufficient coordination, incomplete value-for-money discipline, and poor measurement design — which limits the program’s ability to prove, steer, and improve real outcomes despite asset deployment.",
+      "binding_constraint_top3": [
+        "Evaluation and outcome-governance design was not embedded early enough",
+        "DCCEEW and ARENA did not fully coordinate around overall program outcomes",
+        "Weak cost/value-for-money controls and public reporting reduce learning and discipline"
+      ],
+      "slow_variables": [
+        "Evaluation architecture built into program design and governance",
+        "Cross-entity coordination and ownership of whole-program outcomes",
+        "Data-collection standards and aggregation logic for outcome reporting",
+        "Probity and value-for-money discipline in grant decision-making"
+      ],
+      "contributing_factors": [
+        "The audit says evaluation was not adequately considered during planning",
+        "DCCEEW and ARENA did not fully coordinate to consider how different approaches might influence overall program outcomes",
+        "DCCEEW did not assess applications against an agreed cost-per-kWh provision, potentially affecting value for money",
+        "Public reporting did not provide sufficient information about effective and efficient delivery",
+        "Many DCCEEW-funded projects had end-date extensions, averaging about 40 weeks"
+      ],
+      "good_interventions_ranked": [
+        "Embed a single whole-program evaluation architecture with standard metrics, collection guidance, and aggregation logic across both delivery entities.",
+        "Create explicit cross-entity governance for overall outcomes, not just individual grant streams or asset counts.",
+        "Tighten value-for-money controls, including disciplined cost-per-kWh assessment, transparent reporting, and conflict-of-interest management."
+      ],
+      "bad_interventions": [
+        "Celebrating battery counts alone as proof of success",
+        "Adding more funding rounds without fixing evaluation and coordination",
+        "Focusing only on schedule acceleration without clarifying whether the program is delivering intended benefits"
+      ],
+      "early_warning_signals": [
+        "Project extensions rising or remaining high without corresponding outcome evidence",
+        "Inconsistent or non-aggregable data submissions across delivery channels",
+        "Approved projects with weak value-for-money alignment against agreed cost provisions",
+        "Public reports that still cannot show program-level outcomes clearly"
+      ],
+      "distractors_to_penalize": [
+        "Pure deployment-volume metrics",
+        "Narrative-only claims of success",
+        "More money without stronger measurement and governance"
+      ],
+      "evidence": [
+        "ANAO says delivery was largely effective, but evaluation was not adequately considered during planning.",
+        "The audit says DCCEEW and ARENA did not fully coordinate around how different approaches may affect overall outcomes.",
+        "It says DCCEEW did not assess applications against an agreed cost-per-kWh provision, potentially affecting value for money.",
+        "The audit says public reporting does not provide sufficient information about effective and efficient delivery.",
+        "As at August 2025, DCCEEW projects had many end-date extensions, averaging 40 weeks."
+      ]
+    },
+    "scoring_checklist": {
+      "case_id": "AU-2026-03-12-COMMUNITY-BATTERIES",
+      "binary_checks": [
+        "Did the answer identify evaluation-and-governance weakness around whole-program outcomes, not just battery deployment as the main bottleneck, not merely a symptom or generic concern?",
+        "Did the answer name at least one real slow variable such as evaluation architecture, cross-entity coordination, data standards, and value-for-money discipline?",
+        "Did the top intervention target whole-program measurement and coordination fixes directly?",
+        "Did the answer avoid generic distractors such as asset counts alone, more funding rounds, or schedule-only acceleration?",
+        "Did the answer include at least one concrete early-warning signal?"
+      ],
+      "graded_checks": {
+        "binding_constraint_accuracy_0_to_2": {
+          "0": "Missed or generic",
+          "1": "Partially right / near-equivalent",
+          "2": "Correct and case-specific"
+        },
+        "slow_variable_recall_0_to_2": {
+          "0": "No real slow variables",
+          "1": "One real slow variable or mixed with symptoms",
+          "2": "Multiple real slow variables, clearly separated from symptoms"
+        },
+        "intervention_quality_0_to_2": {
+          "0": "Mostly non-binding or cosmetic",
+          "1": "Mixed",
+          "2": "Targets the real bottleneck directly"
+        },
+        "distractor_resistance_0_to_2": {
+          "0": "Chases distractors",
+          "1": "Some distractor contamination",
+          "2": "Stays focused on the real constraint"
+        }
+      }
+    }
+  },
+  {
+    "case_id": "IN-2026-02-19-UPSIDA",
+    "category": "audit_program_review",
+    "title": "Working of Uttar Pradesh State Industrial Development Authority (UPSIDA)",
+    "publisher": "Comptroller and Auditor General of India",
+    "source_type": "Performance audit report",
+    "publication_date": "2026-02-19",
+    "incident_or_program_date": "2026-02-19",
+    "geography": "India",
+    "url": "https://cag.gov.in/ag1/uttar-pradesh/en/audit-report/details/124053",
+    "source_title": "Report of the Comptroller and Auditor General of India on Working of Uttar Pradesh State Industrial Development Authority (UPSIDA), Report No. 14 of 2025",
+    "why_selected": "Recent state-level performance audit with unusually broad evidence across planning, contracts, plot allotment, and financial controls.",
+    "selection_notes": "Strong benchmark item because many visible failures exist, but the real bottleneck is foundational planning and governance rather than any one transactional irregularity.",
+    "model_packet": {
+      "background": "A state industrial development authority is responsible for planned industrial area development, infrastructure provision, plot allotment, and related control systems across a large portfolio of industrial areas.",
+      "system_context": [
+        "The authority manages many industrial areas across the state.",
+        "Its mandate includes planning, land development, infrastructure, allotment, and internal controls.",
+        "Targets were repeatedly missed across land acquisition, land development, allotment, and recoveries.",
+        "Audit findings cut across both operational execution and institutional governance."
+      ],
+      "timeline": [
+        "2017/18–2022/23: audit period for many performance findings.",
+        "2024: some government responses are noted in the audit materials.",
+        "2026-02-19: the report is tabled."
+      ],
+      "observations": [
+        "Perspective, development, redevelopment, and zonal plans were not finalized as expected.",
+        "Land acquisition and development targets were repeatedly missed.",
+        "Contracting and allotment processes showed multiple irregularities.",
+        "Annual accounts were not prepared since inception, which affects oversight and merger/compliance matters."
+      ],
+      "task": "Analyze this case. Identify the main binding constraint, the slow variables, the top 3 interventions, 2 things to deprioritize, and the earliest warning signals leadership should track."
+    },
+    "gold_packet": {
+      "binding_constraint_top1": "Foundational planning-and-governance failure — the authority is operating without fully approved regulations, completed long-range plans, and basic financial-control disciplines, which then contaminates land development, contracting, allotment, and accountability.",
+      "binding_constraint_top3": [
+        "Absence of approved planning/regulatory architecture and long-range development plans",
+        "Institutional governance and internal-control weakness across the authority",
+        "Lack of basic financial-accounting and oversight systems undermining operational discipline"
+      ],
+      "slow_variables": [
+        "Perspective, development, redevelopment, and zonal planning capability",
+        "Regulatory approval and institutional governance arrangements",
+        "Internal financial controls and annual-accounting discipline",
+        "Contract-management and allotment-process quality",
+        "State-level coordination and approval responsiveness"
+      ],
+      "contributing_factors": [
+        "UPSIDA was managing affairs without approved regulations and did not finalize key plans since its constitution",
+        "Land acquisition and land development targets were repeatedly missed",
+        "Contracts were awarded without proper document verification or bidder-capacity assessment in multiple cases",
+        "Plot allotment processes showed irregular evaluation, excess allotment, and deviations from approved procedure",
+        "Annual accounts of UPSIDA were not prepared since inception"
+      ],
+      "good_interventions_ranked": [
+        "Fix the planning/governance foundation first: approve regulations, complete perspective/development/zonal plans, and create a disciplined planning baseline for all industrial areas.",
+        "Restore internal financial and oversight machinery, including current annual accounts, board/legislature reporting, and digitized investment/control registers.",
+        "Then tighten transactional execution with stronger contract verification, bidder-capacity checks, allotment eligibility rules, and documented accountability for deviations."
+      ],
+      "bad_interventions": [
+        "Treating each contract or allotment irregularity as an isolated issue",
+        "More ambitious target-setting without a real planning and control backbone",
+        "Digitization theater that does not fix planning, approval, and accounting gaps"
+      ],
+      "early_warning_signals": [
+        "Key plans or regulations still pending beyond defined deadlines",
+        "Annual accounts and required reports remaining unprepared or unlaid",
+        "Repeat bid-verification failures, bidder-capacity exceptions, or irregular allotments",
+        "Persistent target misses across acquisition, development, allotment, and recoveries"
+      ],
+      "distractors_to_penalize": [
+        "Only anti-corruption rhetoric without process redesign",
+        "UI or portal upgrades without governance fixes",
+        "Volume targets as the main response"
+      ],
+      "evidence": [
+        "The executive summary says audit found lapses in planning, infrastructure development, allotment of plots, and system of internal control.",
+        "It says UPSIDA operated without approved regulations and had not finalized perspective/development/redevelopment plans since its constitution.",
+        "The summary notes repeated target misses in land acquisition and land development.",
+        "It documents contract-award irregularities, allotment-process problems, and inadequate internal financial controls.",
+        "It says annual accounts of UPSIDA were not prepared since inception."
+      ]
+    },
+    "scoring_checklist": {
+      "case_id": "IN-2026-02-19-UPSIDA",
+      "binary_checks": [
+        "Did the answer identify planning-and-governance failure as the core bottleneck, not just isolated contract or allotment problems as the main bottleneck, not merely a symptom or generic concern?",
+        "Did the answer name at least one real slow variable such as planning capability, regulatory approvals, financial controls, and institutional governance?",
+        "Did the top intervention target restoring foundational planning and financial-control discipline directly?",
+        "Did the answer avoid generic distractors such as isolated anti-corruption rhetoric, target inflation, or cosmetic digitization?",
+        "Did the answer include at least one concrete early-warning signal?"
+      ],
+      "graded_checks": {
+        "binding_constraint_accuracy_0_to_2": {
+          "0": "Missed or generic",
+          "1": "Partially right / near-equivalent",
+          "2": "Correct and case-specific"
+        },
+        "slow_variable_recall_0_to_2": {
+          "0": "No real slow variables",
+          "1": "One real slow variable or mixed with symptoms",
+          "2": "Multiple real slow variables, clearly separated from symptoms"
+        },
+        "intervention_quality_0_to_2": {
+          "0": "Mostly non-binding or cosmetic",
+          "1": "Mixed",
+          "2": "Targets the real bottleneck directly"
+        },
+        "distractor_resistance_0_to_2": {
+          "0": "Chases distractors",
+          "1": "Some distractor contamination",
+          "2": "Stays focused on the real constraint"
+        }
+      }
+    }
+  },
+  {
+    "case_id": "EU-2026-02-02-CRITICAL-RAW-MATERIALS",
+    "category": "audit_program_review",
+    "title": "Critical raw materials for the energy transition – Not a rock-solid policy",
+    "publisher": "European Court of Auditors",
+    "source_type": "Special report / performance audit",
+    "publication_date": "2026-02-02",
+    "incident_or_program_date": "2026-02-02",
+    "geography": "European Union",
+    "url": "https://www.eca.europa.eu/en/publications?ref=SR-2026-04",
+    "source_title": "Special report 04/2026: Critical raw materials for the energy transition – Not a rock-solid policy",
+    "why_selected": "Recent supranational audit with a clean statement of strategic ambition versus binding bottlenecks in imports, domestic production, recycling, and project finance/permitting.",
+    "selection_notes": "Strong case for testing whether the model sees through the high-level strategy and identifies the real constraints in financing, permitting, diversification, and recycling.",
+    "model_packet": {
+      "background": "A regional bloc wants to secure the raw materials needed for the energy transition through diversification, domestic production, processing, recycling, and strategic projects. Targets are set for 2030, but the bloc remains highly import-dependent for many critical materials.",
+      "system_context": [
+        "The policy spans imports, domestic extraction/processing, recycling, and strategic project support.",
+        "Many critical raw materials are still fully imported or not recycled at all.",
+        "Strategic projects matter because supply-security goals must materialize on real timelines.",
+        "Permitting, finance, and administrative processes affect the pace of domestic capacity creation."
+      ],
+      "timeline": [
+        "2030: key policy targets for extraction, processing, recycling, and diversification.",
+        "2026-02-02: the European Court of Auditors publishes Special Report 04/2026."
+      ],
+      "observations": [
+        "The legislation sets a strategic course, but the audit says its targets lack justification.",
+        "Import diversification has not produced tangible results.",
+        "Production and recycling are hampered by financial, legal, and administrative bottlenecks.",
+        "Many strategic projects are unlikely to secure supply by 2030."
+      ],
+      "task": "Analyze this case. Identify the main binding constraint, the slow variables, the top 3 interventions, 2 things to deprioritize, and the earliest warning signals leadership should track."
+    },
+    "gold_packet": {
+      "binding_constraint_top1": "The gap between strategic policy intent and executable supply-side capacity — especially financing, permitting, recycling, and credible project delivery — which keeps the bloc dependent on imports despite ambitious targets.",
+      "binding_constraint_top3": [
+        "Execution bottlenecks in financing, permitting, and project readiness",
+        "Insufficient domestic production/recycling capacity relative to policy targets",
+        "Weak conversion of diversification policy into real, measurable supply security"
+      ],
+      "slow_variables": [
+        "Permitting and administrative throughput for extraction/processing/recycling projects",
+        "Project finance availability and bankable offtake/supply structures",
+        "Domestic processing and recycling ecosystem build-out",
+        "Data/target-quality and policy foundations for prioritization and monitoring"
+      ],
+      "contributing_factors": [
+        "The audit says the legislation sets a strategic course but targets lack justification",
+        "Import diversification has not produced tangible results",
+        "Financial, legal, and administrative bottlenecks hamper domestic production",
+        "There is still not enough substitution or recycling",
+        "Many strategic projects will struggle to secure supply by 2030"
+      ],
+      "good_interventions_ranked": [
+        "Shift from target proclamation to execution discipline: identify, finance, and unblock a narrower portfolio of strategic projects with realistic permitting and delivery plans.",
+        "Attack recycling and processing bottlenecks directly with operational, financing, and regulatory measures rather than treating them as secondary policy goals.",
+        "Use stronger monitoring and target logic so diversification and project progress are measured against actual supply security, not only strategic intent."
+      ],
+      "bad_interventions": [
+        "Publishing more ambitious targets without fixing execution bottlenecks",
+        "Treating import diversification rhetoric as evidence of resilience",
+        "Broad industrial-policy announcements without project-level finance/permitting solutions"
+      ],
+      "early_warning_signals": [
+        "Strategic projects missing permitting milestones or lacking secured finance/offtake",
+        "Import concentration remaining largely unchanged for key materials",
+        "Domestic recycling and processing volumes failing to rise toward target trajectories",
+        "Targets that remain weakly justified or detached from execution capacity"
+      ],
+      "distractors_to_penalize": [
+        "More strategy documents",
+        "Headline target changes alone",
+        "Generic innovation talk without supply-chain execution"
+      ],
+      "evidence": [
+        "The ECA says the EU faces many challenges and that the legislation sets a strategic course but targets lack justification.",
+        "It says import diversification has not produced tangible results.",
+        "The report says bottlenecks hinder production and recycling, including financing bottlenecks.",
+        "The ECA says many strategic projects will struggle to secure supply by 2030.",
+        "The facts-and-findings sheet says there is still not enough substitution or recycling and that financial, legal, and administrative bottlenecks hamper domestic production."
+      ]
+    },
+    "scoring_checklist": {
+      "case_id": "EU-2026-02-02-CRITICAL-RAW-MATERIALS",
+      "binary_checks": [
+        "Did the answer identify execution bottlenecks in financing, permitting, recycling, and project delivery rather than strategy alone as the main bottleneck, not merely a symptom or generic concern?",
+        "Did the answer name at least one real slow variable such as permitting throughput, finance availability, domestic processing/recycling capacity, and target-quality foundations?",
+        "Did the top intervention target real project execution and supply-capacity build-out directly?",
+        "Did the answer avoid generic distractors such as more targets, rhetoric about diversification, or generic innovation statements?",
+        "Did the answer include at least one concrete early-warning signal?"
+      ],
+      "graded_checks": {
+        "binding_constraint_accuracy_0_to_2": {
+          "0": "Missed or generic",
+          "1": "Partially right / near-equivalent",
+          "2": "Correct and case-specific"
+        },
+        "slow_variable_recall_0_to_2": {
+          "0": "No real slow variables",
+          "1": "One real slow variable or mixed with symptoms",
+          "2": "Multiple real slow variables, clearly separated from symptoms"
+        },
+        "intervention_quality_0_to_2": {
+          "0": "Mostly non-binding or cosmetic",
+          "1": "Mixed",
+          "2": "Targets the real bottleneck directly"
+        },
+        "distractor_resistance_0_to_2": {
+          "0": "Chases distractors",
+          "1": "Some distractor contamination",
+          "2": "Stays focused on the real constraint"
+        }
+      }
+    }
+  },
+  {
+    "case_id": "UK-2026-02-11-UNLOCKING-LAND",
+    "category": "audit_program_review",
+    "title": "Unlocking land for housing",
+    "publisher": "National Audit Office (UK)",
+    "source_type": "Value-for-money report",
+    "publication_date": "2026-02-11",
+    "incident_or_program_date": "2026-02-11",
+    "geography": "United Kingdom (England)",
+    "url": "https://www.nao.org.uk/reports/unlocking-land-for-housing/",
+    "source_title": "Unlocking land for housing",
+    "why_selected": "Recent value-for-money report that distinguishes between funds committed, sites supported, and the harder long-term challenge of measuring what interventions actually unlock homes.",
+    "selection_notes": "Useful because it punishes shallow answers: the real bottleneck is not just land scarcity, but weak evidence and portfolio discipline about which interventions unlock the right homes in the right places over long timelines.",
+    "model_packet": {
+      "background": "A housing ministry has spent for years on multiple programs designed to unlock land for housing where the market would otherwise underdeliver because sites are not profitable or attractive enough. A new consolidated fund is about to launch with much larger resources.",
+      "system_context": [
+        "The existing approach uses multiple programs, funding types, and delivery partners.",
+        "Unlocking land and actually building homes both take many years.",
+        "The ministry has supported hundreds of sites and expects hundreds of thousands of homes over time.",
+        "The new fund is expected to simplify the system and support faster delivery, but it inherits lessons and unresolved measurement challenges from prior programs."
+      ],
+      "timeline": [
+        "2016/17 onward: current unlocking-land programs run across many sites.",
+        "2025: Homes England publishes an investment roadmap.",
+        "2026-02-11: the NAO publishes its report.",
+        "2026-04-01: the ministry expects the new National Housing Delivery Fund and housing bank to be operational."
+      ],
+      "observations": [
+        "The system intervenes because land may be unattractive due to remediation needs, infrastructure gaps, or fragmented ownership.",
+        "Many projects will continue spending on unlocking work for years, with housebuilding extending much longer.",
+        "The ministry did not initially set out to track homes built on some major funds that account for a large share of intended capacity.",
+        "The report stresses the need for common metrics, clearer risk language, place priorities, and better understanding of what interventions actually work."
+      ],
+      "task": "Analyze this case. Identify the main binding constraint, the slow variables, the top 3 interventions, 2 things to deprioritize, and the earliest warning signals leadership should track."
+    },
+    "gold_packet": {
+      "binding_constraint_top1": "Weak evidence-and-portfolio discipline about which interventions unlock the right sites and translate into actual homes — compounded by fragmented funding logic, inconsistent tracking, and long delivery lags.",
+      "binding_constraint_top3": [
+        "Insufficient measurement of downstream housing outcomes across major funds",
+        "Fragmented intervention design and weak common theory of change / risk language",
+        "Portfolio prioritization difficulty: funding deliverable sites versus the most impactful sites"
+      ],
+      "slow_variables": [
+        "Long delivery cycles from land unlocking to completed homes",
+        "Harmonized metrics and tracking across delivery partners and funds",
+        "Portfolio risk appetite and common risk language",
+        "Place-based investment strategy and theory of change for interventions"
+      ],
+      "contributing_factors": [
+        "Land often remains undeveloped because it is not profitable or attractive enough due to remediation, infrastructure, or fragmented ownership",
+        "Funding has supported many projects, but only a minority have completed unlocking work so far",
+        "The ministry did not originally track homes built on some major funds that represent around half of intended housing capacity",
+        "The report says the new fund is an opportunity to develop harmonized metrics, clearer risk approaches, and better understanding of which interventions work"
+      ],
+      "good_interventions_ranked": [
+        "Create end-to-end measurement across all funds: from unlocking activity to actual homes built, with harmonized metrics and long-term tracking.",
+        "Build a stronger portfolio theory of change and common risk language so the new fund can choose between fast-delivery sites and higher-impact but riskier opportunities intentionally.",
+        "Set explicit place and intervention priorities for the new fund, tied to evidence about which tools unlock land and homes most effectively."
+      ],
+      "bad_interventions": [
+        "Announcing bigger funds without stronger outcome measurement",
+        "Treating land unlocked as a sufficient success metric",
+        "Favoring only the easiest-to-deliver projects without explicit portfolio logic"
+      ],
+      "early_warning_signals": [
+        "Large funds or projects still lacking downstream home-completion tracking",
+        "Growing mismatch between intended housing capacity and verified homes delivered",
+        "Project pipelines skewing toward low-risk / low-impact opportunities",
+        "Frequent policy shifts that reduce local confidence and pipeline quality"
+      ],
+      "distractors_to_penalize": [
+        "Funding size as the main story",
+        "Site counts without outcome tracking",
+        "Process simplification alone without evidence and portfolio discipline"
+      ],
+      "evidence": [
+        "The NAO says land may remain undeveloped because it is not profitable or attractive enough owing to remediation, infrastructure, or fragmented ownership.",
+        "It says the ministry expects 713,000 homes over time but many projects continue for years and housebuilding may continue to 2050.",
+        "The report says MHCLG did not set out to track homes built on the Home Building Funds and the Brownfield, Infrastructure and Land Fund, which together account for around half of intended housing capacity.",
+        "The report says the new fund is an opportunity to create harmonized metrics, common risk language, and a clearer understanding of which interventions deliver unlocked land and homes quickly while preserving value for money."
+      ]
+    },
+    "scoring_checklist": {
+      "case_id": "UK-2026-02-11-UNLOCKING-LAND",
+      "binary_checks": [
+        "Did the answer identify measurement-and-portfolio discipline around translating land unlocking into actual homes as the main bottleneck, not merely a symptom or generic concern?",
+        "Did the answer name at least one real slow variable such as long delivery cycles, harmonized metrics, portfolio risk appetite, and place-based investment strategy?",
+        "Did the top intervention target tracking real housing outcomes and improving portfolio logic directly?",
+        "Did the answer avoid generic distractors such as bigger funds, raw site counts, or process simplification without evidence?",
+        "Did the answer include at least one concrete early-warning signal?"
+      ],
+      "graded_checks": {
+        "binding_constraint_accuracy_0_to_2": {
+          "0": "Missed or generic",
+          "1": "Partially right / near-equivalent",
+          "2": "Correct and case-specific"
+        },
+        "slow_variable_recall_0_to_2": {
+          "0": "No real slow variables",
+          "1": "One real slow variable or mixed with symptoms",
+          "2": "Multiple real slow variables, clearly separated from symptoms"
+        },
+        "intervention_quality_0_to_2": {
+          "0": "Mostly non-binding or cosmetic",
+          "1": "Mixed",
+          "2": "Targets the real bottleneck directly"
+        },
+        "distractor_resistance_0_to_2": {
+          "0": "Chases distractors",
+          "1": "Some distractor contamination",
+          "2": "Stays focused on the real constraint"
+        }
+      }
+    }
+  }
+]

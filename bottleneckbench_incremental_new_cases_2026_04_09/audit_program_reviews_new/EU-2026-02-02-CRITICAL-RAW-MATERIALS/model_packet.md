@@ -1,0 +1,23 @@
+# EU-2026-02-02-CRITICAL-RAW-MATERIALS — Critical raw materials for the energy transition – Not a rock-solid policy
+
+## Background
+A regional bloc wants to secure the raw materials needed for the energy transition through diversification, domestic production, processing, recycling, and strategic projects. Targets are set for 2030, but the bloc remains highly import-dependent for many critical materials.
+
+## System context
+- The policy spans imports, domestic extraction/processing, recycling, and strategic project support.
+- Many critical raw materials are still fully imported or not recycled at all.
+- Strategic projects matter because supply-security goals must materialize on real timelines.
+- Permitting, finance, and administrative processes affect the pace of domestic capacity creation.
+
+## Timeline
+- 2030: key policy targets for extraction, processing, recycling, and diversification.
+- 2026-02-02: the European Court of Auditors publishes Special Report 04/2026.
+
+## Observations
+- The legislation sets a strategic course, but the audit says its targets lack justification.
+- Import diversification has not produced tangible results.
+- Production and recycling are hampered by financial, legal, and administrative bottlenecks.
+- Many strategic projects are unlikely to secure supply by 2030.
+
+## Task
+Analyze this case. Identify the main binding constraint, the slow variables, the top 3 interventions, 2 things to deprioritize, and the earliest warning signals leadership should track.

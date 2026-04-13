@@ -1,0 +1,24 @@
+# GH-2026-03-03-CACHE-STORM — GitHub March 3 cache-expiry write storm incident
+
+## Background
+A large developer platform experienced widespread degraded availability across the web app, API, Git operations, Copilot, and other dependent services. The incident followed a deployment intended to reduce system burden.
+
+## System context
+- Multiple services depend on a user settings caching mechanism.
+- A previous incident had already revealed stress around large volumes of writes to this mechanism.
+- A deployment was intended to reduce write burden rather than add a new user-facing feature.
+- The platform is highly interconnected: replication delays in one area can cascade into many product surfaces.
+
+## Timeline
+- 2026-03-03 18:46 UTC: incident period begins.
+- 2026-03-03 20:09 UTC: customer impact ends after rollback.
+- 2026-04-08: the provider publishes the monthly availability report with root-cause notes and remediation items.
+
+## Observations
+- At peak, github.com request failures were about 40%.
+- API request failures were about 43%.
+- Copilot requests saw about 21% errors.
+- The platform itself notes this incident shared the same underlying cause pattern as an early-February incident.
+
+## Task
+Analyze this case. Identify the main binding constraint, the slow variables, the top 3 interventions, 2 things to deprioritize, and the earliest warning signals leadership should track.

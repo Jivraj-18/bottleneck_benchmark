@@ -1,0 +1,13 @@
+{
+  "case_id": "NB-2026-03-10-USCENTRAL1-POWER",
+  "title": "Nebius us-central1 provider-maintenance power incident",
+  "publisher": "Nebius",
+  "source_type": "Incident postmortem",
+  "publication_date": "2026-03-20",
+  "incident_or_program_date": "2026-03-10",
+  "geography": "United States region (us-central1)",
+  "url": "https://nebius.com/blog/posts/incident-post-mortem-analysis-us-central1-service-disruption-on-march-10",
+  "source_title": "Incident post-mortem analysis: us-central1 service disruption on March 10, 2026",
+  "why_selected": "Detailed multi-hour postmortem showing both the initiating infrastructure failure and the deeper recovery-sequencing bottleneck.",
+  "selection_notes": "Excellent case where the first visible cause is power maintenance, but the more benchmark-interesting bottleneck is the provider’s preparation and dependency-ordered regional recovery discipline."
+}
